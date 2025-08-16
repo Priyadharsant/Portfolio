@@ -1,143 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>404 - Page Not Found</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #8EC5FC 0%, #E0C3FC 100%);
-      overflow: hidden;
-      color: #333;
-    }
+    <meta property="og:title" content="Priyadharsan - AI and Full-Stack Developer">
+    <meta property="og:description" content="Explore my skills, projects, and achievements in AI, data science, and development.">
+    <meta property="og:image" content="https://i.postimg.cc/zLsXb8YM/IMG-20250110-093720.jpg">
+    <meta property="og:url" content="https://priyadharsan.netlify.app">
+    <meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priyadharsan</title>
+    <link rel="icon" type="image/*" href="https://i.postimg.cc/zLsXb8YM/IMG-20250110-093720.jpg">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background: #1a1a2e;
+            color: #e6e6e6;
+        }
+        main {
+            flex: 1;
+            padding: 80px 20px 20px;
+        }
+        footer {
+            background: #ff5f2b;
+            width: 100%;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            transition: background 0.3s;
+        }
+        body.dark-mode footer {
+            background: #16213e;
+        }
+        header {
+            background: #158cff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(20px);
+            width: 91.5%;
+            z-index: 1000;
+            box-shadow: 0 4px 10px #158cff89;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        body.dark-mode header {
+            background: #0f3460;
+            box-shadow: 0 4px 10px #e94560;
+        }
+        header h2 {
+            margin: 0;
+            color: #bfeaff;
+            font-size: 24px;
+            padding-left: 10px;
+        }
+        header button {
+            font-size: 20px;
+            border: none;
+            background: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        header button:hover {
+            transform: scale(1.2);
+            color: #ff6347;
+        }
+        section {
+            margin-bottom: 40px;
+            background: #ffffff4d;
+            border: 1px outset white;
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        body.dark-mode section {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #e94560;
+        }
+        section h2 {
+            font-size: 28px;
+            text-align: left;
+            padding-left: 20px;
+            color: #ff9d00;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        body.dark-mode section h2 {
+            color: #0aceff;
+        }
+        h2::selection {
+            background-color: #ff9d00;
+            color: white;
+        }
+        p::selection {
+            background-color: #000000;
+            color: white;
+        }
+        header h2::selection {
+            background-color: white;
+            color: #158cff;
+        }
+        footer p::selection {
+            background-color: white;
+            color: #ff5f2b;
+        }
+        .skill {
+            background: #333;
+            color: white;
+            flex-grow: 2;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            width: 150px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s forwards;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .skill:hover {
+            background-color: #ff6347;
+            color: white;
+            padding: 20px;
+        }
+        #skills {
+            display: flex;
+            flex-wrap: wrap;
+            cursor: pointer;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeIn 2.5s forwards;
+        }
+        #projects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            text-decoration:none ;
+            animation: fadeIn 3s forwards;
+        }
+        .project {
+            background: #ffffffd0;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            width: 250px;
+            transition: transform 0.3s ease;
+        }
+        .project:hover {
+            transform: scale(1.05);
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links img {
+            width: 40px;
+            height: 40px;
+            filter: grayscale(100%);
+            transition: filter 0.3s, transform 0.3s;
+        }
+        .social-links img:hover {
+            filter: grayscale(0%);
+            transform: scale(1.2);
+        }
+        /* Contact Form Styles */
+#contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
 
-    .container {
-      text-align: center;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 1.5s ease;
-    }
+#contact h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
 
-    .code {
-      font-size: 100px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
+#contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 80%;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-    .emoji {
-      font-size: 90px;
-      display: inline-block;
-      animation: shake 1s infinite ease-in-out;
-    }
+#contact-form input,
+#contact-form textarea {
+    width: 80%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: border 0.3s, box-shadow 0.3s;
+}
 
-    .message {
-      font-size: 22px;
-      margin-top: 20px;
-      color: #158cff;
-    }
+#contact-form input:focus,
+#contact-form textarea:focus {
+    border: 1px solid #158cff;
+    box-shadow: 0 0 8px rgba(21, 140, 255, 0.5);
+    outline: none;
+}
 
-    .home-button,.link{
-      display: inline-block;
-      
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.5s ease;
-      animation: fadeIn 1s ease; 
-    }
+#contact-form textarea {
+    resize: none;
+    min-height: 120px;
+}
 
-    .home-button:hover {
-      background: #ff5f2b;
-    }
-    
-    .link {
-        display : none;
-    }
-    
-    a{
-        color : white ;
-        text-decoration : none;
-        outline: none;
-        -webkit-tap-highlight-color: transparent ;
-    }
-    
-    .link{
-        background : #ff5f2b;
-        padding : 10px ;
-        border-radius : 10px ;
-    }
-    
-    body:hover .link{
-        display : inline-flex ;
-        transition: background 0.3s ease;
-    }
-    
-    a:focus {
-        outline: none;
-    }
-    
-    .link:hover
-    {
-  transform: scale(1.15); 
-  
-transition: transform 4s ease-in-out;
-    }
-    @keyframes shake {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(8deg); }
-      50% { transform: rotate(-8deg); }
-      75% { transform: rotate(5deg); }
-      100% { transform: rotate(0deg); }
-    }
+#contact-form button {
+    background: #158cff;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
+#contact-form button:hover {
+    background: #0f3460;
+    transform: scale(1.05);
+}
 
-    @media (max-width: 600px) {
-      .code{
-        font-size: 60px;
-      }
+/* Dark Mode Adjustments */
+body.dark-mode #contact-form {
+    background: rgba(255, 255, 255, 0.05);
+}
 
-      .emoji {
-        font-size: 60px;
-      }
+body.dark-mode #contact-form input,
+body.dark-mode #contact-form textarea {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f1f1;
+    border: 1px solid #444;
+}
 
-      .message {
-        font-size: 18px;
-      }
-    }
-  </style>
+body.dark-mode #contact-form input:focus,
+body.dark-mode #contact-form textarea:focus {
+    border: 1px solid #0aceff;
+    box-shadow: 0 0 8px rgba(10, 206, 255, 0.6);
+}
+
+body.dark-mode #contact-form button {
+    background: #0aceff;
+}
+
+body.dark-mode #contact-form button:hover {
+    background: #e94560;
+}
+
+        /* Like Button */
+        .like-button {
+            background: #ff5f2b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .like-button:hover {
+            background: #ff9d00;
+            transform: scale(1.05);
+        }
+        .like-button.liked {
+            background: #ff9d00;
+        }
+        .like-button.liked::after {
+            content: '❤️';
+        }
+        .like-count {
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        /* Loading Animation */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        a {
+            text-decoration: none;
+            color: inherit; /* Keeps the default text color */
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #ff6347;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Back-to-Top Button */
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff6347;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            z-index: 1000;
+        }
+        #back-to-top:hover {
+            background: #ff5f2b;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="code">
-      <span>4</span>
-            <span class="emoji"><a href="/Home.html" class="home-button" title="Please click me!">😔</a></span> 
-      <span>4</span>
+    <!-- Loading Animation -->
+    <div id="loading">
+        <div class="loader"></div>
     </div>
-    <div class="message">Oops! The page you're looking for doesn’t exist.</div>
-    <br>
-    <span class ="link">
-        <a href="/Home.html">Go to Home</a>
-    </span >
-  </div>
-  
+
+    <!-- Header -->
+    <header>
+        <h2 id="tt">Priyadharsan</h2>
+        <button id="theme-toggle">🌙</button>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section id="about">
+            <h2>About Me</h2>
+            <p>Hello! I am Priyadharsan, a passionate developer specializing in AI, data science, and full-stack development. I am dedicated to building solutions that make a difference!</p>
+        </section>
+
+        <section id="skills">
+            <h2>My Skills</h2>
+            <div class="skill">Python</div>
+            <div class="skill">C</div>
+            <div class="skill">Java</div>
+            <div class="skill">HTML</div>
+            <div class="skill">CSS</div>
+        </section>
+
+        <section id="projects">
+            <h2>My Projects</h2>
+            <div class="project">
+                <h3>KMV ASURAN</h3>
+                <p>Website for gaming YouTuber</p>
+            </div>
+            <div class="project">
+                <h3>Simple Calculator</h3>
+                <p>Simple mathematical function website</p>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <form id="contact-form">
+                <!-- Added name attributes for EmailJS -->
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+                <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Connect with Me</h2>
+            <div class="social-links">
+                <a href="https://github.com/Priyadharsant" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/github.png" alt="GitHub">
+                </a>
+                <a href="https://www.linkedin.com/in/priya-dharsan-t-2b5810327?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/linkedin.png" alt="LinkedIn">
+                </a>
+                <a href="https://onecompiler.com/users/42j8ym45r" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/code.png" alt="OneCompiler">
+                </a>
+            </div>
+        </section>
+
+        <!-- Like Button Section -->
+        <section>
+            <h2>Like My Work?</h2>
+            <button class="like-button" id="like-button">👍 Like</button>
+            <span class="like-count" id="like-count">0</span>
+        </section>
+    </main>
+
+    <!-- Back-to-Top Button -->
+    <button id="back-to-top" title="Go to top">↑</button>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Priyadharsan.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your actual public key once
+        emailjs.init("dC14qcr4g4yVnkS27");
+
+        // Handle form submission with correct IDs and names
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            emailjs.sendForm('service_0j2q9jq', 'template_70dkd0o', this)
+                .then(function() {
+                    alert('Message sent successfully!');
+                    document.getElementById('contact-form').reset();
+                }, function(error) {
+                    alert('Failed to send message, please try again.');
+                    console.error('EmailJS error:', error);
+                });
+        });
+
+        // Loading Animation
+        window.addEventListener('load', () => {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        });
+
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            themeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+
+        // Back-to-Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Like Button Functionality
+        const likeButton = document.getElementById('like-button');
+        const likeCount = document.getElementById('like-count');
+
+        // Load like count from localStorage
+        let likes = parseInt(localStorage.getItem('likes')) || 0;
+        likeCount.textContent = likes;
+
+        // Check if user has already liked in this session
+        const hasLiked = sessionStorage.getItem('hasLiked');
+        if (hasLiked) {
+            likeButton.disabled = true;
+            likeButton.textContent = '❤️ Liked';
+            likeButton.classList.add('liked');
+        }
+
+        likeButton.addEventListener('click', () => {
+            if (!sessionStorage.getItem('hasLiked')) {
+                likes++;
+                likeCount.textContent = likes;
+                localStorage.setItem('likes', likes);
+                sessionStorage.setItem('hasLiked', 'true');
+                likeButton.classList.add('liked');
+                likeButton.textContent = '❤️ Liked';
+                likeButton.disabled = true;
+            }
+        });
+    </script>
 </body>
 </html>
