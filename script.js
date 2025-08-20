@@ -1,3 +1,13 @@
+const emailInput = document.getElementById("email");
+const notifyBox = document.getElementById("note");
+
+emailInput.addEventListener("focus", () => {
+  notifyBox.classList.add("show");
+});
+
+emailInput.addEventListener("blur", () => {
+  notifyBox.classList.remove("show");
+});
 window.addEventListener('load', () => {
     const popup = document.getElementById('popup');
     popup.classList.add('show');
