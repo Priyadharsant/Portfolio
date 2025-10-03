@@ -124,7 +124,6 @@ body {
         align-self :center ;  
     }  
     #skill{      
-        box-shadow :0 0 5px #3b00ff91;  
         text-align :center ;  
     }      
       
@@ -138,6 +137,7 @@ body {
      .projects_container{
          box-shadow: 0 0 10px #d6d6d6;  
          height: auto ;
+           padding : 10px;
      }
     .project_con{  
         display: flex;  
