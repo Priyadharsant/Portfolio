@@ -1,0 +1,369 @@
+body {  
+      margin: 0;  
+      min-height: 100vh;  
+      overflow:none;  
+      background: #f0f0f0;  
+      filter: blur(100);  
+      background: linear-gradient(to right ,#0018ff15,#ce00ff15);  
+    }  
+      
+    #header{  
+        position: fixed;  
+        top:0;  
+        z-index: 50;
+    }  
+      
+      
+    .title{  
+        background: #ffffff;  
+    }  
+    main{  
+        top:7em;  
+    }  
+    .name{  
+      background: -webkit-linear-gradient(135deg ,#ff00f1,#404eff);  
+      -webkit-background-clip: text;  
+      -webkit-text-fill-color: transparent;  
+   }  
+   h2{
+       font-family: "Bree Serif", serif;
+      font-size: 2em;
+      background: linear-gradient(45deg , #ff1100, #ff555f, #ff1100);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+   }
+   .name{     
+      font-family: "Bree Serif", serif;  
+    }  
+      
+    #about{  
+        background : white ;       
+    }  
+      
+    #intro{  
+        display:flex;  
+        justify-content : center ;  
+        text-align: center ;     
+        margin-top: 6em;   
+    }   
+        
+    #intro ul{  
+        list-style-type: none;  
+    }  
+      
+    img{  
+        width:20em;  
+        height:auto;  
+          
+    }    
+    .lead::first-letter{  
+        color: #a400ff;  
+        font-size: 1.5em;  
+        font-family: "Bree Serif", serif;  
+    }   
+    #about {
+    background: white;
+    box-shadow: 0 0 10px #d6d6d6;  
+}
+
+#about_con {
+    display: flex;
+    flex-direction: column; 
+    gap: 1.5em;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+}
+
+#about_con img {
+    max-width: 250px;
+    height: auto;
+    border-radius: 10px;
+}
+
+
+    #intro h3{  
+        font-size :3em;  
+        font-weight: bolder;  
+    }  
+    
+    h2{  
+        font-size: 2em;  
+        font-weight: bolder;  
+        margin-bottom :40px ;  
+        text-align :center ;  
+    }  
+    #skills{  
+        height :auto ;  
+        width :100%;  
+          
+    }   
+    #skills_con ul{  
+        display: flex ;  
+        flex-direction :row ;  
+        gap :2em;  
+        justify-content :center ;  
+        list-style-type: none ;  
+        flex-wrap: wrap;  
+    }  
+    #skills_con ul li{  
+        display :flex ;  
+        flex-direction :column ;  
+        text-align: center ;  
+        justify-content :space-between ;  
+        font-weight :bold ;  
+    }  
+      
+    #skill_logo{  
+          
+        width :2.5em;  
+          
+        align-self :center ;  
+    }  
+    #skill{      
+        box-shadow :0 0 5px #3b00ff91;  
+        text-align :center ;  
+    }      
+      
+    .lead strong,b{  
+            background: -webkit-linear-gradient(#ff1100,#ff6a7f);  
+      -webkit-background-clip: text;  
+      -webkit-text-fill-color: transparent;  
+      font-family: "Bree Serif", serif;  
+      font-weight: bolder;       
+        }  
+     .projects_container{
+         box-shadow: 0 0 10px #d6d6d6;  
+         height: auto ;
+     }
+    .project_con{  
+        display: flex;  
+        align-items: center ;  
+        justify-content: space-between;  
+        gap : 2em;  
+        overflow-x: hidden;  
+        padding: 10px;  
+    }  
+    .projects{  
+        display: flex;  
+        justify-content:space-between;  
+        gap:2em;  
+        margin : 0px;  
+        padding : 0px;  
+        align-items: center;  
+        height : 120px;
+        list-style: none;  
+        animation: slide 20s linear infinite ;  
+    }  
+    .projects li{  
+        display: flex;  
+        flex-direction :column ;  
+        align-items :center ;  
+        justify-content :center ;  
+        height: 100px ;  
+        width: 200px;  
+        margin : 0px;
+        border-radius : 10px;  
+        box-shadow: 0 0 10px #d6d6d6;  
+        background: white ;  
+        transition: transform 0.4s ease-in-out;
+    }  
+    .projects li h4{  
+        font-size: large;  
+        font-weight: bold ;  
+    }  
+    .projects li p{  
+        color: gray; 
+        font-size: small; 
+    }  
+    .project_container{
+        background: white ;
+        border-radius : 10px;
+        
+    }
+    
+    .projects li:hover
+    {
+        transform: scale(1.1) translateY(-10px);  
+    } 
+    
+    .project_con:hover  .projects {  
+        animation-play-state: paused;  
+    }  
+    .achievement_con{
+        display :flex ;
+        flex-direction :column ;
+        align-items :center ;
+        justify-content :center ;
+        background : white ;
+        margin-top : 10px;
+        box-shadow: 0 0 10px #d6d6d6;  
+    }
+    .achievements{
+        background: white ;
+        display: flex ;
+        align-items: center ;
+        justify-content : center ;
+        flex-wrap: wrap;
+        gap:20px;
+        width : 100%;
+        max-width : 600px;
+        padding : 20px ;
+        
+    }
+    .achieve{
+        background: white ;
+        width: 45%;
+        height: 100px;
+        margin: 0 ;
+        border-radius : 10px;
+        box-shadow: 0 0 10px #d6d6d6;  
+        display :flex ;
+        align-items :center ;
+        justify-content :center ;
+        text-align :center ;
+        overflow: hidden ;
+        padding :10px ;
+        font-size: small;
+    }
+  .achieve p {
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(-50px);
+  margin: 0;
+}
+
+.achieve p.show {
+  opacity: 1;
+  transform: translateX(0);
+} 
+    #contact{
+        background: white;
+        border-radius : 20px;
+        display: flex;
+        flex-direction: column ;
+        align-items: center ;
+        justify-content: center ;
+        flex-wrap: nowrap;
+        margin-top: 10px;
+        padding-bottom: 20px;
+        box-shadow: 0 0 10px #d6d6d6;  
+    }
+    #contact-form{
+        display :flex ;
+        flex-direction: column ;
+        align-items :center ;
+        justify-content :center ;
+        gap :20px;
+        width: 100%;
+    }
+    input,textarea,.notify{
+        width : 300px;
+        height : 50px;
+        border-radius : 10px ;
+        outline: none;
+        border: 1px solid #626262;
+        padding: 5px 10px;
+        box-shadow: 0 0 10px #d6d6d6;  
+    }
+    textarea{
+        height : 150px;
+        
+    }
+    .notify{
+        height: auto ;
+        border: none;
+        border-left: 5px solid #5900e1;
+        font-size: small;
+        display : none;
+        border-radius: 5px;
+    }
+    .show{
+        display :inline;
+    }
+    button{
+        width : 100px;
+        height: 50px;
+        border: none;
+        border-radius : 15px;
+        background: linear-gradient( 135deg, #5138e1, #5138e1ec, #5138e1);
+        color: white ;
+        font-size: large;
+        font-weight: bold ;
+        transition: transform 0.3s ease-in-out,box-shadow 0.3s ease-in-out;
+    }
+    button:hover{
+        transform: scaleX(1.05) translateY(-5px);
+    }
+    #contact-form *:hover{
+        box-shadow: 0 0 10px #3c2bffab;  
+        border-color: #404eff;
+    }
+    
+    footer{
+        width : 100%;
+        background: linear-gradient(135deg, #04003b,#2b003b);
+        display: flex ;
+        justify-content : space-around ;
+        align-items: center ;
+        flex-wrap: wrap-reverse;
+        color: gray;
+        padding: 50px 0px;
+        margin-top: 30px;
+        column-gap: 20px;
+        box-shadow: 0 0 10px #2b003b;  
+    }
+    footer a{
+        text-decoration: none ;
+        color : gray;
+    }
+    .license{
+        width : 40%;
+    }
+    .connect{
+        width : 300px;
+        display : flex ;
+        justify-content : center ;
+        gap: 30px;
+        margin-bottom: 20px;
+    }
+    .connect *{
+        width : 30px;
+        height : 30px;
+        transition : transform 0.3s ease-in-out;
+    }
+    .connect *:hover{
+        transform: scale(1.1) translateY(-2px);
+    }
+    
+    @keyframes slide{  
+        to{  
+            transform: translateX(calc(-100% - 2em));  
+        }  
+    }   
+    
+    @media(min-width: 700px) {
+    #about_con {
+        flex-direction: row-reverse ; 
+        text-align: left;
+    }
+    #about_con p {
+        max-width: 600px;
+    }
+    .achieve {
+        width : 200px;
+    }
+    input,textarea,.notify{
+        width : 500px;
+    }
+    .connect{
+        width:300px;
+    }
+    .connect *{
+        width : 50px;
+        height: 50px ;
+    }
+}
