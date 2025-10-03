@@ -82,7 +82,7 @@ document.getElementById("contact-form").addEventListener("submit", function(even
       mail.value = "unknownemail1807@gmail.com";
       console.log(mail.value)
   }
-  emailjs.sendForm("service_2ij6k8", "template_70dkd0o", this)
+  emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
       alert("✅ Message sent successfully!");
       this.reset();
