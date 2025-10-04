@@ -53,11 +53,12 @@ function updateAchievements() {
     }, i * 300); 
   });
 }
-
+let success = ["#d4edda","#155724"];
+let err_msg = ["#f8d7da","#721c24"]; 
 updateAchievements();
 setInterval(updateAchievements, 4600);
 
-// Initialize EmailJS
+
 (function(){
   emailjs.init("dC14qcr4g4yVnkS27");
 })();
@@ -74,21 +75,33 @@ emailInput.addEventListener("blur", () => {
   notifyBox.classList.remove("show");
 });
 
-// Handle form submit
 document.getElementById("contact-form").addEventListener("submit", function(event) {
   event.preventDefault();
   let mail = document.getElementById("email");
+  let notify_status = document.querySelector(".notify_status");
   if (mail.value === '') {
       mail.value = "unknownemail1807@gmail.com";
       console.log(mail.value)
   }
   emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
-      alert("✅ Message sent successfully!");
+      notify_status.innerText = "✅ Message sent successfully!";
+      notify_status.style.background = success[0];
+      notify_status.style.color = success[1];
+      notify_status.style.borderColor = "green";
+      notify_status.style.boxShadow = "0 0 10px #a5ff80"
       this.reset();
     })
     .catch((error) => {
-      alert("❌ Failed to send, try again.");
+      notify_status.innerText = "❌ Failed to send, try again.";
+      notify_status.style.background = err_msg[0];
+      notify_status.style.color = err_msg[1]
+      //notify_status.style.borderColor = "red";
+      notify_status.style.boxShadow = "0 0 10px  #ff808a"
       console.error(error);
     });
+    notify_status.classList.add("show"); 
+    setTimeout(()=>{
+        notify_status.classList.remove("show");
+    },5000)
 });
