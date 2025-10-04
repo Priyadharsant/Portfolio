@@ -284,7 +284,7 @@ body {
     .show{
         display :inline;
     }
-    button{
+    .send{
         width : 100px;
         height: 50px;
         border: none;
@@ -293,12 +293,15 @@ body {
         color: white ;
         font-size: large;
         font-weight: bold ;
-        transition: transform 0.3s ease-in-out,box-shadow 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out, 
+              box-shadow 0.3s ease-in-out, 
+background-color 5s ease-in-out;
     }
-    button:hover{
+    .send:hover{
         transform: scaleX(1.05) translateY(-5px);
+        background: linear-gradient( 135deg, #5138e1, #c415ff);
     }
-    #contact-form *:hover{
+    input:hover,textarea:hover,.send:hover{
         box-shadow: 0 0 10px #3c2bffab;  
         border-color: #404eff;
     }
@@ -337,6 +340,31 @@ body {
     }
     .connect *:hover{
         transform: scale(1.1) translateY(-2px);
+    }
+    
+    
+    .notify_status{
+        position: fixed;
+        z-index : 50;
+        width: 300px ;
+        height : 100px ;        
+        bottom: 20px;
+        left: 5px;
+        padding: 20px 10px;
+        display: flex ;
+        justify-content: center ;
+        align-items: center ;
+        text-align: center ;
+        border-radius: 20px;
+        border: 2px inset transparent;
+        box-shadow: 0 0 10px transparent;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;             
+    }
+    .notify_status.show{
+        display : flex ;
+        opacity: 1;
+        transition: opacity 1s ease-in-out;  
     }
     
     @keyframes slide{  
