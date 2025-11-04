@@ -1,4 +1,5 @@
 let projects_list = [
+    ["Post Site","Create,Edit and Delete","https://post-six-nu.vercel.app/"],
     ["Simon Game","Using JQuery",'https://priyadharsant.github.io/simon_game/'],
     ["Music Player","Basic Music Player",'https://priyadharsant.github.io/music_player/'],
     ["Dice Game","Two Player Game","https://priyadharsant.github.io/dice_game/"],
