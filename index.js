@@ -1,11 +1,11 @@
 let projects_list = [
+    ["ToDo","Add Edit ToDo","https://todo-bfp3.onrender.com/"],
     ["Post Site","Create,Edit and Delete","https://post-priyan.vercel.app/"],
     ["Simon Game","Using JQuery",'https://priyadharsant.github.io/simon_game/'],
     ["Music Player","Basic Music Player",'https://priyadharsant.github.io/music_player/'],
     ["Dice Game","Two Player Game","https://priyadharsant.github.io/dice_game/"],
     ["Tin Dog","Using Bootstrap","https://priyantindog.netlify.app/"],
-    ["KMV Asuran","Website for Gaming YouTuber","https://Priyadharsant.github.io/old_portfolio/asuran"],
-    ["ToDo","Add Edit ToDo","https://todo-bfp3.onrender.com/"]
+    ["KMV Asuran","Website for Gaming YouTuber","https://Priyadharsant.github.io/old_portfolio/asuran"]
 ]
 
 let project = document.querySelectorAll(".projects");
