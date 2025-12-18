@@ -1,27 +1,34 @@
 let projects_list = [
-    ["ToDo","Add Edit ToDo","https://todo-bfp3.onrender.com/"],
-    ["Post Site","Create,Edit and Delete","https://post-priyan.vercel.app/"],
-    ["Simon Game","Using JQuery",'https://priyadharsant.github.io/simon_game/'],
-    ["Music Player","Basic Music Player",'https://priyadharsant.github.io/music_player/'],
-    ["Dice Game","Two Player Game","https://priyadharsant.github.io/dice_game/"],
-    ["Tin Dog","Using Bootstrap","https://priyantindog.netlify.app/"],
-    ["KMV Asuran","Website for Gaming YouTuber","https://Priyadharsant.github.io/old_portfolio/asuran"]
+  ["ToDo", "Add Edit ToDo", "https://todo-bfp3.onrender.com/"],
+  ["Post Site", "Create,Edit and Delete", "https://post-priyan.vercel.app/"],
+  ["Simon Game", "Using JQuery", 'https://priyadharsant.github.io/simon_game/'],
+  ["Music Player", "Basic Music Player", 'https://priyadharsant.github.io/music_player/'],
+  ["Dice Game", "Two Player Game", "https://priyadharsant.github.io/dice_game/"],
+  ["Tin Dog", "Using Bootstrap", "https://priyantindog.netlify.app/"],
+  ["KMV Asuran", "Website for Gaming YouTuber", "https://Priyadharsant.github.io/old_portfolio/asuran"]
 ]
 
 let project = document.querySelectorAll(".projects");
-projects_list.forEach((e,i) => {
-    let h4 = document.createElement("h4");
-    let p = document.createElement("p");
-    h4.innerText = e[0];
-    p.innerText = e[1];
-    let li = document.createElement("li");
-    li.appendChild(h4)
-    li.appendChild(p)
-    project[0].appendChild(li)
-    project[1].appendChild(li.cloneNode(true));
-    li.onclick =() => {
-         window.location.href = e[2];
-         }
+projects_list.forEach((e, i) => {
+  let h4 = document.createElement("h4");
+  let p = document.createElement("p");
+  h4.innerText = e[0];
+  p.innerText = e[1];
+  let li = document.createElement("li");
+  li.appendChild(h4)
+  li.appendChild(p)
+  li.setAttribute("onclick", "window.location.href='" + e[2] + "'")
+  project[0].appendChild(li)
+  project[1].appendChild(li.cloneNode(true));
+  // try {
+  //   li.onclick = () => {
+  //     window.location.href = e[2];
+  //     console.log(e[2])
+  //   }
+  // } catch (error
+  // ) {
+  //   console.log(error)
+  // }
 })
 
 let achieve = [
@@ -44,24 +51,24 @@ function shuffle(arr) {
 }
 
 function updateAchievements() {
-  shuffle(achieve); 
+  shuffle(achieve);
   achievement.forEach((el, i) => {
     setTimeout(() => {
       el.classList.remove("show");
       setTimeout(() => {
         el.innerText = achieve[i];
         el.classList.add("show");
-      }, 800); 
-    }, i * 300); 
+      }, 800);
+    }, i * 300);
   });
 }
-let success = ["#d4edda","#155724"];
-let err_msg = ["#f8d7da","#721c24"]; 
+let success = ["#d4edda", "#155724"];
+let err_msg = ["#f8d7da", "#721c24"];
 updateAchievements();
 setInterval(updateAchievements, 4600);
 
 
-(function(){
+(function () {
   emailjs.init("dC14qcr4g4yVnkS27");
 })();
 
@@ -77,13 +84,13 @@ emailInput.addEventListener("blur", () => {
   notifyBox.classList.remove("show");
 });
 
-document.getElementById("contact-form").addEventListener("submit", function(event) {
+document.getElementById("contact-form").addEventListener("submit", function (event) {
   event.preventDefault();
   let mail = document.getElementById("email");
   let notify_status = document.querySelector(".notify_status");
   if (mail.value === '') {
-      mail.value = "unknownemail1807@gmail.com";
-      console.log(mail.value)
+    mail.value = "unknownemail1807@gmail.com";
+    console.log(mail.value)
   }
   emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
@@ -102,8 +109,8 @@ document.getElementById("contact-form").addEventListener("submit", function(even
       notify_status.style.boxShadow = "0 0 10px  #ff808a"
       console.error(error);
     });
-    notify_status.classList.add("show"); 
-    setTimeout(()=>{
-        notify_status.classList.remove("show");
-    },5000)
+  notify_status.classList.add("show");
+  setTimeout(() => {
+    notify_status.classList.remove("show");
+  }, 5000)
 });
