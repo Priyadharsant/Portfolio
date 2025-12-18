@@ -213,6 +213,7 @@ b {
     border-radius: 10px;
 
 }
+
 .projects li:hover {
     transform: scale(1.1) translateY(-10px);
 }
@@ -307,8 +308,9 @@ textarea,
 }
 
 textarea {
-    height: 150px;
-
+    max-height: 150px;
+    min-height: 150px;
+    resize: none;
 }
 
 .notify {
