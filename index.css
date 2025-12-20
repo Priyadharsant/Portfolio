@@ -112,20 +112,13 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
-.menu_items a {
-    text-decoration: none;
-    color: black;
-}
+
 
 .menu_items:hover {
     background: #5900e11a;
     border: 1px solid #5900e1;
-}
-
-.menu_items:hover a {
     color: #5900e1;
 }
-
 
 .show_menu {
     display: flex;
