@@ -63,7 +63,6 @@ img {
 
 }
 
-.dropdown-item
 
 /*
     .lead::first-letter{  
@@ -96,8 +95,29 @@ img {
 
 #intro h3 {
     font-size: 3em;
+    transition: transform 0.4s ease-in-out;
     font-weight: bolder;
+    transition: all 0.5s ease-in-out;
 }
+
+#career-goal {
+    background: white;
+    box-shadow: 0 0 10px #d6d6d6;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#intro h3:hover {
+    transform: scale(1.05) translateY(-5px);
+    background: -webkit-linear-gradient(135deg, #ff00f1, #404eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: colorchange 5s infinite;
+}
+
+
 
 h2 {
     font-size: 2em;
@@ -115,7 +135,6 @@ h2 {
 #skills_con ul {
     display: flex;
     flex-direction: row;
-    gap: 2em;
     justify-content: center;
     list-style-type: none;
     flex-wrap: wrap;
@@ -132,7 +151,9 @@ h2 {
 
 #skills_con ul li:hover {
     transform: scale(1.1) translateY(-7px);
-    transition: transform 0.3s ease-in-out;
+    /* transition: all 0.3s ease-in-out;
+    background: white;
+    box-shadow: 0 2px 10px #e598fe; */
 }
 
 #skill_logo {
@@ -144,6 +165,67 @@ h2 {
 
 #skill {
     text-align: center;
+}
+
+.skill {
+    padding: 0.5rem 1rem 0rem 1rem;
+    border-radius: 10px;
+}
+
+.lead {
+    font-family: serif;
+}
+
+.keyword-tags {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.tag {
+    padding: 8px 16px;
+    border-radius: 999px;
+
+    background-color: #ffecec;
+    color: #d32f2f;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1;
+
+    cursor: default;
+    user-select: none;
+
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+
+    transition:
+        outline-color 0.25s ease,
+        transform 0.25s ease,
+        background-color 0.25s ease;
+}
+
+.tag:hover {
+    outline-color: #d32f2f;
+    background-color: #ffdede;
+    transform: translateY(-2px);
+}
+
+.tag:focus-visible {
+    outline-color: #d32f2f;
+}
+
+@media (max-width: 600px) {
+    .keyword-tags {
+        justify-content: center;
+    }
+
+    .tag {
+        font-size: 0.85rem;
+        padding: 7px 14px;
+    }
 }
 
 .lead strong,
@@ -216,6 +298,7 @@ b {
 
 .projects li:hover {
     transform: scale(1.1) translateY(-10px);
+    box-shadow: 0 0 15px #edb8ff;
 }
 
 .project_con:hover .projects {
