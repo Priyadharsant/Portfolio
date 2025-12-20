@@ -133,3 +133,6 @@ window.addEventListener("scroll", () => {
   menu.classList.remove("show");
   hamburger_menu.classList.remove("active");
 });
+
+let year = new Date().getFullYear();
+document.querySelector(".license p").innerHTML = `&copy; ${year} Priyadharsan.`;

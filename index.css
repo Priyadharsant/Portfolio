@@ -627,6 +627,7 @@ footer a {
     transition: opacity 1s ease-in-out;
 }
 
+
 @keyframes slide {
     to {
         transform: translateX(calc(-100% - 2em));
