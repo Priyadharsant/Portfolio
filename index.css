@@ -186,6 +186,12 @@ img {
     box-shadow: 0 0 10px #d6d6d6;
 }
 
+#about p {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin: 0px;
+}
+
 #about_con {
     display: flex;
     flex-direction: column;
@@ -217,6 +223,9 @@ img {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #intro h3:hover {
@@ -624,8 +633,12 @@ footer a {
         text-align: left;
     }
 
+    #career-goal p {
+        max-width: 1000px;
+    }
+
     #about_con p {
-        max-width: 600px;
+        max-width: 700px;
     }
 
     .achieve {
