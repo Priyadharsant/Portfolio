@@ -87,11 +87,13 @@ emailInput.addEventListener("blur", () => {
 document.getElementById("contact-form").addEventListener("submit", function (event) {
   event.preventDefault();
   let mail = document.getElementById("email");
+  let sendbtn = documents.getElementByClass("send");
   let notify_status = document.querySelector(".notify_status");
   if (mail.value === '') {
     mail.value = "unknownemail1807@gmail.com";
     console.log(mail.value)
   }
+  sendbtn.setAttribute("disabled",true);
   emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
       notify_status.innerText = "✅ Message sent successfully!";
@@ -110,6 +112,7 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
       console.error(error);
     });
   notify_status.classList.add("show");
+  sendbtn.setAttribute("disabled",false);
   setTimeout(() => {
     notify_status.classList.remove("show");
   }, 5000)
