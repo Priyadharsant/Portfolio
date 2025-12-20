@@ -13,6 +13,124 @@ body {
     z-index: 50;
 }
 
+.hamburger_menu {
+    width: 35px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.line {
+    height: 4px;
+    background: #333;
+    border-radius: 5px;
+    transition: all 0.4s ease;
+}
+
+.active_menu {
+
+    border: 2px solid black;
+}
+
+.active_menu .line1 {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.active_menu .line2 {
+    opacity: 0;
+}
+
+.active_menu .line3 {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Hamburger */
+.hamburger_menu {
+    width: 35px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.4s ease;
+}
+
+.line {
+    height: 4px;
+    background: #333;
+    border-radius: 5px;
+    transition: all 0.4s ease;
+}
+
+.hamburger_menu.active {
+    border: 2px solid black;
+}
+
+.hamburger_menu.active .line1 {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger_menu.active .line2 {
+    opacity: 0;
+}
+
+.hamburger_menu.active .line3 {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+#menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: white;
+    box-shadow: 0 0 10px #d6d6d6;
+    border-radius: 10px;
+    padding: 10px;
+    list-style: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+#menu.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.menu_items {
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu_items a {
+    text-decoration: none;
+    color: black;
+}
+
+.menu_items:hover {
+    background: #5900e11a;
+    border: 1px solid #5900e1;
+}
+
+.menu_items:hover a {
+    color: #5900e1;
+}
+
+
+.show_menu {
+    display: flex;
+}
 
 .title {
     background: #ffffff;

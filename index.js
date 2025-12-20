@@ -114,3 +114,11 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
     notify_status.classList.remove("show");
   }, 5000)
 });
+
+const hamburger_menu = document.getElementById("hamburger_menu");
+const menu = document.getElementById("menu");
+
+hamburger_menu.addEventListener("click", () => {
+  menu.classList.toggle("show");
+  hamburger_menu.classList.toggle("active");
+});
