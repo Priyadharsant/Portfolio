@@ -106,7 +106,6 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
       notify_status.innerText = "❌ Failed to send, try again.";
       notify_status.style.background = err_msg[0];
       notify_status.style.color = err_msg[1]
-      //notify_status.style.borderColor = "red";
       notify_status.style.boxShadow = "0 0 10px  #ff808a"
       console.error(error);
     });

@@ -347,7 +347,7 @@ h2 {
     }
 }
 
-.strong,
+strong,
 b {
     background: -webkit-linear-gradient(#ff1100, #ff6a7f);
     -webkit-background-clip: text;
