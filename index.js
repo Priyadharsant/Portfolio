@@ -75,7 +75,6 @@ setInterval(updateAchievements, 4600);
 const emailInput = document.getElementById("email");
 const notifyBox = document.getElementById("note");
 
-// Show / hide note box
 emailInput.addEventListener("focus", () => {
   notifyBox.classList.add("show");
 });
@@ -88,10 +87,17 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
   event.preventDefault();
   let mail = document.getElementById("email");
   let notify_status = document.querySelector(".notify_status");
+  let send_btn = document.querySelector(".send");
   if (mail.value === '') {
     mail.value = "unknownemail1807@gmail.com";
     console.log(mail.value)
   }
+  send_btn.innerText = "Sending...";
+  send_btn.disabled = true;
+  setTimeout(() => {
+    send_btn.innerText = "Send";
+    send_btn.disabled = false;
+  }, 3000);
   emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
       notify_status.innerText = "✅ Message sent successfully!";
@@ -110,6 +116,7 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
       console.error(error);
     });
   notify_status.classList.add("show");
+
   setTimeout(() => {
     notify_status.classList.remove("show");
   }, 5000)
