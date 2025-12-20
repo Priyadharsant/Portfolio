@@ -86,13 +86,18 @@ emailInput.addEventListener("blur", () => {
 document.getElementById("contact-form").addEventListener("submit", function (event) {
   event.preventDefault();
   let mail = document.getElementById("email");
-  let sendbtn = documents.getElementByClass("send");
   let notify_status = document.querySelector(".notify_status");
   let send_btn = document.querySelector(".send");
   if (mail.value === '') {
     mail.value = "unknownemail1807@gmail.com";
     console.log(mail.value)
   }
+  send_btn.innerText = "Sending...";
+  send_btn.disabled = true;
+  setTimeout(() => {
+    send_btn.innerText = "Send";
+    send_btn.disabled = false;
+  }, 3000);
   emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
       notify_status.innerText = "✅ Message sent successfully!";
@@ -106,10 +111,12 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
       notify_status.innerText = "❌ Failed to send, try again.";
       notify_status.style.background = err_msg[0];
       notify_status.style.color = err_msg[1]
+      //notify_status.style.borderColor = "red";
       notify_status.style.boxShadow = "0 0 10px  #ff808a"
       console.error(error);
     });
   notify_status.classList.add("show");
+
   setTimeout(() => {
     notify_status.classList.remove("show");
   }, 5000)
@@ -121,4 +128,8 @@ const menu = document.getElementById("menu");
 hamburger_menu.addEventListener("click", () => {
   menu.classList.toggle("show");
   hamburger_menu.classList.toggle("active");
+});
+window.addEventListener("scroll", () => {
+  menu.classList.remove("show");
+  hamburger_menu.classList.remove("active");
 });
