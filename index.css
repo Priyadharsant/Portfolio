@@ -670,15 +670,15 @@ footer a {
 }
 
 main *{
-    animation : fadein 2s ease-in-out;
+    animation : fadein 1s ease-in-out;
 }
 @keyframes fadein{
     0%{
-        transform : translateY(-20);
+        transform : translateY(-20px);
         opacity : 0.3;
 }
 100%{
     opacity : 1;
-    transform : translateY(0);
+    transform : translateY(0px);
 }
 }
