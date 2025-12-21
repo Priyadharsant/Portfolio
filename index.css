@@ -668,3 +668,17 @@ footer a {
         height: 50px;
     }
 }
+
+main *{
+    animation : fadein 2s ease-in-out;
+}
+@keyframes fadein{
+    0%{
+        transform : translateY(-20);
+        opacity : 0.3;
+}
+100%{
+    opacity : 1;
+    transform : translateY(0);
+}
+}
