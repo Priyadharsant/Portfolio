@@ -606,27 +606,66 @@ footer a {
     position: fixed;
     z-index: 50;
     width: 300px;
-    height: 100px;
-    bottom: 20px;
-    left: 5px;
+    top: calc(50vh - 50px);
+    left: calc(50vw - 150px);
+    display: flex;
+    flex-direction: column;
     padding: 20px 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     border-radius: 20px;
+    background: white;
     border: 2px inset transparent;
     box-shadow: 0 0 10px transparent;
     opacity: 0;
     transition: opacity 1s ease-in-out;
 }
 
+.notify_sym {
+    font-size: 3em;
+    font-weight: 500;
+    margin-bottom: 10px;
+    border-radius: 500px;
+    height: 1.2em;
+    width: 1.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid transparent;
+
+}
+
 .notify_status.show {
     display: flex;
     opacity: 1;
-    transition: opacity 1s ease-in-out;
+    transition: opacity .5s ease-in-out;
+    box-shadow: 0 0 10px #ccc;
 }
 
+.notify_sym p {
+    margin: 0;
+}
+
+.notify_status.show .notify_sym p {
+
+    animation: notify_pop 0.5s linear;
+}
+
+@keyframes notify_pop {
+    0% {
+        transform: scale(0.5) rotate(30deg);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
 
 @keyframes slide {
     to {
@@ -669,16 +708,18 @@ footer a {
     }
 }
 
-main *{
-    animation : fadein 1s ease-in-out;
+main * {
+    animation: fadein 1s ease-in-out;
 }
-@keyframes fadein{
-    0%{
-        transform : translateY(-20px);
-        opacity : 0.3;
-}
-100%{
-    opacity : 1;
-    transform : translateY(0px);
-}
+
+@keyframes fadein {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
 }

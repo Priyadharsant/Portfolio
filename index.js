@@ -83,10 +83,12 @@ emailInput.addEventListener("blur", () => {
   notifyBox.classList.remove("show");
 });
 
-document.getElementById("contact-form").addEventListener("submit", function (event) {
+document.getElementById("contact-form").addEventListener("submit", async function (event) {
   event.preventDefault();
   let mail = document.getElementById("email");
   let notify_status = document.querySelector(".notify_status");
+  let notify_sym = document.querySelector(".notify_sym");
+  let notify_msg = document.querySelector(".notify_msg");
   let send_btn = document.querySelector(".send");
   if (mail.value === '') {
     mail.value = "unknownemail1807@gmail.com";
@@ -98,28 +100,27 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
     send_btn.innerText = "Send";
     send_btn.disabled = false;
   }, 3000);
-  emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
+  console.log(this)
+  await emailjs.sendForm("service_2ij6k8", "template_70dkd0o", this)
     .then(() => {
-      notify_status.innerText = "✅ Message sent successfully!";
-      notify_status.style.background = success[0];
-      notify_status.style.color = success[1];
-      notify_status.style.borderColor = "green";
-      notify_status.style.boxShadow = "0 0 10px #a5ff80"
+      notify_msg.innerText = "Your message has been sent successfully!";
+      notify_sym.style.borderColor = "#03e803";
+      notify_sym.querySelector("p").style.color = "#03e803";
+      notify_sym.querySelector("p").innerText = "✓";
       this.reset();
     })
     .catch((error) => {
-      notify_status.innerText = "❌ Failed to send, try again.";
-      notify_status.style.background = err_msg[0];
-      notify_status.style.color = err_msg[1]
-      //notify_status.style.borderColor = "red";
-      notify_status.style.boxShadow = "0 0 10px  #ff808a"
+      notify_msg.innerText = "Failed to send, try again.";
+      notify_sym.style.borderColor = "#f94e4e";
+      notify_sym.querySelector("p").style.color = "#f94e4e";
+      notify_sym.querySelector("p").innerText = "!";
       console.error(error);
     });
   notify_status.classList.add("show");
 
   setTimeout(() => {
     notify_status.classList.remove("show");
-  }, 5000)
+  }, 3000)
 });
 
 const hamburger_menu = document.getElementById("hamburger_menu");
