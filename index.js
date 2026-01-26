@@ -101,7 +101,7 @@ document.getElementById("contact-form").addEventListener("submit", async functio
     send_btn.disabled = false;
   }, 3000);
   console.log(this)
-  await emailjs.sendForm("service_2ij6k8", "template_70dkd0o", this)
+  await emailjs.sendForm("service_2ij6k8e", "template_70dkd0o", this)
     .then(() => {
       notify_msg.innerText = "Your message has been sent successfully!";
       notify_sym.style.borderColor = "#03e803";
@@ -110,7 +110,7 @@ document.getElementById("contact-form").addEventListener("submit", async functio
       this.reset();
     })
     .catch((error) => {
-      notify_msg.innerText = "Failed to send, try again.";
+      notify_msg.innerText = "Something went wrong! Please try again.";
       notify_sym.style.borderColor = "#f94e4e";
       notify_sym.querySelector("p").style.color = "#f94e4e";
       notify_sym.querySelector("p").innerText = "!";
