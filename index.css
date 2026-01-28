@@ -234,7 +234,6 @@ img {
     background: -webkit-linear-gradient(135deg, #ff00f1, #404eff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: colorchange 5s infinite;
 }
 
 
@@ -580,7 +579,7 @@ footer a {
 }
 
 .license {
-    width: 40%;
+    width: fit-content;
 }
 
 .connect {
