@@ -1,0 +1,11 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "frontend": "npm --prefix frontend run dev",
+    "backend": "npm --prefix backend run dev",
+    "build": "npm --prefix frontend run build",
+    "lint": "npm --prefix frontend run lint"
+  }
+}

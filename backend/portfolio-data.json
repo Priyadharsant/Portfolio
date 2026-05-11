@@ -1,0 +1,209 @@
+{
+  "profile": {
+    "name": "Priyadharsan T",
+    "title": "Backend Developer • Frontend Developer • Problem Solver",
+    "tagline": "Building complete backend systems, clean frontend interfaces, cloud-ready applications, and solving problems with structured thinking.",
+    "email": "priyadharsant4@gmail.com",
+    "github": "https://github.com/Priyadharsant",
+    "linkedin": "https://www.linkedin.com/in/priya-dharsan-t-2b5810327",
+    "codechef": "https://www.codechef.com/users/priyadharsan07",
+    "leetcode": "https://leetcode.com/u/Priyadharsant/",
+    "resume": "/resume.pdf"
+  },
+  "hero": {
+    "kicker": "Backend & Frontend Developer",
+    "highlights": [
+      "Backend",
+      "Frontend",
+      "AWS Cloud"
+    ]
+  },
+  "about": {
+    "title": "Backend-first student developer with real college web experience.",
+    "paragraphs": [
+      "I am a B.Tech AI & DS student at Velammal Engineering College with separate strengths in complete backend development, frontend development, AWS Cloud, and problem solving.",
+      "As Backend TL at WebOps, I work on real college web systems, maintain website backend flows, collaborate with teammates, and contribute to admission portal development.",
+      "I like building practical systems that are clean, reliable, and useful for real users, while continuously improving my coding and problem-solving ability."
+    ],
+    "currentlyWorkingOn": [
+      "College web systems",
+      "AI tools",
+      "Automation projects"
+    ]
+  },
+  "skills": [
+    {
+      "title": "Frontend",
+      "items": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "EJS",
+        "React"
+      ]
+    },
+    {
+      "title": "Backend",
+      "items": [
+        "Node.js",
+        "Express",
+        "Python",
+        "REST APIs",
+        "Authentication",
+        "API Design"
+      ]
+    },
+    {
+      "title": "Database",
+      "items": [
+        "MongoDB",
+        "MySQL"
+      ]
+    },
+    {
+      "title": "Tools",
+      "items": [
+        "Git",
+        "GitHub",
+        "Linux",
+        "VS Code"
+      ]
+    },
+    {
+      "title": "Cloud",
+      "items": [
+        "AWS Cloud",
+        "Cloud Deployment",
+        "Hosting",
+        "Server Basics"
+      ]
+    },
+    {
+      "title": "Problem Solving",
+      "items": [
+        "DSA",
+        "Algorithms",
+        "Debugging",
+        "Logic Building"
+      ]
+    }
+  ],
+  "skillsIntro": "A focused stack for building web applications, backend services, APIs, and automation workflows.",
+  "experience": {
+    "title": "WebOps Backend TL",
+    "organization": "Velammal Engineering College",
+    "badge": "Real-world college web experience",
+    "points": [
+      "Maintaining and improving the college website backend",
+      "Building backend features for student-facing and admin-facing flows",
+      "Collaborating with the WebOps team on production website updates",
+      "Contributing to admission portal workflows and data handling"
+    ]
+  },
+  "projects": [
+    {
+      "title": "College Website Backend",
+      "description": "Backend services and maintenance support for real-world college web systems used by students, faculty, and admission teams.",
+      "stack": [
+        "Node.js",
+        "React",
+        "MongoDB",
+        "REST API"
+      ],
+      "github": "https://github.com/priyadharsan/college-web-backend",
+      "demo": "https://velammal.edu.in",
+      "accent": "from-emerald-400 via-teal-500 to-cyan-500",
+      "status": "completed",
+      "features": [
+        "Content update workflows",
+        "Reliable API endpoints",
+        "Team-ready backend structure"
+      ]
+    },
+    {
+      "title": "College Admission Portal",
+      "description": "A backend-focused admission workflow for handling student applications, validations, and administrative review.",
+      "stack": [
+        "Node.js",
+        "React",
+        "MongoDB",
+        "Rest API"
+      ],
+      "github": "https://github.com/priyadharsan/admission-portal",
+      "status": "on process",
+      "demo": "",
+      "accent": "from-cyan-400 via-blue-500 to-indigo-500",
+      "features": [
+        "Role-based application review",
+        "Structured student data handling",
+        "Clean admin-side workflow"
+      ]
+    },
+    {
+      "title": "ToDo",
+      "description": "A deployed task management app for creating, editing, and organizing todos with a simple focused workflow.",
+      "stack": [
+        "React",
+        "JavaScript",
+        "CSS"
+      ],
+      "github": "https://github.com/Priyadharsant",
+      "demo": "https://todo-bfp3.onrender.com/",
+      "status": "completed",
+      "accent": "from-sky-400 via-cyan-500 to-teal-500",
+      "features": [
+        "Add todo items",
+        "Edit existing todos",
+        "Clean deployed user interface"
+      ]
+    },
+    {
+      "title": "FakeKart",
+      "description": "A responsive ecommerce web application with product browsing and a polished shopping interface.",
+      "stack": [
+        "React",
+        "JavaScript",
+        "CSS",
+        "Netlify"
+      ],
+      "github": "https://github.com/Priyadharsant",
+      "demo": "https://fakekart.netlify.app/",
+      "status": "completed",
+      "accent": "from-indigo-400 via-blue-500 to-cyan-500",
+      "features": [
+        "Product listing interface",
+        "Ecommerce-style user flow",
+        "Responsive Netlify deployment"
+      ]
+    }
+  ],
+  "projectsIntro": "Selected work focused on backend systems, automation, and practical web applications.",
+  "achievements": [
+    {
+      "title": "CodeChef Profile",
+      "description": "Active problem-solving profile for strengthening DSA and coding fundamentals."
+    },
+    {
+      "title": "Coursera Java",
+      "description": "Completed Java-focused certification work to build stronger programming basics."
+    },
+    {
+      "title": "WebOps Leadership",
+      "description": "Backend TL experience collaborating on college web systems and admission workflows."
+    },
+    {
+      "title": "GitHub Contributions",
+      "description": "Maintains project repositories and practices Git-based development workflows."
+    }
+  ],
+  "resume": {
+    "description": "A quick resume section for recruiters who want the formal snapshot."
+  },
+  "contact": {
+    "intro": "Open to internships, backend roles, AI projects, and useful automation work."
+  },
+  "footer": {
+    "builtWith": "Built with React & Tailwind CSS",
+    "copyright": "© 2026 Priyadharsan T"
+  }
+}
