@@ -140,6 +140,35 @@ app.get('/api/portfolio', async (_req, res) => {
   }
 });
 
+app.get('/api/resume', async (req, res) => {
+  try {
+    const data = await Portfolio.findOne();
+    if (!data || !data.profile || !data.profile.resume) {
+      return res.status(404).json({ message: 'Resume not found' });
+    }
+    
+    const response = await fetch(data.profile.resume);
+    if (!response.ok) {
+        throw new Error('Failed to fetch resume file');
+    }
+    
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    if (req.query.download === 'true') {
+      res.setHeader('Content-Disposition', 'attachment; filename="resume.pdf"');
+    } else {
+      res.setHeader('Content-Disposition', 'inline; filename="resume.pdf"');
+    }
+    
+    return res.send(buffer);
+  } catch (error) {
+    console.error('Failed to fetch resume:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body ?? {};
   console.log("Mail triggered")

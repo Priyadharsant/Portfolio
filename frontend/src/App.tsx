@@ -10,6 +10,7 @@ import Resume from './components/Resume';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackgroundDemo from './components/BackgroundDemo';
+import ResumeViewer from './components/ResumeViewer';
 import LoadingScreen from './components/LoadingScreen';
 import ScrollProgress from './components/ScrollProgress';
 import Logo from './components/Logo';
@@ -18,6 +19,7 @@ import { apiUrl } from './utils/api';
 
 function App() {
   const isBackgroundDemo = window.location.pathname === '/background-demo';
+  const isResumeView = window.location.pathname === '/resume';
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [error, setError] = useState('');
   const [isFloatingLogoVisible, setIsFloatingLogoVisible] = useState(false);
@@ -46,7 +48,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isBackgroundDemo) {
+    if (isBackgroundDemo || isResumeView) {
       return;
     }
 
@@ -70,10 +72,14 @@ function App() {
     };
 
     loadPortfolio();
-  }, [isBackgroundDemo]);
+  }, [isBackgroundDemo, isResumeView]);
 
   if (isBackgroundDemo) {
     return <BackgroundDemo />;
+  }
+
+  if (isResumeView) {
+    return <ResumeViewer />;
   }
 
   if (error) {

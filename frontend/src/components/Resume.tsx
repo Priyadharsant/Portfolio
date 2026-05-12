@@ -2,13 +2,14 @@ import { motion } from 'framer-motion';
 import { Download, Eye } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 import SectionHeader from './SectionHeader';
+import { apiUrl } from '../utils/api';
 
 type ResumeProps = {
     profile: PortfolioData['profile'];
     resume: PortfolioData['resume'];
 };
 
-const Resume = ({ profile, resume }: ResumeProps) => {
+const Resume = ({ resume }: ResumeProps) => {
     return (
         <section id="resume" className="border-b border-white/10 bg-transparent">
             <div className="section-shell text-center">
@@ -20,7 +21,7 @@ const Resume = ({ profile, resume }: ResumeProps) => {
                     viewport={{ once: true }}
                 >
                     <motion.a
-                        href={profile.resume}
+                        href="/resume"
                         target="_blank"
                         rel="noreferrer"
                         className="secondary-action min-h-12 flex-1"
@@ -31,7 +32,7 @@ const Resume = ({ profile, resume }: ResumeProps) => {
                         View Resume
                     </motion.a>
                     <motion.a
-                        href={profile.resume}
+                        href={apiUrl('/api/resume?download=true')}
                         download
                         className="primary-action min-h-12 flex-1"
                         whileHover={{ y: -2 }}
