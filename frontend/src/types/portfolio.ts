@@ -54,7 +54,6 @@ export type PortfolioData = {
     intro: string;
   };
   footer: {
-    builtWith: string;
     copyright: string;
   };
 };

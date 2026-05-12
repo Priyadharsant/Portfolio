@@ -1,7 +1,6 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import nodemailer from 'nodemailer';
 import mongoose from 'mongoose';
 
 dotenv.config();
@@ -20,27 +19,10 @@ const Portfolio = mongoose.model('Portfolio', new mongoose.Schema({}, { strict: 
 app.use(cors());
 app.use(express.json());
 
-const requiredEnv = ['MAIL_HOST', 'MAIL_PORT', 'MAIL_USER', 'MAIL_PASS', 'MAIL_TO'];
+const requiredEnv = ['RESEND_API_KEY', 'RESEND_FROM', 'MAIL_TO'];
 
 function getMissingEnv() {
   return requiredEnv.filter((key) => !process.env[key]);
-}
-
-function getMailConfig() {
-  const port = Number(process.env.MAIL_PORT);
-
-  return {
-    host: process.env.MAIL_HOST,
-    port,
-    secure: process.env.MAIL_SECURE === 'true' || port === 465,
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 20000,
-  };
 }
 
 function escapeHtml(value) {
@@ -50,6 +32,28 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+async function sendResendEmail(payload) {
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(data?.message || 'Resend failed to send email.');
+    error.status = response.status;
+    error.details = data;
+    throw error;
+  }
+
+  return data;
 }
 
 function buildOwnerMail({ name, email, message }) {
@@ -138,7 +142,7 @@ app.get('/api/portfolio', async (_req, res) => {
 
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body ?? {};
-
+  console.log("Mail triggered")
   if (!name || !email || !message) {
     return res.status(400).json({ message: 'Please fill all contact form fields.' });
   }
@@ -150,49 +154,39 @@ app.post('/api/contact', async (req, res) => {
     });
   }
 
-  const transporter = nodemailer.createTransport(getMailConfig());
-
   try {
     const ownerMail = buildOwnerMail({ name, email, message });
-    const autoReplyMail = buildAutoReplyMail({ name, message });
 
-    await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.MAIL_USER}>`,
+    await sendResendEmail({
+      from: process.env.RESEND_FROM,
       to: process.env.MAIL_TO,
-      replyTo: email,
+      reply_to: email,
       subject: ownerMail.subject,
       text: ownerMail.text,
       html: ownerMail.html,
     });
 
-    await transporter.sendMail({
-      from: `"Priyadharsan T" <${process.env.MAIL_USER}>`,
-      to: email,
-      subject: autoReplyMail.subject,
-      text: autoReplyMail.text,
-      html: autoReplyMail.html,
-    });
+    console.log(`Contact owner email sent via Resend: from=${email}, to=${process.env.MAIL_TO}`);
 
-    return res.json({ message: 'Message sent successfully. Auto-reply sent to your email.' });
+    if (process.env.RESEND_SEND_AUTO_REPLY === 'true') {
+      const autoReplyMail = buildAutoReplyMail({ name, message });
+
+      await sendResendEmail({
+        from: process.env.RESEND_FROM,
+        to: email,
+        subject: autoReplyMail.subject,
+        text: autoReplyMail.text,
+        html: autoReplyMail.html,
+      });
+
+      console.log(`Contact auto-reply sent via Resend: to=${email}`);
+    } else {
+      console.log(`Contact auto-reply skipped: RESEND_SEND_AUTO_REPLY is not true, to=${email}`);
+    }
+
+    return res.json({ message: 'Message sent successfully.' });
   } catch (error) {
     console.error('Failed to send contact email:', error);
-
-    if (error?.code === 'EAUTH') {
-      return res.status(401).json({
-        message:
-          'Mail login failed. Use a Gmail app password in MAIL_PASS, not your normal Gmail password.',
-      });
-    }
-
-    if (error?.code === 'ETIMEDOUT' || error?.code === 'ESOCKET') {
-      console.error(
-        `Mail connection failed. Check MAIL_HOST, MAIL_PORT, and MAIL_SECURE. Current config: host=${process.env.MAIL_HOST || 'missing'}, port=${process.env.MAIL_PORT || 'missing'}, secure=${process.env.MAIL_SECURE || 'auto'}`,
-      );
-
-      return res.status(504).json({
-        message: 'Unable to send your message right now. Please try again later.',
-      });
-    }
 
     return res.status(500).json({ message: 'Failed to send message. Please try again.' });
   }
@@ -201,6 +195,6 @@ app.post('/api/contact', async (req, res) => {
 app.listen(port, () => {
   console.log(`Mail server running on http://localhost:${port}`);
   console.log(
-    `Mail config: host=${process.env.MAIL_HOST || 'missing'}, port=${process.env.MAIL_PORT || 'missing'}, secure=${process.env.MAIL_SECURE || 'auto'}, user=${process.env.MAIL_USER ? 'set' : 'missing'}, to=${process.env.MAIL_TO ? 'set' : 'missing'}`,
+    `Mail config: provider=resend, apiKey=${process.env.RESEND_API_KEY ? 'set' : 'missing'}, from=${process.env.RESEND_FROM || 'missing'}, to=${process.env.MAIL_TO ? 'set' : 'missing'}, autoReply=${process.env.RESEND_SEND_AUTO_REPLY === 'true' ? 'enabled' : 'disabled'}`,
   );
 });
