@@ -26,6 +26,23 @@ function getMissingEnv() {
   return requiredEnv.filter((key) => !process.env[key]);
 }
 
+function getMailConfig() {
+  const port = Number(process.env.MAIL_PORT);
+
+  return {
+    host: process.env.MAIL_HOST,
+    port,
+    secure: process.env.MAIL_SECURE === 'true' || port === 465,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
+  };
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -133,15 +150,7 @@ app.post('/api/contact', async (req, res) => {
     });
   }
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: Number(process.env.MAIL_PORT),
-    secure: process.env.MAIL_SECURE === 'true',
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-  });
+  const transporter = nodemailer.createTransport(getMailConfig());
 
   try {
     const ownerMail = buildOwnerMail({ name, email, message });
@@ -175,10 +184,20 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
+    if (error?.code === 'ETIMEDOUT' || error?.code === 'ESOCKET') {
+      return res.status(504).json({
+        message:
+          'Mail server connection timed out. Check MAIL_HOST, MAIL_PORT, and MAIL_SECURE on Render. For Gmail use smtp.gmail.com with port 465 and MAIL_SECURE=true, or port 587 and MAIL_SECURE=false.',
+      });
+    }
+
     return res.status(500).json({ message: 'Failed to send message. Please try again.' });
   }
 });
 
 app.listen(port, () => {
   console.log(`Mail server running on http://localhost:${port}`);
+  console.log(
+    `Mail config: host=${process.env.MAIL_HOST || 'missing'}, port=${process.env.MAIL_PORT || 'missing'}, secure=${process.env.MAIL_SECURE || 'auto'}, user=${process.env.MAIL_USER ? 'set' : 'missing'}, to=${process.env.MAIL_TO ? 'set' : 'missing'}`,
+  );
 });
