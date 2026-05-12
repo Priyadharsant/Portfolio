@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Download, Eye } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 import SectionHeader from './SectionHeader';
-import { apiUrl } from '../utils/api';
 
 type ResumeProps = {
     profile: PortfolioData['profile'];
@@ -32,8 +31,7 @@ const Resume = ({ resume }: ResumeProps) => {
                         View Resume
                     </motion.a>
                     <motion.a
-                        href={apiUrl('/api/resume?download=true')}
-                        download
+                        href="/download_resume"
                         className="primary-action min-h-12 flex-1"
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.98 }}

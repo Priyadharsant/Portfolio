@@ -101,8 +101,7 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
 
                     <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                         <motion.a
-                            href={profile.resume}
-                            download
+                            href="/download_resume"
                             className="inline-flex h-12 transform-gpu items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-400 to-cyan-500 px-8 font-semibold text-slate-950 transition-[box-shadow,transform] duration-150 will-change-transform hover:scale-105 hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-[#06070b]"
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.98 }}

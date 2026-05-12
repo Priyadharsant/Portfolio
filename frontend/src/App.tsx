@@ -11,6 +11,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackgroundDemo from './components/BackgroundDemo';
 import ResumeViewer from './components/ResumeViewer';
+import DownloadResume from './components/DownloadResume';
 import LoadingScreen from './components/LoadingScreen';
 import ScrollProgress from './components/ScrollProgress';
 import Logo from './components/Logo';
@@ -20,6 +21,7 @@ import { apiUrl } from './utils/api';
 function App() {
   const isBackgroundDemo = window.location.pathname === '/background-demo';
   const isResumeView = window.location.pathname === '/resume';
+  const isDownloadResume = window.location.pathname === '/download_resume';
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [error, setError] = useState('');
   const [isFloatingLogoVisible, setIsFloatingLogoVisible] = useState(false);
@@ -48,7 +50,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isBackgroundDemo || isResumeView) {
+    if (isBackgroundDemo || isResumeView || isDownloadResume) {
       return;
     }
 
@@ -72,7 +74,7 @@ function App() {
     };
 
     loadPortfolio();
-  }, [isBackgroundDemo, isResumeView]);
+  }, [isBackgroundDemo, isResumeView, isDownloadResume]);
 
   if (isBackgroundDemo) {
     return <BackgroundDemo />;
@@ -80,6 +82,10 @@ function App() {
 
   if (isResumeView) {
     return <ResumeViewer />;
+  }
+
+  if (isDownloadResume) {
+    return <DownloadResume />;
   }
 
   if (error) {
