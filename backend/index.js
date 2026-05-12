@@ -185,9 +185,12 @@ app.post('/api/contact', async (req, res) => {
     }
 
     if (error?.code === 'ETIMEDOUT' || error?.code === 'ESOCKET') {
+      console.error(
+        `Mail connection failed. Check MAIL_HOST, MAIL_PORT, and MAIL_SECURE. Current config: host=${process.env.MAIL_HOST || 'missing'}, port=${process.env.MAIL_PORT || 'missing'}, secure=${process.env.MAIL_SECURE || 'auto'}`,
+      );
+
       return res.status(504).json({
-        message:
-          'Mail server connection timed out. Check MAIL_HOST, MAIL_PORT, and MAIL_SECURE on Render. For Gmail use smtp.gmail.com with port 465 and MAIL_SECURE=true, or port 587 and MAIL_SECURE=false.',
+        message: 'Unable to send your message right now. Please try again later.',
       });
     }
 
