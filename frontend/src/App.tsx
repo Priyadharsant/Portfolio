@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
@@ -12,12 +12,38 @@ import Footer from './components/Footer';
 import BackgroundDemo from './components/BackgroundDemo';
 import LoadingScreen from './components/LoadingScreen';
 import ScrollProgress from './components/ScrollProgress';
+import Logo from './components/Logo';
 import type { PortfolioData } from './types/portfolio';
+import { apiUrl } from './utils/api';
 
 function App() {
   const isBackgroundDemo = window.location.pathname === '/background-demo';
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [error, setError] = useState('');
+  const [isFloatingLogoVisible, setIsFloatingLogoVisible] = useState(false);
+
+  const heroNameRef = useRef<HTMLHeadingElement>(null);
+  const isFloatingLogoVisibleRef = useRef(false);
+
+  useEffect(() => {
+    const updateFloatingLogo = () => {
+      const shouldShowLogo = window.scrollY > window.innerHeight * 0.72;
+
+      if (shouldShowLogo !== isFloatingLogoVisibleRef.current) {
+        isFloatingLogoVisibleRef.current = shouldShowLogo;
+        setIsFloatingLogoVisible(shouldShowLogo);
+      }
+    };
+
+    updateFloatingLogo();
+    window.addEventListener('scroll', updateFloatingLogo, { passive: true });
+    window.addEventListener('resize', updateFloatingLogo);
+
+    return () => {
+      window.removeEventListener('scroll', updateFloatingLogo);
+      window.removeEventListener('resize', updateFloatingLogo);
+    };
+  }, []);
 
   useEffect(() => {
     if (isBackgroundDemo) {
@@ -26,7 +52,7 @@ function App() {
 
     const loadPortfolio = async () => {
       try {
-        const response = await fetch('/api/portfolio');
+        const response = await fetch(apiUrl('/api/portfolio'));
 
         if (!response.ok) {
           throw new Error('Unable to load portfolio details.');
@@ -77,15 +103,20 @@ function App() {
       transition={{ duration: 0.5 }}
     >
       <ScrollProgress />
-      <Hero profile={portfolio.profile} hero={portfolio.hero} />
-      <About about={portfolio.about} />
-      <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
-      <Experience experience={portfolio.experience} />
-      <Projects projects={portfolio.projects} intro={portfolio.projectsIntro} />
-      <Achievements achievements={portfolio.achievements} />
-      <Resume profile={portfolio.profile} resume={portfolio.resume} />
-      <Contact profile={portfolio.profile} contact={portfolio.contact} />
-      <Footer footer={portfolio.footer} />
+      <LayoutGroup>
+        <Logo isHidden={!isFloatingLogoVisible} />
+        <Hero profile={portfolio.profile} hero={portfolio.hero} nameRef={heroNameRef} />
+      </LayoutGroup>
+      <div className="portfolio-body-bg">
+        <About about={portfolio.about} />
+        <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
+        <Experience experience={portfolio.experience} />
+        <Projects projects={portfolio.projects} intro={portfolio.projectsIntro} />
+        <Achievements achievements={portfolio.achievements} />
+        <Resume profile={portfolio.profile} resume={portfolio.resume} />
+        <Contact profile={portfolio.profile} contact={portfolio.contact} />
+        <Footer footer={portfolio.footer} />
+      </div>
     </motion.div>
   );
 }

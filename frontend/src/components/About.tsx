@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import type { PortfolioData } from '../types/portfolio';
 import { cardHover, fadeUp, staggerContainer } from '../utils/motion';
+import SectionHeader from './SectionHeader';
 
 type AboutProps = {
     about: PortfolioData['about'];
@@ -8,17 +9,9 @@ type AboutProps = {
 
 const About = ({ about }: AboutProps) => {
     return (
-        <section id="about" className="border-b border-white/10 bg-slate-950">
+        <section id="about" className="border-b border-white/10 bg-transparent">
             <div className="section-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.35 }}
-                >
-                    <p className="section-kicker">About</p>
-                    <h2 className="section-title">{about.title}</h2>
-                </motion.div>
+                <SectionHeader kicker="About" title={about.title} />
                 <motion.div
                     className="space-y-5 text-base leading-8 text-slate-300"
                     variants={staggerContainer}
@@ -33,7 +26,7 @@ const About = ({ about }: AboutProps) => {
                         {about.currentlyWorkingOn.map((item) => (
                             <motion.div
                                 key={item}
-                                className="rounded-md border border-white/10 bg-white/[0.04] p-4 text-sm font-semibold text-teal-100"
+                                className="interactive-card rounded-md border border-white/10 bg-white/[0.055] p-4 text-sm font-semibold text-teal-100 shadow-lg shadow-black/10"
                                 variants={fadeUp}
                                 whileHover={cardHover}
                             >

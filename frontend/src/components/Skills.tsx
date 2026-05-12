@@ -21,11 +21,11 @@ const getCategoryIcon = (title: string) => {
 
 const Skills = ({ skills, intro }: SkillsProps) => {
     return (
-        <section id="skills" className="relative border-b border-white/5 bg-[#0a0d14] py-24 overflow-hidden">
+        <section id="skills" className="relative border-b border-white/5 bg-transparent py-24 overflow-hidden">
             {/* Background Details */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)]" />
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
-            
+
             <div className="section-shell relative z-10">
                 <div className="mb-16 text-center max-w-3xl mx-auto">
                     <motion.div
@@ -45,7 +45,7 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                     >
                         Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500">Skills</span>
                     </motion.h2>
-                    <motion.p 
+                    <motion.p
                         className="text-lg text-slate-400 leading-relaxed"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -73,14 +73,14 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                             >
                                 {/* Soft glow effect on hover */}
                                 <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-teal-500/10 blur-[50px] transition-all group-hover:bg-teal-500/20" />
-                                
+
                                 <div className="relative z-10 flex items-center gap-4 mb-6">
                                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-teal-400 shadow-inner group-hover:scale-110 group-hover:border-teal-500/50 group-hover:bg-teal-500/10 transition-all duration-300">
                                         <Icon className="h-6 w-6" />
                                     </div>
                                     <h3 className="text-2xl font-bold text-slate-100">{category.title}</h3>
                                 </div>
-                                
+
                                 <div className="relative z-10 flex flex-wrap gap-2.5">
                                     {category.items.map((skill) => (
                                         <motion.span

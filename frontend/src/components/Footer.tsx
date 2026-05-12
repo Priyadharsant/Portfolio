@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { ArrowUp } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 
 type FooterProps = {
@@ -7,16 +7,17 @@ type FooterProps = {
 
 const Footer = ({ footer }: FooterProps) => {
     return (
-        <footer className="bg-[#06070b] py-8 text-slate-400">
-            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 text-center sm:flex-row sm:px-6 lg:px-8">
-                <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+        <footer className="bg-transparent py-8 text-slate-400">
+            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 border-t border-white/10 px-5 pt-8 text-center text-sm sm:flex-row sm:px-6 lg:px-8">
+                <p className="text-slate-300">{footer.copyright}</p>
+                <a
+                    href="#"
+                    aria-label="Back to top"
+                    title="Back to top"
+                    className="secondary-action h-10 w-10 px-0 py-0"
                 >
-                    {footer.builtWith}
-                </motion.p>
-                <p>{footer.copyright}</p>
+                    <ArrowUp className="h-4 w-4" />
+                </a>
             </div>
         </footer>
     );

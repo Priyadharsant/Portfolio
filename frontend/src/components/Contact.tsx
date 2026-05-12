@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Send } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 import { cardHover, fadeUp } from '../utils/motion';
+import SectionHeader from './SectionHeader';
+import { apiUrl } from '../utils/api';
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -34,7 +36,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
         };
 
         try {
-            const response = await fetch('/api/contact', {
+            const response = await fetch(apiUrl('/api/contact'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,20 +59,12 @@ const Contact = ({ profile, contact }: ContactProps) => {
     };
 
     return (
-        <section id="contact" className="border-b border-white/10 bg-slate-950">
+        <section id="contact" className="border-b border-white/10 bg-transparent">
             <div className="section-shell">
-                <motion.h2
-                    className="section-title"
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.35 }}
-                >
-                    Contact
-                </motion.h2>
+                <SectionHeader kicker="Next step" title="Contact" />
                 <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
                     <motion.div
-                        className="glass-panel rounded-lg p-6"
+                        className="glass-panel interactive-card rounded-lg p-6"
                         variants={fadeUp}
                         initial="hidden"
                         whileInView="visible"
@@ -88,7 +82,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     href={href}
                                     target={href.startsWith('mailto:') ? undefined : '_blank'}
                                     rel="noreferrer"
-                                    className="flex items-center gap-3 rounded-md border border-white/10 bg-slate-950 px-4 py-3 text-slate-300 transition hover:border-teal-300 hover:text-teal-200"
+                                    className="relative flex items-center gap-3 rounded-md border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-300 transition hover:border-teal-300 hover:bg-teal-300/10 hover:text-teal-200"
                                     whileHover={{ borderColor: 'rgba(45, 212, 191, 0.65)' }}
                                     whileTap={{ scale: 0.98 }}
                                 >
@@ -99,7 +93,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                         </div>
                     </motion.div>
                     <motion.div
-                        className="glass-panel rounded-lg p-6"
+                        className="glass-panel interactive-card rounded-lg p-6"
                         variants={fadeUp}
                         initial="hidden"
                         whileInView="visible"
@@ -115,7 +109,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     type="text"
                                     placeholder="Your name"
                                     required
-                                    className="w-full rounded-md border border-white/10 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-teal-300"
+                                    className="w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-teal-300 focus:bg-slate-950"
                                 />
                             </div>
                             <div>
@@ -124,7 +118,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     type="email"
                                     placeholder="Your email"
                                     required
-                                    className="w-full rounded-md border border-white/10 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-teal-300"
+                                    className="w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-teal-300 focus:bg-slate-950"
                                 />
                             </div>
                             <div>
@@ -133,7 +127,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     rows={4}
                                     placeholder="Your message"
                                     required
-                                    className="w-full resize-none rounded-md border border-white/10 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-teal-300"
+                                    className="w-full resize-none rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-teal-300 focus:bg-slate-950"
                                 ></textarea>
                             </div>
                             {statusMessage && (
@@ -151,7 +145,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                             <motion.button
                                 type="submit"
                                 disabled={status === 'loading'}
-                                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-teal-400 px-5 py-3 font-bold text-slate-950 transition hover:bg-teal-300"
+                                className="primary-action w-full px-5 py-3 disabled:cursor-not-allowed disabled:opacity-70"
                                 whileHover={{ backgroundColor: '#5eead4' }}
                                 whileTap={{ scale: 0.98 }}
                             >
