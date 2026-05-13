@@ -61,7 +61,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
     return (
         <section id="contact" className="border-b border-white/10 bg-transparent">
             <div className="section-shell">
-                <SectionHeader kicker="Next step" title="Contact" />
+                <SectionHeader kicker="Reach out" title="Contact" />
                 <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
                     <motion.div
                         className="glass-panel interactive-card rounded-lg p-6"

@@ -12,7 +12,7 @@ const Resume = ({ resume }: ResumeProps) => {
     return (
         <section id="resume" className="border-b border-white/10 bg-transparent">
             <div className="section-shell text-center">
-                <SectionHeader kicker="Snapshot" title="Resume" copy={resume.description} align="center" />
+                <SectionHeader kicker="Overview" title="Resume" copy={resume.description} align="center" />
                 <motion.div
                     className="mx-auto mt-8 flex max-w-xl flex-col justify-center gap-3 sm:flex-row"
                     initial={{ opacity: 0, y: 16 }}
