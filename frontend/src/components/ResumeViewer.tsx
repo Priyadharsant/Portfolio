@@ -59,7 +59,24 @@ const ResumeViewer = () => {
     };
 
     const handlePrint = () => {
-        window.print();
+        if (!resumeUrl) return;
+
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = resumeUrl;
+        document.body.appendChild(iframe);
+
+        iframe.onload = () => {
+            const iframeWindow = iframe.contentWindow;
+            if (iframeWindow) {
+                const handleAfterPrint = () => {
+                    iframeWindow.removeEventListener('afterprint', handleAfterPrint);
+                    document.body.removeChild(iframe);
+                };
+                iframeWindow.addEventListener('afterprint', handleAfterPrint);
+                iframeWindow.print();
+            }
+        }
     };
 
     const handleZoomIn = () => {
@@ -71,23 +88,47 @@ const ResumeViewer = () => {
     };
 
     return (
-        <main className="dark relative h-screen bg-[#06070b] text-slate-100">
+        <main className="dark relative min-h-screen bg-[#06070b] text-slate-100">
             <style>{`
                 @media print {
+                    html,
                     body {
-                        background-color: white;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        background: white !important;
                     }
-                    header, .print-hidden {
-                        display: none;
+
+                    body * {
+                        visibility: hidden;
                     }
+
+                    .pdf-container, .pdf-container * {
+                        visibility: visible;
+                    }
+
                     .pdf-container {
-                        padding-top: 0;
-                        height: auto;
-                        overflow: visible;
+                        position: absolute;
+                        inset: 0;
+                        overflow: visible !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                        background: white !important;
                     }
+
+                    .react-pdf__Document {
+                        display: block !important;
+                    }
+
                     .react-pdf__Page {
-                        margin-bottom: 1rem;
-                        box-shadow: none;
+                        margin: 0 auto !important;
+                        box-shadow: none !important;
+                        break-inside: avoid;
+                        page-break-inside: avoid;
+                    }
+
+                    .react-pdf__Page canvas {
+                        width: 100% !important;
+                        height: auto !important;
                     }
                 }
 
@@ -167,19 +208,20 @@ const ResumeViewer = () => {
                     </button>
                 </div>
             </header>
-            <div ref={containerRef} className="h-full pt-16 overflow-auto pdf-container px-4">
+            <div ref={containerRef} className="h-full pt-16 overflow-auto pdf-container px-4 print:p-0">
                 {resumeUrl ? (
                     <Document
                         file={resumeUrl}
                         onLoadSuccess={onDocumentLoadSuccess}
                         loading={<div className="flex h-full items-center justify-center"><p className="text-slate-400">Loading Resume...</p></div>}
-                        className="flex flex-col items-center gap-8 py-8"
+                        className="flex flex-col items-center gap-8 py-8 print:gap-0 print:py-0"
                     >
                         {Array.from({ length: numPages ?? 0 }, (_, index) => (
                             <Page
                                 key={`page_${index + 1}`}
                                 pageNumber={index + 1}
                                 scale={zoom}
+                                devicePixelRatio={2.5}
                                 className="shadow-2xl shadow-black/40"
                             />
                         ))}
