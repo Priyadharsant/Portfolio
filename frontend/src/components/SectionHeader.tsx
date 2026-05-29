@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 type SectionHeaderProps = {
     kicker: string;
@@ -26,16 +27,17 @@ const SectionHeader = ({ kicker, title, copy, align = 'left' }: SectionHeaderPro
                 },
             }}
         >
-            <motion.p
-                className="section-kicker"
+            <motion.div
+                className="inline-flex items-center justify-center rounded-full bg-teal-50/90 px-4 py-1.5 mb-4 border border-teal-500/20 dark:bg-teal-500/10"
                 variants={{
                     hidden: { opacity: 0, y: 12, filter: 'blur(8px)' },
                     visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
                 }}
                 transition={{ duration: 0.55, ease: 'easeOut' }}
             >
-                {kicker}
-            </motion.p>
+                <Sparkles className="mr-2 h-4 w-4 text-teal-700 dark:text-teal-400" />
+                <span className="text-sm font-semibold text-teal-700 uppercase tracking-widest dark:text-teal-300">{kicker}</span>
+            </motion.div>
             <div className={isCentered ? 'mx-auto flex max-w-2xl flex-col items-center' : 'flex max-w-2xl flex-col'}>
                 <h2 className="section-title overflow-hidden pb-1">
                     {titleWords.map((word, index) => (
@@ -53,7 +55,7 @@ const SectionHeader = ({ kicker, title, copy, align = 'left' }: SectionHeaderPro
                     ))}
                 </h2>
                 <motion.div
-                    className="mt-4 h-px w-24 origin-left bg-gradient-to-r from-teal-300 via-cyan-300 to-transparent"
+                    className="mt-4 h-0.5 w-24 origin-left bg-gradient-to-r from-teal-300 via-cyan-300 to-transparent"
                     variants={{
                         hidden: { scaleX: 0, opacity: 0 },
                         visible: { scaleX: 1, opacity: 1 },

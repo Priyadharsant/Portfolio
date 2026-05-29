@@ -101,7 +101,7 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                         {profile.name}
                     </motion.h1>
 
-                    <motion.h2 variants={fadeUp} className="mt-4 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-700 via-cyan-600 to-blue-600 dark:from-teal-300 dark:via-cyan-400 dark:to-blue-500 sm:text-3xl">
+                    <motion.h2 variants={fadeUp} className="mt-4 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-teal-700 via-cyan-600 to-blue-600 dark:from-teal-300 dark:via-cyan-400 dark:to-blue-500 sm:text-4xl">
                         {profile.title}
                     </motion.h2>
 

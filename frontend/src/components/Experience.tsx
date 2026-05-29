@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Briefcase, CheckCircle2 } from 'lucide-react';
+import { BadgeCheck, Briefcase, CheckCircle2 } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 import { cardHover, fadeUp, staggerContainer } from '../utils/motion';
 import SectionHeader from './SectionHeader';
@@ -33,9 +33,10 @@ const Experience = ({ experience }: ExperienceProps) => {
                             <h3 className="text-2xl font-bold text-slate-950 dark:text-white">{experience.title}</h3>
                             <p className="mt-2 text-slate-600 dark:text-slate-400">{experience.organization}</p>
                         </div>
-                        <span className="w-fit rounded-md border border-teal-500/30 bg-teal-100/70 px-3 py-2 text-sm font-semibold text-teal-800 shadow-sm shadow-teal-200/60 dark:border-teal-300/30 dark:bg-teal-300/10 dark:text-teal-200 dark:shadow-teal-950/30">
+                        <div className="inline-flex items-center gap-2 w-fit rounded-md border border-teal-500/30 bg-teal-100/70 px-3 py-2 text-sm font-semibold text-teal-800 shadow-sm shadow-teal-200/60 dark:border-teal-300/30 dark:bg-teal-300/10 dark:text-teal-200 dark:shadow-teal-950/30">
+                            <BadgeCheck className="h-4 w-4" />
                             {experience.badge}
-                        </span>
+                        </div>
                     </div>
                     <motion.div
                         className="mt-8 grid gap-4 md:grid-cols-2"
@@ -47,8 +48,8 @@ const Experience = ({ experience }: ExperienceProps) => {
                         {experience.points.map((point) => (
                             <motion.div key={point} variants={fadeUp} className="rounded-md border border-slate-200/80 bg-slate-50/90 p-4 text-slate-700 dark:border-white/10 dark:bg-slate-950/35 dark:text-slate-300">
                                 <div className="flex gap-3">
-                                <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-teal-600 dark:text-teal-300" />
-                                <p>{point}</p>
+                                    <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-teal-600 dark:text-teal-300" />
+                                    <p>{point}</p>
                                 </div>
                             </motion.div>
                         ))}

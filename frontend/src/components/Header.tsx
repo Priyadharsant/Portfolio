@@ -1,10 +1,10 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { Download, Menu, X } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const navItems = [
     { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
+    { label: 'Expertise', href: '#skills' },
     { label: 'Experience', href: '#experience' },
     { label: 'Projects', href: '#projects' },
     { label: 'Contact', href: '#contact' },
@@ -76,10 +76,10 @@ const Header = () => {
                             <span className="text-slate-950 transition-colors group-hover:text-slate-800 dark:text-white dark:group-hover:text-slate-100">
                                 Priya
                             </span>
-                            <span className="text-teal-600 transition-colors group-hover:text-cyan-500 dark:text-teal-300 dark:group-hover:text-cyan-200">
-                                Dharsan
+                            <span className="text-teal-600 transition-colors group-hover:text-cyan-600 dark:text-teal-400 dark:group-hover:text-cyan-300">
+                                dharsan T
                             </span>
-                            <span className="absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-80 transition-all duration-200 group-hover:w-full" />
+                            <span className="absolute -bottom-1.5 left-0 h-1 w-12 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-200 group-hover:w-full" />
                         </span>
                     </a>
 
@@ -88,7 +88,7 @@ const Header = () => {
                             <a
                                 key={item.href}
                                 href={item.href}
-                                className="relative rounded-full px-3 py-2 text-sm font-bold text-slate-600 transition duration-200 after:absolute after:bottom-1.5 after:left-3 after:right-3 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-teal-500 after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:text-slate-950 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:after:bg-teal-300 dark:hover:text-white"
+                                className="relative rounded-full px-3 py-2 text-sm font-bold text-slate-600 transition duration-200 after:absolute after:bottom-1.5 after:left-3 after:right-3 after:h-1 after:origin-center after:scale-x-0 after:rounded-full after:bg-teal-500 after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:text-slate-950 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:after:bg-teal-300 dark:hover:text-white"
                             >
                                 {item.label}
                             </a>
@@ -114,7 +114,23 @@ const Header = () => {
                             onClick={() => setIsMenuOpen((current) => !current)}
                             whileTap={{ scale: 0.94 }}
                         >
-                            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                            <div className="relative h-5 w-5">
+                                <motion.span
+                                    className="absolute left-0 top-1 h-0.5 w-5 bg-current rounded-full"
+                                    animate={isMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                />
+                                <motion.span
+                                    className="absolute left-0 top-2.5 h-0.5 w-5 bg-current rounded-full"
+                                    animate={isMenuOpen ? { opacity: 0, x: -5 } : { opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                />
+                                <motion.span
+                                    className="absolute left-0 top-4 h-0.5 w-5 bg-current rounded-full"
+                                    animate={isMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                />
+                            </div>
                         </motion.button>
                     </div>
                 </div>
