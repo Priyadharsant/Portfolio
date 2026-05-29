@@ -160,7 +160,7 @@ const ResumeViewer = () => {
                         loading={<div className="flex h-full items-center justify-center"><p className="text-slate-400">Loading Resume...</p></div>}
                         className="flex flex-col items-center gap-8 py-8"
                     >
-                        {Array.from(new Array(numPages), (el, index) => (
+                        {Array.from({ length: numPages ?? 0 }, (_, index) => (
                             <Page
                                 key={`page_${index + 1}`}
                                 pageNumber={index + 1}
