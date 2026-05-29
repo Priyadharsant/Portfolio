@@ -13,6 +13,8 @@ import ScrollProgress from './components/ScrollProgress';
 import SectionGlowOverlay from './components/SectionGlowOverlay';
 import type { PortfolioData } from './types/portfolio';
 import { apiUrl } from './utils/api';
+import { TooltipProvider } from './components/TooltipContext';
+import Tooltip from './components/Tooltip';
 
 const About = lazy(() => import('./components/About'));
 const Skills = lazy(() => import('./components/Skills'));
@@ -102,34 +104,37 @@ function App() {
   }
 
   return (
-    <motion.main
-      className="relative min-h-screen overflow-hidden bg-[#f8fbff] text-slate-900 dark:bg-[#06070b] dark:text-slate-100"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <MouseBackground theme={theme} />
-      <Header />
-      <ScrollProgress />
-      <ScrollToTop />
-      <FloatingThemeToggle theme={theme} onThemeToggle={() => setTheme((currentTheme) => currentTheme === 'dark' ? 'light' : 'dark')} />
-      <SectionGlowOverlay />
-      <LayoutGroup>
-        <Hero profile={portfolio.profile} hero={portfolio.hero} />
-      </LayoutGroup>
-      <div className="portfolio-body-bg relative">
-        <Suspense fallback={<LoadingScreen />}>
-          <About about={portfolio.about} />
-          <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
-          <Experience experience={portfolio.experience} />
-          <Projects projects={portfolio.projects} intro={portfolio.projectsIntro} />
-          <Achievements achievements={portfolio.achievements} />
-          <Resume profile={portfolio.profile} resume={portfolio.resume} />
-          <Contact profile={portfolio.profile} contact={portfolio.contact} />
-          <Footer />
-        </Suspense>
-      </div>
-    </motion.main>
+    <TooltipProvider>
+      <motion.main
+        className="relative min-h-screen overflow-hidden bg-[#f8fbff] text-slate-900 dark:bg-[#06070b] dark:text-slate-100"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Tooltip />
+        <MouseBackground theme={theme} />
+        <Header />
+        <ScrollProgress />
+        <ScrollToTop />
+        <FloatingThemeToggle theme={theme} onThemeToggle={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))} />
+        <SectionGlowOverlay />
+        <LayoutGroup>
+          <Hero profile={portfolio.profile} hero={portfolio.hero} />
+        </LayoutGroup>
+        <div className="portfolio-body-bg relative">
+          <Suspense fallback={<LoadingScreen />}>
+            <About about={portfolio.about} />
+            <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
+            <Experience experience={portfolio.experience} />
+            <Projects projects={portfolio.projects} intro={portfolio.projectsIntro} />
+            <Achievements achievements={portfolio.achievements} />
+            <Resume profile={portfolio.profile} resume={portfolio.resume} />
+            <Contact profile={portfolio.profile} contact={portfolio.contact} />
+            <Footer />
+          </Suspense>
+        </div>
+      </motion.main>
+    </TooltipProvider>
   );
 }
 

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { Download } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const navItems = [
@@ -51,10 +51,10 @@ const Header = () => {
             className="fixed inset-x-0 top-0 z-50"
             initial={{ y: -100, opacity: 0 }}
             animate={isScrolled || isMenuOpen ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
             <motion.div
-                className={`overflow-hidden border-b transition-[background-color,border-color,backdrop-filter] duration-500 ${isScrolled || isMenuOpen
+                className={`overflow-hidden border-b transition-[background-color,border-color,backdrop-filter] duration-300 ${isScrolled || isMenuOpen
                     ? 'border-zinc-200/50 bg-white/20 backdrop-blur-2xl dark:border-white/5 dark:bg-zinc-950/40' // Scrolled state: neutral dark blur effect
                     : 'border-transparent bg-transparent dark:bg-transparent' // Initial state: transparent background and border
                     }`}
@@ -77,9 +77,9 @@ const Header = () => {
                                 Priya
                             </span>
                             <span className="text-teal-600 transition-colors group-hover:text-cyan-600 dark:text-teal-400 dark:group-hover:text-cyan-300">
-                                dharsan T
+                                Dharsan T
                             </span>
-                            <span className="absolute -bottom-1.5 left-0 h-1 w-12 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-200 group-hover:w-full" />
+                            <span className="absolute -bottom-1.5 left-0 h-0.5 w-12 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-200 group-hover:w-full" />
                         </span>
                     </a>
 
@@ -88,7 +88,7 @@ const Header = () => {
                             <a
                                 key={item.href}
                                 href={item.href}
-                                className="relative rounded-full px-3 py-2 text-sm font-bold text-slate-600 transition duration-200 after:absolute after:bottom-1.5 after:left-3 after:right-3 after:h-1 after:origin-center after:scale-x-0 after:rounded-full after:bg-teal-500 after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:text-slate-950 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:after:bg-teal-300 dark:hover:text-white"
+                                className="relative rounded-full px-3 py-2 text-sm font-bold text-slate-600 transition duration-200 after:absolute after:bottom-1.5 after:left-3 after:right-3 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-teal-500 after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:text-slate-950 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:after:bg-teal-300 dark:hover:text-white"
                             >
                                 {item.label}
                             </a>
@@ -97,13 +97,15 @@ const Header = () => {
 
                     <div className="flex items-center gap-2">
                         <motion.a
-                            href="/download_resume"
+                            href="/resume"
+                            target="_blank"
+                            rel="noreferrer"
                             className="hidden h-10 items-center gap-2 rounded-md bg-slate-950/95 px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-200/60 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#f8fbff] dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 dark:hover:shadow-teal-950/40 dark:focus:ring-teal-300 dark:focus:ring-offset-[#06070b] md:inline-flex"
                             whileHover={{ y: -3, scale: 1.03 }}
                             whileTap={{ scale: 0.96 }}
                         >
-                            <Download className="h-4 w-4" />
-                            Resume
+                            <Eye className="h-4 w-4" />
+                            View Resume
                         </motion.a>
 
                         <motion.button
@@ -156,12 +158,14 @@ const Header = () => {
                                     </a>
                                 ))}
                                 <a
-                                    href="/download_resume"
+                                    href="/resume"
+                                    target="_blank"
+                                    rel="noreferrer"
                                     onClick={closeMenu}
                                     className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-slate-950 px-4 text-sm font-bold text-white transition hover:bg-teal-700 dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 md:hidden"
                                 >
-                                    <Download className="h-4 w-4" />
-                                    Download Resume
+                                    <Eye className="h-4 w-4" />
+                                    View Resume
                                 </a>
                             </nav>
                         </motion.div>

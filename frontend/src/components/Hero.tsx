@@ -1,8 +1,9 @@
 import type { Ref } from 'react';
 import { motion } from 'framer-motion';
-import { ChefHat, Code2, Download, Github, Linkedin, Mail, ArrowRight, Sparkles, Cloud, Layout, Server } from 'lucide-react';
+import { ChefHat, Code2, Eye, Github, Linkedin, Mail, ArrowRight, Sparkles, Cloud, Layout, Server } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 import { fadeUp, staggerContainer } from '../utils/motion';
+import { useTooltip } from './TooltipContext';
 
 type HeroProps = {
     profile: PortfolioData['profile'];
@@ -25,12 +26,13 @@ const particles = [
 ];
 
 const Hero = ({ profile, hero, nameRef }: HeroProps) => {
+    const { showTooltip, hideTooltip } = useTooltip();
     const socials = [
-        { label: 'GitHub', href: profile.github, icon: Github },
-        { label: 'LinkedIn', href: profile.linkedin, icon: Linkedin },
-        { label: 'CodeChef', href: profile.codechef, icon: ChefHat },
-        { label: 'LeetCode', href: profile.leetcode, icon: Code2 },
-        { label: 'Email', href: `mailto:${profile.email}`, icon: Mail },
+        { label: 'GitHub', title: 'View my GitHub profile', href: profile.github, icon: Github },
+        { label: 'LinkedIn', title: 'Connect on LinkedIn', href: profile.linkedin, icon: Linkedin },
+        { label: 'CodeChef', title: 'View my CodeChef profile', href: profile.codechef, icon: ChefHat },
+        { label: 'LeetCode', title: 'View my LeetCode profile', href: profile.leetcode, icon: Code2 },
+        { label: 'Email', title: 'Send me an email', href: `mailto:${profile.email}`, icon: Mail },
     ];
 
     const getHighlightIcon = (title: string) => {
@@ -111,13 +113,15 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
 
                     <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                         <motion.a
-                            href="/download_resume"
+                            href="/resume"
+                            target="_blank"
+                            rel="noreferrer"
                             className="inline-flex h-12 transform-gpu items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-8 font-semibold text-white transition-[box-shadow,transform] duration-150 will-change-transform hover:scale-105 hover:shadow-[0_0_30px_rgba(20,184,166,0.32)] focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#f8fbff] dark:from-teal-400 dark:to-cyan-500 dark:text-slate-950 dark:hover:shadow-[0_0_30px_rgba(45,212,191,0.4)] dark:focus:ring-teal-400 dark:focus:ring-offset-[#06070b]"
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <Download className="h-5 w-5" />
-                            Download Resume
+                            <Eye className="h-5 w-5" />
+                            View Resume
                         </motion.a>
                         <motion.a
                             href="#projects"
@@ -133,14 +137,18 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                     <motion.div variants={fadeUp} className="mt-12 flex items-center gap-4">
                         <div className="h-px flex-1 bg-gradient-to-r from-slate-300 to-transparent dark:from-slate-800 sm:hidden" />
                         <div className="flex flex-wrap gap-3">
-                            {socials.map(({ label, href, icon: Icon }) => (
+                            {socials.map(({ label, href, icon: Icon, title }) => (
                                 <motion.a
                                     key={label}
                                     href={href}
                                     target={href.startsWith('mailto:') ? undefined : '_blank'}
                                     rel="noreferrer"
                                     aria-label={label}
-                                    title={label}
+                                    onMouseEnter={(e) => {
+                                        const rect = e.currentTarget.getBoundingClientRect();
+                                        showTooltip(title, { x: rect.left + rect.width / 2, y: rect.bottom });
+                                    }}
+                                    onMouseLeave={hideTooltip}
                                     className="inline-flex h-12 w-12 transform-gpu items-center justify-center rounded-xl border border-slate-300 bg-white/70 text-slate-600 backdrop-blur-sm transition-[background-color,border-color,box-shadow,color,transform] duration-150 will-change-transform hover:border-teal-500/50 hover:bg-teal-50 hover:text-teal-700 hover:shadow-[0_0_15px_rgba(20,184,166,0.18)] dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-400 dark:hover:bg-teal-500/10 dark:hover:text-teal-300 dark:hover:shadow-[0_0_15px_rgba(45,212,191,0.2)]"
                                     whileHover={{ y: -3, scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}

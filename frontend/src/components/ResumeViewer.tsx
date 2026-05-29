@@ -71,7 +71,7 @@ const ResumeViewer = () => {
     };
 
     return (
-        <main className="relative h-screen bg-[#06070b] text-slate-100">
+        <main className="dark relative h-screen bg-[#06070b] text-slate-100">
             <style>{`
                 @media print {
                     body {
@@ -131,20 +131,20 @@ const ResumeViewer = () => {
                     </span>
                 </a>
                 <div className="flex items-center gap-3">
-                    <div className="hidden items-center gap-1 rounded-md bg-slate-950/95 text-white dark:bg-teal-400 dark:text-slate-950 sm:inline-flex">
+                    <div className="hidden items-center gap-1 rounded-md bg-teal-400 text-slate-950 sm:inline-flex">
                         <button
                             type="button"
                             onClick={handleZoomOut}
-                            className="h-10 w-10 inline-flex items-center justify-center rounded-l-md bg-transparent transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:hover:bg-teal-300"
+                            className="h-10 w-10 inline-flex items-center justify-center rounded-l-md bg-inherit transition hover:bg-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b]"
                             aria-label="Zoom out"
                         >
                             <ZoomOut className="h-4 w-4" />
                         </button>
-                        <span className="w-px h-5 bg-white/20 dark:bg-slate-950/20" />
+                        <span className="w-px h-5 bg-slate-950/20" />
                         <button
                             type="button"
                             onClick={handleZoomIn}
-                            className="h-10 w-10 inline-flex items-center justify-center rounded-r-md bg-transparent transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:hover:bg-teal-300"
+                            className="h-10 w-10 inline-flex items-center justify-center rounded-r-md bg-inherit transition hover:bg-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b]"
                             aria-label="Zoom in"
                         >
                             <ZoomIn className="h-4 w-4" />
@@ -152,7 +152,7 @@ const ResumeViewer = () => {
                     </div>
                     <a
                         href="/download_resume"
-                        className="inline-flex h-10 items-center gap-2 rounded-md bg-slate-950/95 px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300"
+                        className="inline-flex h-10 items-center gap-2 rounded-md bg-teal-400 px-4 text-sm font-black text-slate-950 transition hover:-translate-y-0.5 hover:bg-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b]"
                     >
                         <Download className="h-4 w-4" />
                         Download
@@ -160,7 +160,7 @@ const ResumeViewer = () => {
                     <button
                         type="button"
                         onClick={handlePrint}
-                        className="hidden h-10 items-center gap-2 rounded-md bg-slate-950/95 px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 sm:inline-flex"
+                        className="hidden h-10 items-center gap-2 rounded-md bg-teal-400 px-4 text-sm font-black text-slate-950 transition hover:-translate-y-0.5 hover:bg-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] sm:inline-flex"
                     >
                         <Printer className="h-4 w-4" />
                         Print

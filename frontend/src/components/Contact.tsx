@@ -35,6 +35,13 @@ const Contact = ({ profile, contact }: ContactProps) => {
             message: String(formData.get('message') ?? ''),
         };
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(payload.email)) {
+            setStatus('error');
+            setStatusMessage('Please enter a valid email address.');
+            return;
+        }
+
         try {
             const response = await fetch(apiUrl('/api/contact'), {
                 method: 'POST',
