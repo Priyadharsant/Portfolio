@@ -23,41 +23,21 @@ const About = ({ about }: AboutProps) => {
                         <motion.p variants={fadeUp} key={paragraph}>{paragraph}</motion.p>
                     ))}
 
-                    <motion.div className="pt-4" variants={fadeUp}>
-                        <h3 className="mb-3 text-sm font-semibold text-slate-500 dark:text-slate-400">Quick Overview</h3>
-                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                            {[
-                                { id: 'overview', label: 'Overview', href: '#about' },
-                                { id: 'practice', label: 'Practice', href: '#skills' },
-                                { id: 'work', label: 'Selected Work', href: '#projects' },
-                                { id: 'proof', label: 'Proof Points', href: '#achievements' },
-                            ].map((nav) => (
-                                <motion.a
-                                    key={nav.id}
-                                    href={nav.href}
+                    <motion.div variants={fadeUp} className="pt-4">
+                        <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">Currently working on</h3>
+                        <div className="grid gap-3 sm:grid-cols-3">
+                            {about.currentlyWorkingOn.map((item) => (
+                                <motion.div
+                                    key={item}
+                                    className="interactive-card rounded-md border border-slate-200/80 bg-white/75 p-4 text-sm font-semibold text-teal-800 shadow-lg shadow-slate-200/70 dark:border-white/10 dark:bg-white/[0.055] dark:text-teal-100 dark:shadow-black/10"
                                     variants={fadeUp}
                                     whileHover={cardHover}
-                                    className="interactive-card flex items-center justify-center gap-2 rounded-md border border-slate-200/80 bg-white/75 p-4 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-200/70 hover:scale-[1.01] focus:outline-none dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-100 dark:shadow-black/10"
-                                    aria-label={nav.label}
                                 >
-                                    {nav.label}
-                                </motion.a>
+                                    {item}
+                                </motion.div>
                             ))}
                         </div>
                     </motion.div>
-
-                    <div className="grid gap-3 pt-3 sm:grid-cols-3">
-                        {about.currentlyWorkingOn.map((item) => (
-                            <motion.div
-                                key={item}
-                                className="interactive-card rounded-md border border-slate-200/80 bg-white/75 p-4 text-sm font-semibold text-teal-800 shadow-lg shadow-slate-200/70 dark:border-white/10 dark:bg-white/[0.055] dark:text-teal-100 dark:shadow-black/10"
-                                variants={fadeUp}
-                                whileHover={cardHover}
-                            >
-                                {item}
-                            </motion.div>
-                        ))}
-                    </div>
                 </motion.div>
             </div>
         </section>

@@ -1,5 +1,5 @@
 import { ArrowLeft, Download, Printer, ZoomIn, ZoomOut } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -12,6 +12,7 @@ const ResumeViewer = () => {
     const [resumeUrl, setResumeUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number | null>(null);
     const [zoom, setZoom] = useState(1); // react-pdf uses a scale factor
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         document.title = 'Resume | Priyadharsan T';
@@ -39,8 +40,22 @@ const ResumeViewer = () => {
         };
     }, []);
 
-    const onDocumentLoadSuccess = ({ numPages: nextNumPages }: { numPages: number }) => {
-        setNumPages(nextNumPages);
+    const onDocumentLoadSuccess = (pdf: any) => {
+        setNumPages(pdf.numPages);
+        if (containerRef.current) {
+            pdf.getPage(1).then((page: any) => {
+                const isMobile = window.innerWidth < 768;
+                const style = window.getComputedStyle(containerRef.current!);
+                const containerWidth =
+                    containerRef.current!.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+                const scaleToFit = containerWidth / page.getViewport({ scale: 1.0 }).width;
+                if (isMobile) {
+                    setZoom(scaleToFit);
+                } else {
+                    setZoom(Math.min(1.0, scaleToFit));
+                }
+            });
+        }
     };
 
     const handlePrint = () => {
@@ -120,7 +135,7 @@ const ResumeViewer = () => {
                         <button
                             type="button"
                             onClick={handleZoomOut}
-                            className="h-10 w-10 inline-flex items-center justify-center rounded-l-md transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:hover:bg-teal-300"
+                            className="h-10 w-10 inline-flex items-center justify-center rounded-l-md bg-transparent transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:hover:bg-teal-300"
                             aria-label="Zoom out"
                         >
                             <ZoomOut className="h-4 w-4" />
@@ -129,7 +144,7 @@ const ResumeViewer = () => {
                         <button
                             type="button"
                             onClick={handleZoomIn}
-                            className="h-10 w-10 inline-flex items-center justify-center rounded-r-md transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:hover:bg-teal-300"
+                            className="h-10 w-10 inline-flex items-center justify-center rounded-r-md bg-transparent transition hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#06070b] dark:hover:bg-teal-300"
                             aria-label="Zoom in"
                         >
                             <ZoomIn className="h-4 w-4" />
@@ -152,7 +167,7 @@ const ResumeViewer = () => {
                     </button>
                 </div>
             </header>
-            <div className="h-full pt-16 overflow-auto pdf-container">
+            <div ref={containerRef} className="h-full pt-16 overflow-auto pdf-container px-4">
                 {resumeUrl ? (
                     <Document
                         file={resumeUrl}
