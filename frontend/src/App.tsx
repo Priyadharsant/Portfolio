@@ -124,7 +124,7 @@ function App() {
           <Achievements achievements={portfolio.achievements} />
           <Resume profile={portfolio.profile} resume={portfolio.resume} />
           <Contact profile={portfolio.profile} contact={portfolio.contact} />
-          <Footer footer={portfolio.footer} />
+          <Footer />
         </Suspense>
       </div>
     </motion.main>

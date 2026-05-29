@@ -1,10 +1,4 @@
-import type { PortfolioData } from '../types/portfolio';
-
-type FooterProps = {
-    footer: PortfolioData['footer'];
-};
-
-const Footer = ({ footer }: FooterProps) => {
+const Footer = () => {
     return (
         <footer className="bg-transparent py-12 text-slate-600 dark:text-slate-400">
             <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-4 text-sm sm:flex-row sm:px-5 lg:px-6 xl:px-8">
