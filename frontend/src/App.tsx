@@ -8,6 +8,7 @@ import LoadingScreen from './components/LoadingScreen';
 import Header from './components/Header';
 import MouseBackground from './components/MouseBackground';
 import FloatingThemeToggle from './components/FloatingThemeToggle';
+import ScrollToTop from './components/ScrollToTop';
 import SectionGlowOverlay from './components/SectionGlowOverlay';
 import type { PortfolioData } from './types/portfolio';
 import { apiUrl } from './utils/api';
@@ -108,6 +109,7 @@ function App() {
     >
       <MouseBackground theme={theme} />
       <Header />
+      <ScrollToTop />
       <FloatingThemeToggle theme={theme} onThemeToggle={() => setTheme((currentTheme) => currentTheme === 'dark' ? 'light' : 'dark')} />
       <SectionGlowOverlay />
       <LayoutGroup>
