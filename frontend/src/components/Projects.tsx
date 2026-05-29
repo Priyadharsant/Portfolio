@@ -96,12 +96,12 @@ const Projects = ({ projects, intro }: ProjectsProps) => {
                                         ))}
                                     </ul>
                                     <div className="mt-6 flex flex-wrap gap-3">
-                                        <motion.a href={project.github} target="_blank" rel="noreferrer" className="secondary-action" whileTap={{ scale: 0.98 }}>
+                                        <motion.a aria-label={`GitHub repository for ${project.title}`} href={project.github} target="_blank" rel="noreferrer" className="secondary-action" whileTap={{ scale: 0.98 }}>
                                             <Github className="h-4 w-4" />
                                             GitHub
                                         </motion.a>
                                         {project.status !== 'on process' && (
-                                            <motion.a href={project.demo} target="_blank" rel="noreferrer" className="primary-action" whileTap={{ scale: 0.98 }}>
+                                            <motion.a aria-label={`Live demo for ${project.title}`} href={project.demo} target="_blank" rel="noreferrer" className="primary-action" whileTap={{ scale: 0.98 }}>
                                                 <ExternalLink className="h-4 w-4" />
                                                 Visit Site
                                             </motion.a>

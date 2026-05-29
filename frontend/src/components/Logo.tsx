@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 const Logo = ({ isHidden = false }: { isHidden?: boolean }) => {
     return (
         <motion.div
-            className="fixed left-6 top-6 z-50 flex cursor-pointer items-center gap-3 rounded-full border border-white/10 bg-slate-950/70 px-3 py-2 shadow-2xl shadow-black/30 backdrop-blur-xl"
+            className="fixed left-6 top-6 z-50 flex cursor-pointer items-center gap-3 rounded-full border border-white/10 bg-slate-950/70 px-3 py-2 shadow-2xl shadow-black/30 backdrop-blur-md"
             initial={false}
             animate={{
                 pointerEvents: isHidden ? 'none' : 'auto',
@@ -33,7 +33,7 @@ const Logo = ({ isHidden = false }: { isHidden?: boolean }) => {
                     viewBox="0 0 40 40"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="drop-shadow-[0_0_10px_rgba(45,212,191,0.5)]"
+                    className="drop-shadow-[0_0_5px_rgba(45,212,191,0.5)]"
                 >
                     <path
                         d="M20 2L35.5885 11V29L20 38L4.41154 29V11L20 2Z"

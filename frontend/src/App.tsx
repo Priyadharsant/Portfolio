@@ -1,14 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Achievements from './components/Achievements';
-import Resume from './components/Resume';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import BackgroundDemo from './components/BackgroundDemo';
 import ResumeViewer from './components/ResumeViewer';
 import DownloadResume from './components/DownloadResume';
@@ -17,6 +9,15 @@ import ScrollProgress from './components/ScrollProgress';
 import Logo from './components/Logo';
 import type { PortfolioData } from './types/portfolio';
 import { apiUrl } from './utils/api';
+
+const About = lazy(() => import('./components/About'));
+const Skills = lazy(() => import('./components/Skills'));
+const Experience = lazy(() => import('./components/Experience'));
+const Projects = lazy(() => import('./components/Projects'));
+const Achievements = lazy(() => import('./components/Achievements'));
+const Resume = lazy(() => import('./components/Resume'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
 
 function App() {
   const isBackgroundDemo = window.location.pathname === '/background-demo';
@@ -108,7 +109,7 @@ function App() {
   }
 
   return (
-    <motion.div
+    <motion.main
       className="min-h-screen overflow-hidden bg-[#06070b] text-slate-100"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -120,16 +121,18 @@ function App() {
         <Hero profile={portfolio.profile} hero={portfolio.hero} nameRef={heroNameRef} />
       </LayoutGroup>
       <div className="portfolio-body-bg">
-        <About about={portfolio.about} />
-        <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
-        <Experience experience={portfolio.experience} />
-        <Projects projects={portfolio.projects} intro={portfolio.projectsIntro} />
-        <Achievements achievements={portfolio.achievements} />
-        <Resume profile={portfolio.profile} resume={portfolio.resume} />
-        <Contact profile={portfolio.profile} contact={portfolio.contact} />
-        <Footer footer={portfolio.footer} />
+        <Suspense fallback={<LoadingScreen />}>
+          <About about={portfolio.about} />
+          <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
+          <Experience experience={portfolio.experience} />
+          <Projects projects={portfolio.projects} intro={portfolio.projectsIntro} />
+          <Achievements achievements={portfolio.achievements} />
+          <Resume profile={portfolio.profile} resume={portfolio.resume} />
+          <Contact profile={portfolio.profile} contact={portfolio.contact} />
+          <Footer footer={portfolio.footer} />
+        </Suspense>
       </div>
-    </motion.div>
+    </motion.main>
   );
 }
 

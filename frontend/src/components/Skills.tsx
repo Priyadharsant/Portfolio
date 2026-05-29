@@ -68,11 +68,11 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                         return (
                             <motion.div
                                 key={category.title}
-                                className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/40 p-8 backdrop-blur-sm transition-all hover:border-teal-500/30 hover:bg-slate-800/60 hover:shadow-[0_8px_30px_rgba(45,212,191,0.1)]"
+                                className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/40 p-8 backdrop-blur-sm transition-all hover:border-teal-500/30 hover:bg-slate-800/60 hover:shadow-[0_4px_15px_rgba(45,212,191,0.1)]"
                                 variants={fadeUp}
                             >
-                                {/* Soft glow effect on hover */}
-                                <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-teal-500/10 blur-[50px] transition-all group-hover:bg-teal-500/20" />
+                                {/* Decorative elements */}
+                                <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-teal-500/10 blur-[24px] transition-all group-hover:bg-teal-500/20" />
 
                                 <div className="relative z-10 flex items-center gap-4 mb-6">
                                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-teal-400 shadow-inner group-hover:scale-110 group-hover:border-teal-500/50 group-hover:bg-teal-500/10 transition-all duration-300">

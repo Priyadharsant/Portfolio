@@ -151,7 +151,7 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                 >
                     <div className="relative mx-auto w-full max-w-lg">
                         {/* Decorative core glow */}
-                        <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500/10 blur-[100px]" />
+                        <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500/10 blur-[50px]" />
 
                         <div className="grid grid-cols-2 gap-4">
                             {hero.highlights.map((highlight, index) => {
@@ -161,7 +161,7 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                                 return (
                                     <motion.div
                                         key={highlight}
-                                        className={`group relative transform-gpu overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md transition-[background-color,border-color,box-shadow,transform] duration-150 will-change-transform hover:border-teal-500/40 hover:bg-slate-800/80 hover:shadow-[0_8px_30px_rgba(45,212,191,0.15)] ${isFullWidth ? 'col-span-2' : 'col-span-1'}`}
+                                        className={`group relative transform-gpu overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md transition-[background-color,border-color,box-shadow,transform] duration-150 will-change-transform hover:border-teal-500/40 hover:bg-slate-800/80 hover:shadow-[0_8px_15px_rgba(45,212,191,0.15)] ${isFullWidth ? 'col-span-2' : 'col-span-1'}`}
                                         initial={{ opacity: 0, y: 30 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.6, delay: 0.5 + index * 0.15, type: 'spring', stiffness: 50 }}
