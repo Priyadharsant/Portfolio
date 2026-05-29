@@ -100,7 +100,7 @@ const Header = () => {
                             href="/resume"
                             target="_blank"
                             rel="noreferrer"
-                            className="hidden h-10 items-center gap-2 rounded-md bg-slate-950/95 px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-200/60 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#f8fbff] dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 dark:hover:shadow-teal-950/40 dark:focus:ring-teal-300 dark:focus:ring-offset-[#06070b] md:inline-flex"
+                            className="hidden h-10 items-center gap-2 rounded-md bg-teal-600 px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-teal-700 hover:shadow-lg hover:shadow-teal-200/60 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#f8fbff] dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 dark:hover:shadow-teal-950/40 dark:focus:ring-teal-300 dark:focus:ring-offset-[#06070b] md:inline-flex"
                             whileHover={{ y: -3, scale: 1.03 }}
                             whileTap={{ scale: 0.96 }}
                         >
@@ -162,7 +162,7 @@ const Header = () => {
                                     target="_blank"
                                     rel="noreferrer"
                                     onClick={closeMenu}
-                                    className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-slate-950 px-4 text-sm font-bold text-white transition hover:bg-teal-700 dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 md:hidden"
+                                    className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-teal-600 px-4 text-sm font-bold text-white transition hover:bg-teal-700 dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 md:hidden"
                                 >
                                     <Eye className="h-4 w-4" />
                                     View Resume
