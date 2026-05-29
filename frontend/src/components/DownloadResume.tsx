@@ -48,10 +48,10 @@ const DownloadResume = () => {
     }, []);
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-[#06070b] px-5 text-center text-slate-100">
+        <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-5 text-center text-slate-900 dark:bg-[#06070b] dark:text-slate-100">
             <div className="glass-panel max-w-md rounded-lg p-6">
-                <h1 className="text-xl font-semibold text-white">Downloading Resume</h1>
-                <p className="mt-3 text-slate-300">{status}</p>
+                <h1 className="text-xl font-semibold text-slate-950 dark:text-white">Downloading Resume</h1>
+                <p className="mt-3 text-slate-700 dark:text-slate-300">{status}</p>
             </div>
         </main>
     );

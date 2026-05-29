@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const LoadingScreen = () => {
     return (
-        <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#06070b] px-5">
+        <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f8fbff] px-5 dark:bg-[#06070b]">
             <motion.div
                 className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(45,212,191,0.05),transparent_50%)]"
                 animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
@@ -29,7 +29,7 @@ const LoadingScreen = () => {
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
                         <motion.span 
-                            className="text-sm font-black text-white tracking-widest"
+                            className="text-sm font-black text-slate-950 dark:text-white tracking-widest"
                             animate={{ opacity: [0.5, 1, 0.5] }}
                             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                         >
@@ -41,7 +41,7 @@ const LoadingScreen = () => {
                 {/* Text Animation */}
                 <div className="text-center">
                     <motion.h2
-                        className="text-sm font-bold text-teal-300 tracking-[0.3em] uppercase mb-4"
+                        className="text-sm font-bold text-teal-700 dark:text-teal-300 tracking-[0.3em] uppercase mb-4"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}

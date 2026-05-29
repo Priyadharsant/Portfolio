@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 const Logo = ({ isHidden = false }: { isHidden?: boolean }) => {
     return (
         <motion.div
-            className="fixed left-6 top-6 z-50 flex cursor-pointer items-center gap-3 rounded-full border border-white/10 bg-slate-950/70 px-3 py-2 shadow-2xl shadow-black/30 backdrop-blur-md"
+            className="fixed left-6 top-6 z-50 flex cursor-pointer items-center gap-3 rounded-full border border-slate-200/90 bg-white/80 px-3 py-2 shadow-2xl shadow-slate-200/70 backdrop-blur-md dark:border-white/10 dark:bg-slate-950/70 dark:shadow-black/30"
             initial={false}
             animate={{
                 pointerEvents: isHidden ? 'none' : 'auto',
@@ -79,7 +79,7 @@ const Logo = ({ isHidden = false }: { isHidden?: boolean }) => {
                 {!isHidden && (
                     <motion.span
                         key="hero-name"
-                        className="hidden text-xl font-bold tracking-tight text-slate-100 sm:block whitespace-nowrap"
+                        className="hidden text-xl font-bold tracking-tight text-slate-950 dark:text-slate-100 sm:block whitespace-nowrap"
                         initial={{ opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 6 }}

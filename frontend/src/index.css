@@ -3,10 +3,16 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
+  background: #f8fbff;
+  color: #0f172a;
+}
+
+.dark {
+  color-scheme: dark;
   background: #06070b;
   color: #f8fafc;
 }
@@ -17,14 +23,22 @@
 
 html {
   scroll-behavior: smooth;
-  scrollbar-color: rgba(45, 212, 191, 0.55) #06070b;
+  scrollbar-color: rgba(13, 148, 136, 0.55) #eef7fb;
   scrollbar-width: thin;
+}
+
+html.dark {
+  scrollbar-color: rgba(45, 212, 191, 0.55) #06070b;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: #f8fbff;
+}
+
+.dark body {
   background: #06070b;
 }
 
@@ -34,12 +48,24 @@ body {
 
 ::-webkit-scrollbar-track {
   background:
+    linear-gradient(180deg, #f8fbff, #e9f6f8 50%, #f8fbff);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background:
     linear-gradient(180deg, #06070b, #081016 50%, #06070b);
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 3px solid #06070b;
+  border: 3px solid #f8fbff;
   border-radius: 9999px;
+  background:
+    linear-gradient(180deg, rgba(20, 184, 166, 0.9), rgba(14, 165, 233, 0.72));
+  box-shadow: 0 0 18px rgba(20, 184, 166, 0.22);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  border-color: #06070b;
   background:
     linear-gradient(180deg, rgba(45, 212, 191, 0.9), rgba(56, 189, 248, 0.72));
   box-shadow: 0 0 18px rgba(45, 212, 191, 0.25);
@@ -51,6 +77,10 @@ body {
 }
 
 ::-webkit-scrollbar-corner {
+  background: #f8fbff;
+}
+
+.dark ::-webkit-scrollbar-corner {
   background: #06070b;
 }
 
@@ -61,6 +91,11 @@ textarea {
 }
 
 ::selection {
+  background: rgba(20, 184, 166, 0.22);
+  color: #0f172a;
+}
+
+.dark ::selection {
   background: rgba(45, 212, 191, 0.3);
   color: #ffffff;
 }
@@ -69,6 +104,14 @@ textarea {
   .portfolio-body-bg {
     position: relative;
     isolation: isolate;
+    background:
+      linear-gradient(180deg, #f8fbff 0%, #eef8fa 22%, #f7fbff 58%, #ffffff 100%),
+      radial-gradient(circle at 12% 8%, rgba(20, 184, 166, 0.14), transparent 24rem),
+      radial-gradient(circle at 90% 28%, rgba(14, 165, 233, 0.1), transparent 22rem),
+      radial-gradient(circle at 20% 76%, rgba(250, 204, 21, 0.08), transparent 20rem);
+  }
+
+  .dark .portfolio-body-bg {
     background:
       linear-gradient(180deg, #06070b 0%, #070a10 18%, #080b10 48%, #06070b 100%),
       radial-gradient(circle at 12% 8%, rgba(45, 212, 191, 0.12), transparent 24rem),
@@ -82,11 +125,17 @@ textarea {
     inset: 0;
     z-index: -2;
     background:
-      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
     background-size: 5rem 5rem;
     mask-image: linear-gradient(to bottom, transparent, #000 8rem, #000 calc(100% - 8rem), transparent);
     opacity: 0.5;
+  }
+
+  .dark .portfolio-body-bg::before {
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   }
 
   .portfolio-body-bg::after {
@@ -95,49 +144,69 @@ textarea {
     inset: 0;
     z-index: -1;
     background:
-      radial-gradient(ellipse at center, transparent 0%, rgba(6, 7, 11, 0.18) 52%, rgba(6, 7, 11, 0.82) 100%),
-      linear-gradient(90deg, rgba(45, 212, 191, 0.05), transparent 24%, transparent 76%, rgba(56, 189, 248, 0.04));
+      radial-gradient(ellipse at center, transparent 0%, rgba(248, 251, 255, 0.1) 52%, rgba(248, 251, 255, 0.72) 100%),
+      linear-gradient(90deg, rgba(20, 184, 166, 0.08), transparent 24%, transparent 76%, rgba(56, 189, 248, 0.08));
     pointer-events: none;
   }
 
-  .portfolio-body-bg > section {
+  .dark .portfolio-body-bg::after {
+    background:
+      radial-gradient(ellipse at center, transparent 0%, rgba(6, 7, 11, 0.18) 52%, rgba(6, 7, 11, 0.82) 100%),
+      linear-gradient(90deg, rgba(45, 212, 191, 0.05), transparent 24%, transparent 76%, rgba(56, 189, 248, 0.04));
+  }
+
+  .portfolio-body-bg>section {
     position: relative;
   }
 
-  .portfolio-body-bg > section:nth-of-type(even)::before {
+  .portfolio-body-bg>section:nth-of-type(even)::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.018), transparent 28%, transparent 72%, rgba(255, 255, 255, 0.012));
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.025), transparent 28%, transparent 72%, rgba(15, 23, 42, 0.018));
     pointer-events: none;
   }
 
+  .dark .portfolio-body-bg>section:nth-of-type(even)::before {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.018), transparent 28%, transparent 72%, rgba(255, 255, 255, 0.012));
+  }
+
   .section-shell {
-    @apply mx-auto w-full max-w-6xl px-5 py-20 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-7xl px-4 py-20 sm:px-5 lg:px-6 xl:px-8;
+  }
+
+  section {
+    scroll-margin-top: 5rem;
   }
 
   .section-kicker {
-    @apply mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-teal-300;
+    @apply mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-teal-700 dark:text-teal-300;
   }
 
   .section-title {
-    @apply text-3xl font-black tracking-tight text-white sm:text-4xl;
+    @apply text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-4xl;
   }
 
   .section-copy {
-    @apply mt-4 max-w-2xl text-base leading-7 text-slate-300;
+    @apply mt-4 max-w-2xl text-base leading-7 text-slate-700 dark:text-slate-300;
   }
 
   .glass-panel {
-    @apply border border-white/10 bg-white/[0.055] shadow-2xl shadow-black/30 backdrop-blur-md;
+    @apply border border-slate-200/80 bg-white/75 shadow-2xl shadow-slate-200/80 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.055] dark:shadow-black/30;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      0 24px 60px rgba(15, 23, 42, 0.12);
+  }
+
+  .dark .glass-panel {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.06),
       0 24px 60px rgba(0, 0, 0, 0.24);
   }
 
   .interactive-card {
-    @apply relative transform-gpu overflow-hidden transition-[border-color,transform] duration-200 will-change-transform hover:-translate-y-1 hover:border-teal-300/35;
+    @apply relative transform-gpu overflow-hidden transition duration-200 will-change-transform hover:-translate-y-1.5 hover:border-teal-500/45 hover:shadow-2xl hover:shadow-teal-200/45 dark:hover:border-teal-300/35 dark:hover:shadow-teal-950/30;
   }
 
   .interactive-card::before {
@@ -145,17 +214,17 @@ textarea {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.015) 28%, rgba(255, 255, 255, 0.055) 50%, rgba(255, 255, 255, 0.015) 72%, transparent 100%),
-      radial-gradient(circle at top right, rgba(45, 212, 191, 0.08), transparent 20rem);
+      linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.12) 28%, rgba(255, 255, 255, 0.34) 50%, rgba(255, 255, 255, 0.12) 72%, transparent 100%),
+      radial-gradient(circle at top right, rgba(20, 184, 166, 0.14), transparent 18rem);
     background-position: -180% 0, center;
     background-size: 320% 100%, auto;
     opacity: 0;
-    transition: opacity 300ms ease, background-position 900ms ease;
+    transition: opacity 180ms ease, background-position 650ms ease;
     pointer-events: none;
   }
 
   .interactive-card:hover::before {
-    opacity: 0.85;
+    opacity: 0.95;
     background-position: 180% 0, center;
   }
 
@@ -165,7 +234,7 @@ textarea {
     inset: auto 18% -55% 18%;
     height: 7rem;
     border-radius: 9999px;
-    background: rgba(45, 212, 191, 0.14);
+    background: rgba(20, 184, 166, 0.16);
     filter: blur(42px);
     opacity: 0;
     transition: opacity 300ms ease, transform 300ms ease;
@@ -173,16 +242,26 @@ textarea {
   }
 
   .interactive-card:hover::after {
-    opacity: 1;
+    opacity: 0.9;
     transform: translateY(-1rem);
   }
 
+  .dark .interactive-card::before {
+    background:
+      linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.018) 28%, rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.018) 72%, transparent 100%),
+      radial-gradient(circle at top right, rgba(45, 212, 191, 0.07), transparent 18rem);
+  }
+
+  .dark .interactive-card::after {
+    background: rgba(45, 212, 191, 0.1);
+  }
+
   .primary-action {
-    @apply inline-flex items-center justify-center gap-2 rounded-md bg-teal-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-[#06070b];
+    @apply inline-flex transform-gpu items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2.5 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal-500 hover:shadow-lg hover:shadow-teal-200/70 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#f8fbff] active:translate-y-0 dark:bg-teal-400 dark:text-slate-950 dark:hover:bg-teal-300 dark:hover:shadow-teal-950/40 dark:focus:ring-teal-300 dark:focus:ring-offset-[#06070b];
   }
 
   .secondary-action {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:border-teal-300/70 hover:bg-teal-300/10 hover:text-teal-100 focus:outline-none focus:ring-2 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-[#06070b];
+    @apply inline-flex transform-gpu items-center justify-center gap-2 rounded-md border border-slate-300/80 bg-white/75 px-4 py-2.5 text-sm font-semibold text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:border-teal-500/80 hover:bg-teal-100/80 hover:text-teal-800 hover:shadow-lg hover:shadow-teal-100/70 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-[#f8fbff] active:translate-y-0 dark:border-white/15 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:border-teal-300/70 dark:hover:bg-teal-300/10 dark:hover:text-teal-100 dark:hover:shadow-teal-950/30 dark:focus:ring-teal-300 dark:focus:ring-offset-[#06070b];
   }
 
   .soft-highlight {
@@ -216,10 +295,12 @@ textarea {
 }
 
 @keyframes soft-sheen {
+
   0%,
   55% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }

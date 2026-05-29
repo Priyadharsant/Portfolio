@@ -59,7 +59,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
     };
 
     return (
-        <section id="contact" className="border-b border-white/10 bg-transparent">
+        <section id="contact" className="border-b border-slate-200/80 bg-transparent dark:border-white/10">
             <div className="section-shell">
                 <SectionHeader kicker="Reach out" title="Contact" />
                 <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
@@ -71,8 +71,8 @@ const Contact = ({ profile, contact }: ContactProps) => {
                         viewport={{ once: true, amount: 0.3 }}
                         whileHover={cardHover}
                     >
-                        <h3 className="text-2xl font-bold text-white">Get in touch</h3>
-                        <p className="mt-3 leading-7 text-slate-300">
+                        <h3 className="text-2xl font-bold text-slate-950 dark:text-white">Get in touch</h3>
+                        <p className="mt-3 leading-7 text-slate-700 dark:text-slate-300">
                             {contact.intro}
                         </p>
                         <div className="mt-6 space-y-3">
@@ -82,11 +82,11 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     href={href}
                                     target={href.startsWith('mailto:') ? undefined : '_blank'}
                                     rel="noreferrer"
-                                    className="relative flex items-center gap-3 rounded-md border border-white/10 bg-slate-950/60 px-4 py-3 text-slate-300 transition hover:border-teal-300 hover:bg-teal-300/10 hover:text-teal-200"
+                                    className="relative flex items-center gap-3 rounded-md border border-slate-200/80 bg-white/80 px-4 py-3 text-slate-700 transition hover:border-teal-500 hover:bg-teal-50 hover:text-teal-700 dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-300 dark:hover:border-teal-300 dark:hover:bg-teal-300/10 dark:hover:text-teal-200"
                                     whileHover={{ borderColor: 'rgba(45, 212, 191, 0.65)' }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <Icon className="h-5 w-5 text-teal-300" />
+                                    <Icon className="h-5 w-5 text-teal-600 dark:text-teal-300" />
                                     {label}
                                 </motion.a>
                             ))}
@@ -101,7 +101,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                         transition={{ delay: 0.1 }}
                         whileHover={cardHover}
                     >
-                        <h3 className="text-2xl font-bold text-white">Send a message</h3>
+                        <h3 className="text-2xl font-bold text-slate-950 dark:text-white">Send a message</h3>
                         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                             <div>
                                 <input
@@ -109,7 +109,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     type="text"
                                     placeholder="Your name"
                                     required
-                                    className="w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-teal-300 focus:bg-slate-950"
+                                    className="w-full rounded-md border border-slate-200/80 bg-white/90 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white dark:border-white/10 dark:bg-slate-950/70 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-teal-300 dark:focus:bg-slate-950"
                                 />
                             </div>
                             <div>
@@ -118,7 +118,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     type="email"
                                     placeholder="Your email"
                                     required
-                                    className="w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-teal-300 focus:bg-slate-950"
+                                    className="w-full rounded-md border border-slate-200/80 bg-white/90 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white dark:border-white/10 dark:bg-slate-950/70 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-teal-300 dark:focus:bg-slate-950"
                                 />
                             </div>
                             <div>
@@ -127,7 +127,7 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     rows={4}
                                     placeholder="Your message"
                                     required
-                                    className="w-full resize-none rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 hover:border-white/20 focus:border-teal-300 focus:bg-slate-950"
+                                    className="w-full resize-none rounded-md border border-slate-200/80 bg-white/90 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white dark:border-white/10 dark:bg-slate-950/70 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-teal-300 dark:focus:bg-slate-950"
                                 ></textarea>
                             </div>
                             {statusMessage && (
@@ -135,8 +135,8 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     initial={{ opacity: 0, y: 8 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className={`rounded-md border px-4 py-3 text-sm ${status === 'success'
-                                        ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200'
-                                        : 'border-red-400/30 bg-red-400/10 text-red-200'
+                                        ? 'border-emerald-500/30 bg-emerald-50 text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-200'
+                                        : 'border-red-500/30 bg-red-50 text-red-700 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-200'
                                         }`}
                                 >
                                     {statusMessage}

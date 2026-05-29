@@ -21,9 +21,9 @@ const getCategoryIcon = (title: string) => {
 
 const Skills = ({ skills, intro }: SkillsProps) => {
     return (
-        <section id="skills" className="relative border-b border-white/5 bg-transparent py-24 overflow-hidden">
+        <section id="skills" className="relative border-b border-slate-200/80 bg-transparent py-24 overflow-hidden dark:border-white/5">
             {/* Background Details */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)]" />
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
 
             <div className="section-shell relative z-10">
@@ -32,21 +32,21 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center justify-center rounded-full bg-teal-500/10 px-4 py-1.5 mb-4 border border-teal-500/20"
+                        className="inline-flex items-center justify-center rounded-full bg-teal-50/90 px-4 py-1.5 mb-4 border border-teal-500/20 dark:bg-teal-500/10"
                     >
-                        <Sparkles className="mr-2 h-4 w-4 text-teal-400" />
-                        <span className="text-sm font-semibold text-teal-300 uppercase tracking-widest">Expertise</span>
+                        <Sparkles className="mr-2 h-4 w-4 text-teal-700 dark:text-teal-400" />
+                        <span className="text-sm font-semibold text-teal-700 uppercase tracking-widest dark:text-teal-300">Expertise</span>
                     </motion.div>
                     <motion.h2
-                        className="text-4xl font-black text-white sm:text-5xl tracking-tight mb-6"
+                        className="text-4xl font-black text-slate-950 dark:text-white sm:text-5xl tracking-tight mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500">Skills</span>
+                        Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-cyan-600 dark:from-teal-400 dark:to-cyan-500">Skills</span>
                     </motion.h2>
                     <motion.p
-                        className="text-lg text-slate-400 leading-relaxed"
+                        className="text-lg text-slate-700 dark:text-slate-400 leading-relaxed"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -68,24 +68,24 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                         return (
                             <motion.div
                                 key={category.title}
-                                className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/40 p-8 backdrop-blur-sm transition-all hover:border-teal-500/30 hover:bg-slate-800/60 hover:shadow-[0_4px_15px_rgba(45,212,191,0.1)]"
+                                className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/75 p-8 shadow-lg shadow-slate-200/60 backdrop-blur-sm transition-all hover:border-teal-500/30 hover:bg-white hover:shadow-[0_4px_18px_rgba(20,184,166,0.14)] dark:border-slate-800 dark:bg-slate-900/40 dark:shadow-none dark:hover:bg-slate-800/60 dark:hover:shadow-[0_4px_15px_rgba(45,212,191,0.1)]"
                                 variants={fadeUp}
                             >
                                 {/* Decorative elements */}
                                 <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-teal-500/10 blur-[24px] transition-all group-hover:bg-teal-500/20" />
 
                                 <div className="relative z-10 flex items-center gap-4 mb-6">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-teal-400 shadow-inner group-hover:scale-110 group-hover:border-teal-500/50 group-hover:bg-teal-500/10 transition-all duration-300">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 border border-slate-200 text-teal-700 shadow-inner group-hover:scale-110 group-hover:border-teal-500/50 group-hover:bg-teal-100 transition-all duration-300 dark:bg-slate-800 dark:border-slate-700 dark:text-teal-400 dark:group-hover:bg-teal-500/10">
                                         <Icon className="h-6 w-6" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-slate-100">{category.title}</h3>
+                                    <h3 className="text-2xl font-bold text-slate-950 dark:text-slate-100">{category.title}</h3>
                                 </div>
 
                                 <div className="relative z-10 flex flex-wrap gap-2.5">
                                     {category.items.map((skill) => (
                                         <motion.span
                                             key={skill}
-                                            className="rounded-lg border border-slate-700/50 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300 shadow-sm transition-colors hover:border-teal-500/50 hover:bg-teal-500/10 hover:text-teal-300"
+                                            className="rounded-lg border border-slate-200/80 bg-slate-50/90 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:border-teal-500/50 hover:bg-teal-50 hover:text-teal-700 dark:border-slate-700/50 dark:bg-slate-800/50 dark:text-slate-300 dark:hover:bg-teal-500/10 dark:hover:text-teal-300"
                                             whileHover={{ scale: 1.05, y: -2 }}
                                             whileTap={{ scale: 0.95 }}
                                         >

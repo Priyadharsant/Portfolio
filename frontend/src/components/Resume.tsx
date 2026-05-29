@@ -10,7 +10,7 @@ type ResumeProps = {
 
 const Resume = ({ resume }: ResumeProps) => {
     return (
-        <section id="resume" className="border-b border-white/10 bg-transparent">
+        <section id="resume" className="border-b border-slate-200/80 bg-transparent dark:border-white/10">
             <div className="section-shell text-center">
                 <SectionHeader kicker="Overview" title="Resume" copy={resume.description} align="center" />
                 <motion.div

@@ -63,7 +63,7 @@ const SectionHeader = ({ kicker, title, copy, align = 'left' }: SectionHeaderPro
             </div>
             {copy && (
                 <motion.p
-                    className={isCentered ? 'mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-300' : 'section-copy'}
+                    className={isCentered ? 'mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-700 dark:text-slate-300' : 'section-copy'}
                     variants={{
                         hidden: { opacity: 0, y: 18 },
                         visible: { opacity: 1, y: 0 },

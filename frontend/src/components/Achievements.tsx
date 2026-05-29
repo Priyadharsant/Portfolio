@@ -12,7 +12,7 @@ const Achievements = ({ achievements }: AchievementsProps) => {
     const icons = [Code, Award, Trophy, Github];
 
     return (
-        <section id="achievements" className="border-b border-white/10 bg-transparent">
+        <section id="achievements" className="border-b border-slate-200/80 bg-transparent dark:border-white/10">
             <div className="section-shell">
                 <SectionHeader kicker="Proof points" title="Achievements & Profiles" />
                 <motion.div
@@ -30,7 +30,7 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                             whileHover={cardHover}
                         >
                             <motion.div
-                                className="relative flex h-11 w-11 flex-none items-center justify-center rounded-md border border-teal-300/20 bg-teal-400/10 text-teal-300"
+                                className="relative flex h-11 w-11 flex-none items-center justify-center rounded-md border border-teal-500/25 bg-teal-100/70 text-teal-700 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
                                 whileHover={{ color: '#99f6e4' }}
                             >
                                 {(() => {
@@ -39,8 +39,8 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                                 })()}
                             </motion.div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">{achievement.title}</h3>
-                                <p className="mt-2 leading-7 text-slate-300">{achievement.description}</p>
+                                <h3 className="text-lg font-bold text-slate-950 dark:text-white">{achievement.title}</h3>
+                                <p className="mt-2 leading-7 text-slate-700 dark:text-slate-300">{achievement.description}</p>
                             </div>
                         </motion.div>
                     ))}

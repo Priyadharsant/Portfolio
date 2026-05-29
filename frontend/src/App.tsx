@@ -1,12 +1,14 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import Hero from './components/Hero';
 import BackgroundDemo from './components/BackgroundDemo';
 import ResumeViewer from './components/ResumeViewer';
 import DownloadResume from './components/DownloadResume';
 import LoadingScreen from './components/LoadingScreen';
-import ScrollProgress from './components/ScrollProgress';
-import Logo from './components/Logo';
+import Header from './components/Header';
+import MouseBackground from './components/MouseBackground';
+import FloatingThemeToggle from './components/FloatingThemeToggle';
+import SectionGlowOverlay from './components/SectionGlowOverlay';
 import type { PortfolioData } from './types/portfolio';
 import { apiUrl } from './utils/api';
 
@@ -25,30 +27,19 @@ function App() {
   const isDownloadResume = window.location.pathname === '/download_resume';
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [error, setError] = useState('');
-  const [isFloatingLogoVisible, setIsFloatingLogoVisible] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') {
+      return 'light';
+    }
 
-  const heroNameRef = useRef<HTMLHeadingElement>(null);
-  const isFloatingLogoVisibleRef = useRef(false);
+    return window.localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+  });
 
   useEffect(() => {
-    const updateFloatingLogo = () => {
-      const shouldShowLogo = window.scrollY > window.innerHeight * 0.72;
-
-      if (shouldShowLogo !== isFloatingLogoVisibleRef.current) {
-        isFloatingLogoVisibleRef.current = shouldShowLogo;
-        setIsFloatingLogoVisible(shouldShowLogo);
-      }
-    };
-
-    updateFloatingLogo();
-    window.addEventListener('scroll', updateFloatingLogo, { passive: true });
-    window.addEventListener('resize', updateFloatingLogo);
-
-    return () => {
-      window.removeEventListener('scroll', updateFloatingLogo);
-      window.removeEventListener('resize', updateFloatingLogo);
-    };
-  }, []);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.style.colorScheme = theme;
+    window.localStorage.setItem('theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     if (isBackgroundDemo || isResumeView || isDownloadResume) {
@@ -91,10 +82,10 @@ function App() {
 
   if (error) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#06070b] px-5 text-center text-slate-100">
+      <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-5 text-center text-slate-900 dark:bg-[#06070b] dark:text-slate-100">
         <div className="glass-panel max-w-md rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-white">Portfolio backend is offline</h1>
-          <p className="mt-3 text-slate-300">{error}</p>
+          <h1 className="text-2xl font-bold text-slate-950 dark:text-white">Portfolio backend is offline</h1>
+          <p className="mt-3 text-slate-700 dark:text-slate-300">{error}</p>
         </div>
       </main>
     );
@@ -110,17 +101,19 @@ function App() {
 
   return (
     <motion.main
-      className="min-h-screen overflow-hidden bg-[#06070b] text-slate-100"
+      className="relative min-h-screen overflow-hidden bg-[#f8fbff] text-slate-900 dark:bg-[#06070b] dark:text-slate-100"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <ScrollProgress />
+      <MouseBackground theme={theme} />
+      <Header />
+      <FloatingThemeToggle theme={theme} onThemeToggle={() => setTheme((currentTheme) => currentTheme === 'dark' ? 'light' : 'dark')} />
+      <SectionGlowOverlay />
       <LayoutGroup>
-        <Logo isHidden={!isFloatingLogoVisible} />
-        <Hero profile={portfolio.profile} hero={portfolio.hero} nameRef={heroNameRef} />
+        <Hero profile={portfolio.profile} hero={portfolio.hero} />
       </LayoutGroup>
-      <div className="portfolio-body-bg">
+      <div className="portfolio-body-bg relative">
         <Suspense fallback={<LoadingScreen />}>
           <About about={portfolio.about} />
           <Skills skills={portfolio.skills} intro={portfolio.skillsIntro} />
