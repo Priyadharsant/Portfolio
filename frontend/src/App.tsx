@@ -52,23 +52,42 @@ function App() {
 
     const loadPortfolio = async () => {
       try {
+
         const response = await fetch(apiUrl('/api/portfolio'));
 
         if (!response.ok) {
-          throw new Error('Unable to load portfolio details.');
+          throw new Error('API failed');
         }
 
         const data = (await response.json()) as PortfolioData;
+
         setPortfolio(data);
+
       } catch (loadError) {
-        setError(
-          loadError instanceof Error
-            ? loadError.message
-            : 'Unable to load portfolio details.',
-        );
+
+        console.error('Main API failed:', loadError);
+
+        try {
+
+          const fallbackResponse = await fetch('/fallbackPortfolio.json');
+
+          if (!fallbackResponse.ok) {
+            throw new Error('Fallback failed');
+          }
+
+          const fallbackData =
+            (await fallbackResponse.json()) as PortfolioData;
+
+          setPortfolio(fallbackData);
+
+        } catch (fallbackError) {
+
+          console.error('Fallback failed:', fallbackError);
+
+          setError('Unable to load portfolio.');
+        }
       }
     };
-
     loadPortfolio();
   }, [isBackgroundDemo, isResumeView, isDownloadResume]);
 
