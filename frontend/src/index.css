@@ -305,3 +305,9 @@ textarea {
     transform: translateX(100%);
   }
 }
+
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}

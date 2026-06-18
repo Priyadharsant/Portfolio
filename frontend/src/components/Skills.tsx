@@ -19,11 +19,61 @@ const getCategoryIcon = (title: string) => {
     return Wrench;
 };
 
+const getCategoryStyles = (title: string) => {
+    const t = title.toLowerCase();
+    if (t.includes('frontend') || t.includes('ui')) {
+        return {
+            iconBg: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200/60 dark:border-cyan-800/30 text-cyan-600 dark:text-cyan-400 group-hover:bg-cyan-100 group-hover:border-cyan-400/50',
+            glow: 'bg-cyan-500/10 dark:bg-cyan-500/5 group-hover:bg-cyan-500/20 dark:group-hover:bg-cyan-500/10',
+            border: 'hover:border-cyan-500/40 dark:hover:border-cyan-500/30 hover:shadow-[0_8px_30px_rgba(6,182,212,0.08)] dark:hover:shadow-[0_8px_30px_rgba(6,182,212,0.06)]',
+            badge: 'border-slate-200/60 bg-slate-50/70 hover:border-cyan-500/40 hover:bg-cyan-50/40 hover:text-cyan-700 dark:border-slate-800/60 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:bg-cyan-950/20 dark:hover:text-cyan-300'
+        };
+    }
+    if (t.includes('backend') || t.includes('server')) {
+        return {
+            iconBg: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200/60 dark:border-emerald-800/30 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-100 group-hover:border-emerald-400/50',
+            glow: 'bg-emerald-500/10 dark:bg-emerald-500/5 group-hover:bg-emerald-500/20 dark:group-hover:bg-emerald-500/10',
+            border: 'hover:border-emerald-500/40 dark:hover:border-emerald-500/30 hover:shadow-[0_8px_30px_rgba(16,185,129,0.08)] dark:hover:shadow-[0_8px_30px_rgba(16,185,129,0.06)]',
+            badge: 'border-slate-200/60 bg-slate-50/70 hover:border-emerald-500/40 hover:bg-emerald-50/40 hover:text-emerald-700 dark:border-slate-800/60 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-300'
+        };
+    }
+    if (t.includes('database') || t.includes('data')) {
+        return {
+            iconBg: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200/60 dark:border-purple-800/30 text-purple-600 dark:text-purple-400 group-hover:bg-purple-100 group-hover:border-purple-400/50',
+            glow: 'bg-purple-500/10 dark:bg-purple-500/5 group-hover:bg-purple-500/20 dark:group-hover:bg-purple-500/10',
+            border: 'hover:border-purple-500/40 dark:hover:border-purple-500/30 hover:shadow-[0_8px_30px_rgba(168,85,247,0.08)] dark:hover:shadow-[0_8px_30px_rgba(168,85,247,0.06)]',
+            badge: 'border-slate-200/60 bg-slate-50/70 hover:border-purple-500/40 hover:bg-purple-50/40 hover:text-purple-700 dark:border-slate-800/60 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:bg-purple-950/20 dark:hover:text-purple-300'
+        };
+    }
+    if (t.includes('cloud') || t.includes('aws')) {
+        return {
+            iconBg: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200/60 dark:border-amber-800/30 text-amber-600 dark:text-amber-400 group-hover:bg-amber-100 group-hover:border-amber-400/50',
+            glow: 'bg-amber-500/10 dark:bg-amber-500/5 group-hover:bg-amber-500/20 dark:group-hover:bg-amber-500/10',
+            border: 'hover:border-amber-500/40 dark:hover:border-amber-500/30 hover:shadow-[0_8px_30px_rgba(245,158,11,0.08)] dark:hover:shadow-[0_8px_30px_rgba(245,158,11,0.06)]',
+            badge: 'border-slate-200/60 bg-slate-50/70 hover:border-amber-500/40 hover:bg-amber-50/40 hover:text-amber-700 dark:border-slate-800/60 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:bg-amber-950/20 dark:hover:text-amber-300'
+        };
+    }
+    if (t.includes('tool') || t.includes('dev')) {
+        return {
+            iconBg: 'bg-indigo-50 dark:bg-indigo-950/30 border-indigo-200/60 dark:border-indigo-800/30 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-100 group-hover:border-indigo-400/50',
+            glow: 'bg-indigo-500/10 dark:bg-indigo-500/5 group-hover:bg-indigo-500/20 dark:group-hover:bg-indigo-500/10',
+            border: 'hover:border-indigo-500/40 dark:hover:border-indigo-500/30 hover:shadow-[0_8px_30px_rgba(99,102,241,0.08)] dark:hover:shadow-[0_8px_30px_rgba(99,102,241,0.06)]',
+            badge: 'border-slate-200/60 bg-slate-50/70 hover:border-indigo-500/40 hover:bg-indigo-50/40 hover:text-indigo-700 dark:border-slate-800/60 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-300'
+        };
+    }
+    return {
+        iconBg: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200/60 dark:border-teal-800/30 text-teal-600 dark:text-teal-400 group-hover:bg-teal-100 group-hover:border-teal-400/50',
+        glow: 'bg-teal-500/10 dark:bg-teal-500/5 group-hover:bg-teal-500/20 dark:group-hover:bg-teal-500/10',
+        border: 'hover:border-teal-500/40 dark:hover:border-teal-500/30 hover:shadow-[0_8px_30px_rgba(20,184,166,0.08)] dark:hover:shadow-[0_8px_30px_rgba(20,184,166,0.06)]',
+        badge: 'border-slate-200/60 bg-slate-50/70 hover:border-teal-500/40 hover:bg-teal-50/40 hover:text-teal-700 dark:border-slate-800/60 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:bg-teal-950/20 dark:hover:text-teal-300'
+    };
+};
+
 const Skills = ({ skills, intro }: SkillsProps) => {
     return (
         <section id="skills" className="relative border-b border-slate-200/80 bg-transparent py-24 overflow-hidden dark:border-white/5">
             {/* Background Details */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)] pointer-events-none" />
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
 
             <div className="section-shell relative z-10">
@@ -65,27 +115,28 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                 >
                     {skills.map((category) => {
                         const Icon = getCategoryIcon(category.title);
+                        const styles = getCategoryStyles(category.title);
                         return (
                             <motion.div
                                 key={category.title}
-                                className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/75 p-8 shadow-lg shadow-slate-200/60 backdrop-blur-sm transition-all hover:border-teal-500/30 hover:bg-white hover:shadow-[0_4px_18px_rgba(20,184,166,0.14)] dark:border-slate-800 dark:bg-slate-900/40 dark:shadow-none dark:hover:bg-slate-800/60 dark:hover:shadow-[0_4px_15px_rgba(45,212,191,0.1)]"
+                                className={`group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 p-8 shadow-md shadow-slate-200/40 backdrop-blur-md transition-all duration-300 dark:border-slate-800/80 dark:bg-[#0c111e]/40 dark:shadow-none ${styles.border}`}
                                 variants={fadeUp}
                             >
-                                {/* Decorative elements */}
-                                <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-teal-500/10 blur-[24px] transition-all group-hover:bg-teal-500/20" />
+                                {/* Decorative dynamic category glow */}
+                                <div className={`absolute -right-20 -top-20 h-40 w-40 rounded-full blur-[28px] transition-all duration-500 pointer-events-none ${styles.glow}`} />
 
                                 <div className="relative z-10 flex items-center gap-4 mb-6">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 border border-slate-200 text-teal-700 shadow-inner group-hover:scale-110 group-hover:border-teal-500/50 group-hover:bg-teal-100 transition-all duration-300 dark:bg-slate-800 dark:border-slate-700 dark:text-teal-400 dark:group-hover:bg-teal-500/10">
+                                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border shadow-sm transition-all duration-300 group-hover:scale-100 ${styles.iconBg}`}>
                                         <Icon className="h-6 w-6" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-slate-950 dark:text-slate-100">{category.title}</h3>
+                                    <h3 className="text-2xl font-black text-slate-950 dark:text-slate-100">{category.title}</h3>
                                 </div>
 
                                 <div className="relative z-10 flex flex-wrap gap-2.5">
                                     {category.items.map((skill) => (
                                         <motion.span
                                             key={skill}
-                                            className="rounded-lg border border-slate-200/80 bg-slate-50/90 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:border-teal-500/50 hover:bg-teal-50 hover:text-teal-700 dark:border-slate-700/50 dark:bg-slate-800/50 dark:text-slate-300 dark:hover:bg-teal-500/10 dark:hover:text-teal-300"
+                                            className={`rounded-lg border px-3.5 py-1.5 text-xs font-semibold shadow-sm transition-all duration-200 cursor-default ${styles.badge}`}
                                             whileHover={{ scale: 1.05, y: -2 }}
                                             whileTap={{ scale: 0.95 }}
                                         >

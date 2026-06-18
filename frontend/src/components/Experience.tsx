@@ -14,7 +14,7 @@ const Experience = ({ experience }: ExperienceProps) => {
             <div className="section-shell">
                 <SectionHeader kicker="Practice" title="Experience" />
                 <motion.div
-                    className="glass-panel interactive-card mt-10 rounded-lg p-6 sm:p-8"
+                    className="group glass-panel interactive-card mt-10 rounded-lg p-6 sm:p-8"
                     variants={fadeUp}
                     initial="hidden"
                     whileInView="visible"
@@ -24,7 +24,7 @@ const Experience = ({ experience }: ExperienceProps) => {
                     <div className="relative flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
                         <div className="max-w-2xl">
                             <motion.div
-                                className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-md border border-teal-500/25 bg-teal-100/70 text-teal-700 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
+                                className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-md border border-teal-500/25 bg-teal-100/70 text-teal-700 transform transition-transform duration-300 group-hover:scale-100 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
                                 animate={{ rotate: [0, 4, 0] }}
                                 transition={{ duration: 4, repeat: Infinity }}
                             >

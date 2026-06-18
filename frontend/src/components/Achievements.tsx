@@ -25,19 +25,18 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                     {achievements.map((achievement, index) => (
                         <motion.div
                             key={achievement.title}
-                            className="glass-panel interactive-card flex gap-4 rounded-lg p-6"
+                            className="group glass-panel interactive-card flex gap-4 rounded-lg p-6"
                             variants={fadeUp}
                             whileHover={cardHover}
                         >
-                            <motion.div
-                                className="relative flex h-11 w-11 flex-none items-center justify-center rounded-md border border-teal-500/25 bg-teal-100/70 text-teal-700 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
-                                whileHover={{ color: '#99f6e4' }}
+                            <div
+                                className="relative flex h-11 w-11 flex-none items-center justify-center rounded-md border border-teal-500/25 bg-teal-100/70 text-teal-700 transform transition-all duration-300 group-hover:scale-100 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
                             >
                                 {(() => {
                                     const Icon = icons[index] ?? Trophy;
                                     return <Icon className="h-5 w-5" />;
                                 })()}
-                            </motion.div>
+                            </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-950 dark:text-white">{achievement.title}</h3>
                                 <p className="mt-2 leading-7 text-slate-700 dark:text-slate-300">{achievement.description}</p>

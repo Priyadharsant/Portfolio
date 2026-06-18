@@ -54,17 +54,25 @@ const Header = () => {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
             <motion.div
-                className={`overflow-hidden border-b transition-[background-color,border-color,backdrop-filter] duration-300 ${isScrolled || isMenuOpen
-                    ? 'border-zinc-200/50 bg-white/20 backdrop-blur-2xl dark:border-white/5 dark:bg-zinc-950/40' // Scrolled state: neutral dark blur effect
-                    : 'border-transparent bg-transparent dark:bg-transparent' // Initial state: transparent background and border
+                className={`relative overflow-hidden border-b transition-colors duration-150 ${isScrolled || isMenuOpen
+                    ? 'border-zinc-200/50 dark:border-white/5'
+                    : 'border-transparent dark:border-transparent'
                     }`}
                 animate={{
                     boxShadow: isScrolled
                         ? '0 12px 34px rgba(0, 0, 0, 0.15)'
                         : '0 0 0 rgba(0, 0, 0, 0)',
                 }}
-                transition={{ duration: 0.22 }}
+                transition={{ duration: 0.15 }}
             >
+                {/* Dedicated GPU-accelerated background layer */}
+                <motion.div 
+                    className="absolute inset-0 z-[-1] bg-white/40 backdrop-blur-2xl dark:bg-zinc-950/40 pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: isScrolled || isMenuOpen ? 1 : 0 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                />
+
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-5 lg:px-6 xl:px-8">
                     <a
                         href="#"

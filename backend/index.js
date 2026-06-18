@@ -2,6 +2,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
+import cron from 'node-cron';
 
 dotenv.config();
 
@@ -15,6 +16,15 @@ mongoose.connect(process.env.MONGO_URI)
 // Using a flexible schema, assuming the collection is 'portfolios' or 'portfolio' 
 // Let's use 'portfolios' by default, or just 'portfolio'
 const Portfolio = mongoose.model('Portfolio', new mongoose.Schema({}, { strict: false }), 'Portfolio');
+
+const Activity = mongoose.model('Activity', new mongoose.Schema({
+  type: String, // 'VISIT' or 'ERROR'
+  ip: String,
+  ua: String,
+  context: String,
+  errorDetails: String,
+  createdAt: { type: Date, default: Date.now }
+}), 'ActivityLogs');
 
 app.use(cors());
 app.use(express.json());
@@ -146,26 +156,173 @@ app.get('/api/resume', async (req, res) => {
     if (!data || !data.profile || !data.profile.resume) {
       return res.status(404).json({ message: 'Resume not found' });
     }
-    
+
     const response = await fetch(data.profile.resume);
     if (!response.ok) {
-        throw new Error('Failed to fetch resume file');
+      throw new Error('Failed to fetch resume file');
     }
-    
+
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    
+
     res.setHeader('Content-Type', 'application/pdf');
     if (req.query.download === 'true') {
       res.setHeader('Content-Disposition', 'attachment; filename="resume.pdf"');
     } else {
       res.setHeader('Content-Disposition', 'inline; filename="resume.pdf"');
     }
-    
+
     return res.send(buffer);
   } catch (error) {
     console.error('Failed to fetch resume:', error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/api/notify/visit', async (req, res) => {
+  try {
+    const ua = req.headers['user-agent'] || 'Unknown';
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
+
+    // Save to DB for daily digest
+    await Activity.create({ type: 'VISIT', ip, ua });
+    console.log(`[API] Saved VISIT to DB from IP: ${ip}`);
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error('[API] Notify visit error:', err);
+    return res.status(500).json({ success: false });
+  }
+});
+
+app.post('/api/notify/error', async (req, res) => {
+  try {
+    const { error, context } = req.body || {};
+
+    // Save to DB for daily digest
+    await Activity.create({ type: 'ERROR', context, errorDetails: error });
+    console.log(`[API] Saved ERROR to DB: ${context}`);
+
+    // Send immediate alert
+    if (process.env.REPORT_MAIL && process.env.MAIL_TO && process.env.RESEND_API_KEY) {
+      await sendResendEmail({
+        from: process.env.REPORT_MAIL,
+        to: process.env.MAIL_TO,
+        subject: 'Portfolio Error Alert',
+        html: `
+          <div style="margin:0;padding:24px;background:#fef2f2;font-family:Arial,sans-serif;color:#111827;">
+            <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #fecaca;border-radius:12px;overflow:hidden;box-shadow:0 10px 15px -3px rgba(239, 68, 68, 0.1);">
+              <div style="background:#dc2626;padding:24px;">
+                <p style="margin:0;color:#fca5a5;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Critical Alert</p>
+                <h1 style="margin:8px 0 0;color:#ffffff;font-size:24px;">Portfolio Crash Report</h1>
+              </div>
+              <div style="padding:24px;">
+                <p style="margin:0 0 16px;color:#374151;">An unexpected JavaScript error occurred on your portfolio site.</p>
+                <div style="margin-bottom:18px;padding:16px;background:#fef2f2;border-radius:10px;border:1px solid #fecaca;">
+                  <p style="margin:0 0 8px;color:#7f1d1d;font-weight:700;">Context / Location:</p>
+                  <p style="margin:0;color:#991b1b;font-family:monospace;">${escapeHtml(context)}</p>
+                </div>
+                <div style="padding:16px;background:#1e293b;border-radius:8px;overflow-x:auto;">
+                  <p style="margin:0 0 8px;font-weight:700;color:#cbd5e1;">Stack Trace</p>
+                  <pre style="margin:0;color:#f8fafc;font-family:monospace;font-size:13px;line-height:1.5;white-space:pre-wrap;">${escapeHtml(error)}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+      });
+      console.log(`[API] Sent immediate error alert email to ${process.env.REPORT_MAIL}`);
+    } else {
+      console.log(`[API] Skipped immediate error alert email. Missing Env variables (REPORT_MAIL: ${!!process.env.REPORT_MAIL}, RESEND_FROM: ${!!process.env.RESEND_FROM}, RESEND_API_KEY: ${!!process.env.RESEND_API_KEY})`);
+    }
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error('[API] Notify error endpoint failed:', err);
+    return res.status(500).json({ success: false });
+  }
+});
+
+// Setup Daily 9:00 PM CRON Job
+cron.schedule('0 0 21 * * *', async () => {
+  console.log('Running daily 9:00 PM report cron...');
+  if (!process.env.REPORT_MAIL || !process.env.RESEND_FROM || !process.env.RESEND_API_KEY) {
+    console.log('Missing env for report mail, skipping cron.');
+    return;
+  }
+
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const activities = await Activity.find({
+      createdAt: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+    const visits = activities.filter(a => a.type === 'VISIT');
+    const errors = activities.filter(a => a.type === 'ERROR');
+    const uniqueIPs = new Set(visits.map(v => v.ip)).size;
+
+    const html = `
+      <div style="margin:0;padding:24px;background:#f8fafc;font-family:Arial,sans-serif;color:#111827;">
+        <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.05);">
+          <div style="background:#0f172a;padding:24px;">
+            <p style="margin:0;color:#2dd4bf;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Daily Analytics</p>
+            <h1 style="margin:8px 0 0;color:#ffffff;font-size:24px;">Portfolio Digest</h1>
+          </div>
+          <div style="padding:24px;">
+            <p style="margin:0 0 20px;color:#475569;">Here is the activity summary for today (${new Date().toLocaleDateString()}).</p>
+            
+            <div style="margin-bottom:16px;padding:20px;background:#f0fdfa;border-radius:10px;border:1px solid #ccfbf1;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#0d9488;text-transform:uppercase;">Unique Visitors</p>
+                <p style="margin:0;font-size:32px;font-weight:900;color:#0f766e;">${uniqueIPs}</p>
+              </div>
+              <div style="text-align:right;">
+                <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#0d9488;text-transform:uppercase;">Total Page Loads</p>
+                <p style="margin:0;font-size:32px;font-weight:900;color:#0f766e;">${visits.length}</p>
+              </div>
+            </div>
+
+            <div style="padding:20px;background:${errors.length > 0 ? '#fef2f2' : '#f8fafc'};border-radius:10px;border:1px solid ${errors.length > 0 ? '#fecaca' : '#e2e8f0'};">
+              <p style="margin:0 0 8px;font-size:13px;font-weight:700;color:${errors.length > 0 ? '#dc2626' : '#64748b'};text-transform:uppercase;">Stability Report</p>
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:14px;font-weight:700;background:${errors.length > 0 ? '#dc2626' : '#10b981'};color:#fff;">
+                  ${errors.length} Errors
+                </span>
+              </div>
+              <p style="margin:0;color:${errors.length > 0 ? '#991b1b' : '#475569'};font-size:14px;line-height:1.6;">
+                ${errors.length > 0 ? 'Your site encountered crashes today. Please review the real-time email alerts for detailed stack traces to fix these issues.' : 'Excellent! Your site ran perfectly today with zero client-side crashes or errors.'}
+              </p>
+            </div>
+            
+            <div style="margin-top:24px;text-align:center;">
+              <a href="#" style="display:inline-block;padding:12px 24px;background:#0f172a;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:700;font-size:14px;">Review Portfolio</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    await sendResendEmail({
+      from: process.env.REPORT_MAIL,
+      to: process.env.MAIL_TO,
+      subject: `Daily Portfolio Digest (${visits.length} visits, ${errors.length} errors)`,
+      html,
+    });
+
+    console.log('Daily report sent successfully.');
+
+    // Cleanup logs older than 7 days
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    await Activity.deleteMany({ createdAt: { $lt: oneWeekAgo } });
+
+  } catch (err) {
+    console.error('Failed to run daily report cron:', err);
   }
 });
 

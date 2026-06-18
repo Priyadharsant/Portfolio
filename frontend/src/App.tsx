@@ -15,6 +15,7 @@ import type { PortfolioData } from './types/portfolio';
 import { apiUrl } from './utils/api';
 import { TooltipProvider } from './components/TooltipContext';
 import Tooltip from './components/Tooltip';
+import CustomCursor from './components/CustomCursor';
 
 const About = lazy(() => import('./components/About'));
 const Skills = lazy(() => import('./components/Skills'));
@@ -30,6 +31,7 @@ function App() {
   const isResumeView = window.location.pathname === '/resume';
   const isDownloadResume = window.location.pathname === '/download_resume';
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
+  const [showPage, setShowPage] = useState(false);
   const [error, setError] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window === 'undefined') {
@@ -44,6 +46,43 @@ function App() {
     document.documentElement.style.colorScheme = theme;
     window.localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Notify backend of site visit
+  useEffect(() => {
+    // Fire and forget visit notification
+    fetch(apiUrl('/api/notify/visit'), { method: 'POST' }).catch(() => {});
+
+    // Global error listeners for email notification
+    const handleError = (event: ErrorEvent) => {
+      fetch(apiUrl('/api/notify/error'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          context: 'Window Error',
+          error: event.error?.stack || event.message
+        })
+      }).catch(() => {});
+    };
+
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      fetch(apiUrl('/api/notify/error'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          context: 'Unhandled Promise Rejection',
+          error: event.reason?.stack || String(event.reason)
+        })
+      }).catch(() => {});
+    };
+
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleRejection);
+
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleRejection);
+    };
+  }, []);
 
   useEffect(() => {
     if (isBackgroundDemo || isResumeView || isDownloadResume) {
@@ -91,16 +130,35 @@ function App() {
     loadPortfolio();
   }, [isBackgroundDemo, isResumeView, isDownloadResume]);
 
+  useEffect(() => {
+    if (portfolio) {
+      const timer = setTimeout(() => {
+        setShowPage(true);
+      }, 1500); // Increased to 1.5s for smoother transition and reading the success message
+      return () => clearTimeout(timer);
+    }
+  }, [portfolio]);
+
   if (isBackgroundDemo) {
     return <BackgroundDemo />;
   }
 
   if (isResumeView) {
-    return <ResumeViewer />;
+    return (
+      <>
+        <CustomCursor />
+        <ResumeViewer />
+      </>
+    );
   }
 
   if (isDownloadResume) {
-    return <DownloadResume />;
+    return (
+      <>
+        <CustomCursor />
+        <DownloadResume />
+      </>
+    );
   }
 
   if (error) {
@@ -114,16 +172,21 @@ function App() {
     );
   }
 
-  if (!portfolio) {
+  if (!showPage) {
     return (
       <AnimatePresence mode="wait">
-        <LoadingScreen />
+        <LoadingScreen isReady={!!portfolio} />
       </AnimatePresence>
     );
   }
 
+  if (!portfolio) {
+    return null;
+  }
+
   return (
     <TooltipProvider>
+      <CustomCursor />
       <motion.main
         className="relative min-h-screen overflow-hidden bg-[#f8fbff] text-slate-900 dark:bg-[#06070b] dark:text-slate-100"
         initial={{ opacity: 0 }}

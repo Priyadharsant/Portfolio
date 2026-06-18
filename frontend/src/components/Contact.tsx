@@ -89,11 +89,11 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     href={href}
                                     target={href.startsWith('mailto:') ? undefined : '_blank'}
                                     rel="noreferrer"
-                                    className="relative flex items-center gap-3 rounded-md border border-slate-200/80 bg-white/80 px-4 py-3 text-slate-700 transition hover:border-teal-500 hover:bg-teal-50 hover:text-teal-700 dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-300 dark:hover:border-teal-300 dark:hover:bg-teal-300/10 dark:hover:text-teal-200"
+                                    className="group relative flex items-center gap-3 rounded-md border border-slate-200/80 bg-white/80 px-4 py-3 text-slate-700 transition hover:border-teal-500 hover:bg-teal-50 hover:text-teal-700 dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-300 dark:hover:border-teal-300 dark:hover:bg-teal-300/10 dark:hover:text-teal-200"
                                     whileHover={{ borderColor: 'rgba(45, 212, 191, 0.65)' }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <Icon className="h-5 w-5 text-teal-600 dark:text-teal-300" />
+                                    <Icon className="h-5 w-5 text-teal-600 dark:text-teal-300 transform transition-transform duration-300 group-hover:scale-100" />
                                     {label}
                                 </motion.a>
                             ))}

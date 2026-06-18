@@ -1,4 +1,4 @@
-import { ArrowLeft, Download, Printer, ZoomIn, ZoomOut } from 'lucide-react';
+import { ArrowLeft, Download, Printer, ZoomIn, ZoomOut, AlertCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -11,7 +11,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.m
 const ResumeViewer = () => {
     const [resumeUrl, setResumeUrl] = useState<string | null>(null);
     const [numPages, setNumPages] = useState<number | null>(null);
-    const [zoom, setZoom] = useState(1); // react-pdf uses a scale factor
+    const [zoom, setZoom] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -21,13 +23,26 @@ const ResumeViewer = () => {
 
         const loadResume = async () => {
             try {
+                setIsLoading(true);
+                setError(null);
                 const response = await fetch(apiUrl('/api/resume'));
                 if (!response.ok) throw new Error('Failed to load resume');
                 const blob = await response.blob();
                 objectUrl = URL.createObjectURL(blob);
                 setResumeUrl(objectUrl);
-            } catch (error) {
-                console.error('Error loading resume:', error);
+            } catch (err: any) {
+                console.error('Error loading resume:', err);
+                setError('Unable to load resume. The backend server is offline or unreachable.');
+                fetch(apiUrl('/api/notify/error'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        context: 'ResumeViewer Load Error',
+                        error: err?.stack || String(err)
+                    })
+                }).catch(() => {});
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -209,11 +224,41 @@ const ResumeViewer = () => {
                 </div>
             </header>
             <div ref={containerRef} className="h-full pt-16 overflow-auto pdf-container px-4 print:p-0">
-                {resumeUrl ? (
+                {isLoading ? (
+                    <div className="flex h-full flex-col items-center justify-center gap-6">
+                        <div className="relative flex h-16 w-16 items-center justify-center">
+                            <div className="absolute inset-0 animate-ping rounded-full border-2 border-teal-400/40" />
+                            <div className="absolute inset-2 animate-spin rounded-full border-b-2 border-t-2 border-teal-500" />
+                            <div className="h-4 w-4 rounded-full bg-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.6)]" />
+                        </div>
+                        <p className="animate-pulse text-lg font-medium tracking-wider text-slate-300">
+                            LOADING RESUME...
+                        </p>
+                    </div>
+                ) : error ? (
+                    <div className="flex h-full flex-col items-center justify-center gap-4">
+                        <div className="flex max-w-sm flex-col items-center rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center shadow-2xl backdrop-blur-md">
+                            <AlertCircle className="mb-4 h-12 w-12 text-red-400" />
+                            <h2 className="mb-2 text-xl font-bold text-red-400">Connection Failed</h2>
+                            <p className="text-sm leading-relaxed text-slate-300">{error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="mt-8 inline-flex items-center justify-center rounded-lg bg-red-500/20 px-6 py-2.5 text-sm font-semibold text-red-300 transition hover:bg-red-500/30 hover:text-red-200"
+                            >
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
+                ) : resumeUrl ? (
                     <Document
                         file={resumeUrl}
                         onLoadSuccess={onDocumentLoadSuccess}
-                        loading={<div className="flex h-full items-center justify-center"><p className="text-slate-400">Loading Resume...</p></div>}
+                        loading={
+                            <div className="flex py-20 flex-col items-center justify-center gap-4">
+                                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-teal-500" />
+                                <p className="text-sm text-slate-400">Rendering PDF...</p>
+                            </div>
+                        }
                         className="flex flex-col items-center gap-8 py-8 print:gap-0 print:py-0"
                     >
                         {Array.from({ length: numPages ?? 0 }, (_, index) => (
@@ -226,11 +271,7 @@ const ResumeViewer = () => {
                             />
                         ))}
                     </Document>
-                ) : (
-                    <div className="flex h-full items-center justify-center">
-                        <p className="text-slate-400">Loading Resume...</p>
-                    </div>
-                )}
+                ) : null}
             </div>
         </main>
     );
