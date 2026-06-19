@@ -85,10 +85,6 @@ async function sendTelegramMessage(text, replyMarkup = null) {
     if (!replyMarkup) {
       payload.reply_markup = {
         inline_keyboard: [
-          [
-            { text: "📊 Report", callback_data: "cmd_report" },
-            { text: "🐞 Errors", callback_data: "cmd_errors" }
-          ],
           [{ text: "🌐 Open Portfolio", url: "https://priyan.online" }]
         ]
       };
@@ -199,46 +195,38 @@ async function sendRecentErrors(chatId) {
   }
 }
 
-let lastUpdateId = 0;
-async function pollTelegramUpdates() {
-  const { TELEGRAM_BOT_TOKEN, TELEGRAM_API_BASE } = process.env;
-  if (!TELEGRAM_BOT_TOKEN) return;
-  const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
-
+app.post("/api/telegram/webhook", async (req, res) => {
   try {
-    const response = await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`);
-    if (response.ok) {
-      const data = await response.json();
-      for (const update of data.result) {
-        lastUpdateId = update.update_id;
+    const update = req.body;
 
-        if (update.callback_query) {
-          const cb = update.callback_query;
-          const chatId = cb.message?.chat?.id;
-          if (chatId && cb.data === 'cmd_report') await sendInstantReport(chatId);
-          if (chatId && cb.data === 'cmd_errors') await sendRecentErrors(chatId);
-          await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ callback_query_id: cb.id })
-          });
-        }
+    if (update.callback_query) {
+      const cb = update.callback_query;
+      const chatId = cb.message?.chat?.id;
+      if (chatId && cb.data === 'cmd_report') await sendInstantReport(chatId);
+      if (chatId && cb.data === 'cmd_errors') await sendRecentErrors(chatId);
 
-        if (update.message && update.message.text) {
-          const text = update.message.text;
-          const chatId = update.message.chat.id;
-          if (text === '/report' || text === '/status') await sendInstantReport(chatId);
-          if (text === '/errors') await sendRecentErrors(chatId);
-        }
+      const { TELEGRAM_BOT_TOKEN, TELEGRAM_API_BASE } = process.env;
+      if (TELEGRAM_BOT_TOKEN) {
+        const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
+        await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ callback_query_id: cb.id })
+        });
       }
     }
+
+    if (update.message && update.message.text) {
+      const text = update.message.text;
+      const chatId = update.message.chat.id;
+      if (text === 'report' || text === 'status') await sendInstantReport(chatId);
+      if (text === 'errors') await sendRecentErrors(chatId);
+    }
   } catch (err) {
-    // Ignore fetch timeouts
-  } finally {
-    setTimeout(pollTelegramUpdates, 2000);
+    console.error('[API] Webhook error:', err);
   }
-}
-setTimeout(pollTelegramUpdates, 2000);
+  res.sendStatus(200);
+});
 
 function buildOwnerMail({ name, email, message }) {
   const safeName = escapeHtml(name);
@@ -594,10 +582,44 @@ app.post('/api/contact', async (req, res) => {
     return res.status(500).json({ message: 'Failed to send message. Please try again.' });
   }
 });
+async function setupTelegramMenu() {
+  const { TELEGRAM_BOT_TOKEN, TELEGRAM_API_BASE } = process.env;
+  if (!TELEGRAM_BOT_TOKEN) return;
+  const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
+
+  try {
+    const commands = [
+      { command: 'report', description: 'Get instant daily report' },
+      { command: 'status', description: 'Check system health' },
+      { command: 'errors', description: 'View recent crash logs' }
+    ];
+
+    await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/setMyCommands`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ commands })
+    });
+    console.log('[API] Telegram bot menu commands updated.');
+
+    if (process.env.TELEGRAM_WEBHOOK_URL) {
+      await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/setWebhook`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: process.env.TELEGRAM_WEBHOOK_URL })
+      });
+      console.log(`[API] Telegram webhook set to ${process.env.TELEGRAM_WEBHOOK_URL}`);
+    } else {
+      console.log('[API] Telegram webhook setup skipped. TELEGRAM_WEBHOOK_URL is not set.');
+    }
+  } catch (err) {
+    console.error('[API] Failed to set Telegram menu commands:', err);
+  }
+}
 
 app.listen(port, () => {
   console.log(`Mail server running on http://localhost:${port}`);
   console.log(
     `Mail config: provider=resend, apiKey=${process.env.RESEND_API_KEY ? 'set' : 'missing'}, from=${process.env.RESEND_FROM || 'missing'}, to=${process.env.MAIL_TO ? 'set' : 'missing'}, autoReply=${process.env.RESEND_SEND_AUTO_REPLY === 'true' ? 'enabled' : 'disabled'}`,
   );
+  setupTelegramMenu();
 });
