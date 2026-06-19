@@ -66,6 +66,43 @@ async function sendResendEmail(payload) {
   return data;
 }
 
+async function sendWhatsAppMessage(text) {
+  const { META_ACCESS_TOKEN, META_PHONE_NUMBER_ID, WHATSAPP_TO } = process.env;
+  if (!META_ACCESS_TOKEN || !META_PHONE_NUMBER_ID || !WHATSAPP_TO) {
+    console.log('[API] Skipped WhatsApp notification. Missing Meta/WhatsApp Env variables.');
+    return;
+  }
+
+  try {
+    const response = await fetch(`https://graph.facebook.com/v17.0/${META_PHONE_NUMBER_ID}/messages`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${META_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to: WHATSAPP_TO,
+        type: 'text',
+        text: {
+          preview_url: false,
+          body: text
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || 'Meta API returned an error');
+    }
+
+    console.log(`[API] WhatsApp message sent via Meta to ${WHATSAPP_TO}`);
+  } catch (err) {
+    console.error('[API] Failed to send WhatsApp message via Meta:', err);
+  }
+}
+
 function buildOwnerMail({ name, email, message }) {
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
@@ -236,13 +273,26 @@ app.post('/api/notify/error', async (req, res) => {
       console.log(`[API] Skipped immediate error alert email. Missing Env variables (REPORT_MAIL: ${!!process.env.REPORT_MAIL}, RESEND_FROM: ${!!process.env.RESEND_FROM}, RESEND_API_KEY: ${!!process.env.RESEND_API_KEY})`);
     }
 
+    // Send immediate WhatsApp alert
+    await sendWhatsAppMessage(`🚨 *Portfolio Crash Alert*\n\n*Context:* ${context}\n*Error:* ${error?.substring(0, 500) || 'Unknown error'}`);
+
     return res.json({ success: true });
   } catch (err) {
     console.error('[API] Notify error endpoint failed:', err);
     return res.status(500).json({ success: false });
   }
 });
+app.get("/webhook", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
 
+  if (mode === "subscribe" && token === process.env.WHATSAPP_VERIFY_TOKEN) {
+    return res.status(200).send(challenge);
+  }
+
+  return res.sendStatus(403);
+});
 // Setup Daily 9:00 PM CRON Job
 cron.schedule('0 0 21 * * *', async () => {
   console.log('Running daily 9:00 PM report cron...');
@@ -315,6 +365,9 @@ cron.schedule('0 0 21 * * *', async () => {
     });
 
     console.log('Daily report sent successfully.');
+
+    // Send WhatsApp digest
+    await sendWhatsAppMessage(`📊 *Daily Portfolio Report*\n\n*Date:* ${new Date().toLocaleDateString()}\n*Unique Visitors:* ${uniqueIPs}\n*Total Page Loads:* ${visits.length}\n*Errors:* ${errors.length}\n\n${errors.length > 0 ? '⚠️ Your site encountered crashes today.' : '✅ Your site ran perfectly today!'}`);
 
     // Cleanup logs older than 7 days
     const oneWeekAgo = new Date();
