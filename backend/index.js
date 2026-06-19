@@ -85,6 +85,10 @@ async function sendTelegramMessage(text, replyMarkup = null) {
     if (!replyMarkup) {
       payload.reply_markup = {
         inline_keyboard: [
+          [
+            { text: "📊 Report", callback_data: "cmd_report" },
+            { text: "🐞 Errors", callback_data: "cmd_errors" }
+          ],
           [{ text: "🌐 Open Portfolio", url: "https://priyan.online" }]
         ]
       };
@@ -111,6 +115,130 @@ async function sendTelegramMessage(text, replyMarkup = null) {
     console.error('[API] Failed to send Telegram message:', err);
   }
 }
+
+async function sendInstantReport(chatId = null) {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const activities = await Activity.find({
+      createdAt: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+    const visits = activities.filter(a => a.type === 'VISIT');
+    const errors = activities.filter(a => a.type === 'ERROR');
+    const uniqueIPs = new Set(visits.map(v => v.ip)).size;
+
+    const dateStr = new Date().toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const statusText = errors.length > 0
+      ? `🚨 <b>System Warning:</b> <code>${errors.length}</code> crash(es) were logged today. Please check the logs!`
+      : `🛡️ <b>System Healthy:</b> Your portfolio ran perfectly today with <code>0</code> client-side crashes.`;
+
+    const reportMsg = `📊 <b>DAILY SYSTEM DIGEST</b>
+<i>Portfolio Application</i>
+
+<b>Date:</b> <code>${dateStr}</code>
+<b>Status:</b> ${statusText}
+
+<b>Traffic Overview</b>
+• <b>Unique Visitors:</b> <code>${uniqueIPs}</code>
+• <b>Page Loads:</b> <code>${visits.length}</code>
+
+<b>System Health</b>
+• <b>Crashes Logged:</b> <code>${errors.length}</code>
+
+<blockquote expandable><b>Performance Note</b>
+The system processed <b>${visits.length}</b> requests today. ${errors.length === 0 ? "Everything is running smoothly without issues." : "Please review the recent error alerts to ensure stability."}</blockquote>`;
+
+    if (chatId) {
+      const { TELEGRAM_BOT_TOKEN, TELEGRAM_API_BASE } = process.env;
+      if (!TELEGRAM_BOT_TOKEN) return;
+      const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
+      await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: reportMsg, parse_mode: 'HTML' })
+      });
+    } else {
+      await sendTelegramMessage(reportMsg);
+    }
+  } catch (e) {
+    console.error("Failed to generate report", e);
+  }
+}
+
+async function sendRecentErrors(chatId) {
+  try {
+    const { TELEGRAM_BOT_TOKEN, TELEGRAM_API_BASE } = process.env;
+    if (!TELEGRAM_BOT_TOKEN) return;
+    const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
+
+    const recentErrors = await Activity.find({ type: 'ERROR' }).sort({ createdAt: -1 }).limit(3);
+
+    let msg = `🐞 <b>RECENT ERRORS</b>\n<i>Portfolio Application</i>\n\n`;
+    if (recentErrors.length === 0) {
+      msg += `✅ No errors found in the logs!`;
+    } else {
+      recentErrors.forEach((err, idx) => {
+        const safeContext = escapeHtml(err.context || 'Unknown');
+        const safeError = escapeHtml(err.errorDetails?.substring(0, 200) || 'Unknown');
+        msg += `<b>${idx + 1}.</b> <code>${safeContext}</code>\n<blockquote expandable><pre><code class="language-javascript">${safeError}</code></pre></blockquote>\n`;
+      });
+    }
+
+    await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'HTML' })
+    });
+  } catch (e) {
+    console.error("Failed to send errors", e);
+  }
+}
+
+let lastUpdateId = 0;
+async function pollTelegramUpdates() {
+  const { TELEGRAM_BOT_TOKEN, TELEGRAM_API_BASE } = process.env;
+  if (!TELEGRAM_BOT_TOKEN) return;
+  const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
+
+  try {
+    const response = await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`);
+    if (response.ok) {
+      const data = await response.json();
+      for (const update of data.result) {
+        lastUpdateId = update.update_id;
+
+        if (update.callback_query) {
+          const cb = update.callback_query;
+          const chatId = cb.message?.chat?.id;
+          if (chatId && cb.data === 'cmd_report') await sendInstantReport(chatId);
+          if (chatId && cb.data === 'cmd_errors') await sendRecentErrors(chatId);
+          await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ callback_query_id: cb.id })
+          });
+        }
+
+        if (update.message && update.message.text) {
+          const text = update.message.text;
+          const chatId = update.message.chat.id;
+          if (text === '/report' || text === '/status') await sendInstantReport(chatId);
+          if (text === '/errors') await sendRecentErrors(chatId);
+        }
+      }
+    }
+  } catch (err) {
+    // Ignore fetch timeouts
+  } finally {
+    setTimeout(pollTelegramUpdates, 2000);
+  }
+}
+setTimeout(pollTelegramUpdates, 2000);
 
 function buildOwnerMail({ name, email, message }) {
   const safeName = escapeHtml(name);
@@ -317,7 +445,7 @@ app.post('/api/notify/error', async (req, res) => {
 });
 
 // Setup Daily 9:00 PM CRON Job
-cron.schedule('0 0 20 * * *', async () => {
+cron.schedule('0 21 13 * * *', async () => {
   console.log('Running daily 9:00 PM report cron...');
   if (!process.env.REPORT_MAIL || !process.env.RESEND_FROM || !process.env.RESEND_API_KEY) {
     console.log('Missing env for report mail, skipping cron.');
@@ -390,28 +518,7 @@ cron.schedule('0 0 20 * * *', async () => {
     console.log('Daily report sent successfully.');
 
     // Send Telegram digest
-    const dateStr = new Date().toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const statusText = errors.length > 0
-      ? `🚨 <b>System Warning:</b> <code>${errors.length}</code> crash(es) were logged today. Please check the logs!`
-      : `🛡️ <b>System Healthy:</b> Your portfolio ran perfectly today with <code>0</code> client-side crashes.`;
-
-    const reportMsg = `📊 <b>DAILY SYSTEM DIGEST</b>
-<i>Portfolio Application</i>
-
-<b>Date:</b> <code>${dateStr}</code>
-<b>Status:</b> ${statusText}
-
-<b>Traffic Overview</b>
-• <b>Unique Visitors:</b> <code>${uniqueIPs}</code>
-• <b>Page Loads:</b> <code>${visits.length}</code>
-
-<b>System Health</b>
-• <b>Crashes Logged:</b> <code>${errors.length}</code>
-
-<blockquote expandable><b>Performance Note</b>
-The system processed <b>${visits.length}</b> requests today. ${errors.length === 0 ? "Everything is running smoothly without issues." : "Please review the recent error alerts to ensure stability."}</blockquote>`;
-
-    await sendTelegramMessage(reportMsg);
+    await sendInstantReport();
 
     // Cleanup logs older than 7 days
     const oneWeekAgo = new Date();
@@ -466,6 +573,19 @@ app.post('/api/contact', async (req, res) => {
     } else {
       console.log(`Contact auto-reply skipped: RESEND_SEND_AUTO_REPLY is not true, to=${email}`);
     }
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeMessage = escapeHtml(message);
+    const contactMsg = `📨 <b>NEW CONTACT MESSAGE</b>
+<i>Portfolio Application</i>
+
+<b>• Name:</b> <code>${safeName}</code>
+<b>• Email:</b> <code>${safeEmail}</code>
+
+<b>Message:</b>
+<blockquote expandable>${safeMessage}</blockquote>`;
+
+    await sendTelegramMessage(contactMsg);
 
     return res.json({ message: 'Message sent successfully.' });
   } catch (error) {
