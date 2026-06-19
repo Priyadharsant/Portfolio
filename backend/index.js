@@ -66,40 +66,49 @@ async function sendResendEmail(payload) {
   return data;
 }
 
-async function sendWhatsAppMessage(text) {
-  const { META_ACCESS_TOKEN, META_PHONE_NUMBER_ID, WHATSAPP_TO } = process.env;
-  if (!META_ACCESS_TOKEN || !META_PHONE_NUMBER_ID || !WHATSAPP_TO) {
-    console.log('[API] Skipped WhatsApp notification. Missing Meta/WhatsApp Env variables.');
+async function sendTelegramMessage(text, replyMarkup = null) {
+  const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, TELEGRAM_API_BASE } = process.env;
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.log('[API] Skipped Telegram notification. Missing Telegram Env variables.');
     return;
   }
 
+  const apiBase = TELEGRAM_API_BASE || 'https://api.telegram.org';
+
   try {
-    const response = await fetch(`https://graph.facebook.com/v17.0/${META_PHONE_NUMBER_ID}/messages`, {
+    const payload = {
+      chat_id: TELEGRAM_CHAT_ID,
+      text: text,
+      parse_mode: 'HTML'
+    };
+
+    if (!replyMarkup) {
+      payload.reply_markup = {
+        inline_keyboard: [
+          [{ text: "🌐 Open Portfolio", url: "https://priyan.online" }]
+        ]
+      };
+    } else {
+      payload.reply_markup = replyMarkup;
+    }
+
+    const response = await fetch(`${apiBase}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${META_ACCESS_TOKEN}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        messaging_product: 'whatsapp',
-        to: WHATSAPP_TO,
-        type: 'text',
-        text: {
-          preview_url: false,
-          body: text
-        }
-      })
+      body: JSON.stringify(payload)
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || 'Meta API returned an error');
+      throw new Error(data.description || 'Telegram API returned an error');
     }
 
-    console.log(`[API] WhatsApp message sent via Meta to ${WHATSAPP_TO}`);
+    console.log(`[API] Telegram message sent to chat ${TELEGRAM_CHAT_ID}`);
   } catch (err) {
-    console.error('[API] Failed to send WhatsApp message via Meta:', err);
+    console.error('[API] Failed to send Telegram message:', err);
   }
 }
 
@@ -235,6 +244,8 @@ app.post('/api/notify/visit', async (req, res) => {
 app.post('/api/notify/error', async (req, res) => {
   try {
     const { error, context } = req.body || {};
+    const ua = req.headers['user-agent'] || 'Unknown';
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
 
     // Save to DB for daily digest
     await Activity.create({ type: 'ERROR', context, errorDetails: error });
@@ -273,8 +284,30 @@ app.post('/api/notify/error', async (req, res) => {
       console.log(`[API] Skipped immediate error alert email. Missing Env variables (REPORT_MAIL: ${!!process.env.REPORT_MAIL}, RESEND_FROM: ${!!process.env.RESEND_FROM}, RESEND_API_KEY: ${!!process.env.RESEND_API_KEY})`);
     }
 
-    // Send immediate WhatsApp alert
-    await sendWhatsAppMessage(`🚨 *Portfolio Crash Alert*\n\n*Context:* ${context}\n*Error:* ${error?.substring(0, 500) || 'Unknown error'}`);
+    // Send immediate Telegram alert
+    const safeContext = escapeHtml(context);
+    const safeError = escapeHtml(error?.substring(0, 700) || 'Unknown error');
+    const safeIp = escapeHtml(ip);
+    const safeUa = escapeHtml(ua);
+    const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
+    const telegramMsg = `🔴 <b>CRITICAL SYSTEM ALERT</b>
+<i>Portfolio Application</i>
+
+<b>Context</b>
+<code>${safeContext}</code>
+
+<b>Client Details</b>
+• <b>IP:</b> <code>${safeIp}</code>
+• <b>Device:</b> <code>${safeUa}</code>
+
+<b>Time</b>
+<code>${timestamp} IST</code>
+
+<blockquote expandable><b>Stack Trace</b>
+<pre><code class="language-javascript">${safeError}</code></pre></blockquote>`;
+
+    await sendTelegramMessage(telegramMsg);
 
     return res.json({ success: true });
   } catch (err) {
@@ -282,19 +315,9 @@ app.post('/api/notify/error', async (req, res) => {
     return res.status(500).json({ success: false });
   }
 });
-app.get("/webhook", (req, res) => {
-  const mode = req.query["hub.mode"];
-  const token = req.query["hub.verify_token"];
-  const challenge = req.query["hub.challenge"];
 
-  if (mode === "subscribe" && token === process.env.WHATSAPP_VERIFY_TOKEN) {
-    return res.status(200).send(challenge);
-  }
-
-  return res.sendStatus(403);
-});
 // Setup Daily 9:00 PM CRON Job
-cron.schedule('0 0 21 * * *', async () => {
+cron.schedule('0 0 20 * * *', async () => {
   console.log('Running daily 9:00 PM report cron...');
   if (!process.env.REPORT_MAIL || !process.env.RESEND_FROM || !process.env.RESEND_API_KEY) {
     console.log('Missing env for report mail, skipping cron.');
@@ -366,8 +389,29 @@ cron.schedule('0 0 21 * * *', async () => {
 
     console.log('Daily report sent successfully.');
 
-    // Send WhatsApp digest
-    await sendWhatsAppMessage(`📊 *Daily Portfolio Report*\n\n*Date:* ${new Date().toLocaleDateString()}\n*Unique Visitors:* ${uniqueIPs}\n*Total Page Loads:* ${visits.length}\n*Errors:* ${errors.length}\n\n${errors.length > 0 ? '⚠️ Your site encountered crashes today.' : '✅ Your site ran perfectly today!'}`);
+    // Send Telegram digest
+    const dateStr = new Date().toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const statusText = errors.length > 0
+      ? `🚨 <b>System Warning:</b> <code>${errors.length}</code> crash(es) were logged today. Please check the logs!`
+      : `🛡️ <b>System Healthy:</b> Your portfolio ran perfectly today with <code>0</code> client-side crashes.`;
+
+    const reportMsg = `📊 <b>DAILY SYSTEM DIGEST</b>
+<i>Portfolio Application</i>
+
+<b>Date:</b> <code>${dateStr}</code>
+<b>Status:</b> ${statusText}
+
+<b>Traffic Overview</b>
+• <b>Unique Visitors:</b> <code>${uniqueIPs}</code>
+• <b>Page Loads:</b> <code>${visits.length}</code>
+
+<b>System Health</b>
+• <b>Crashes Logged:</b> <code>${errors.length}</code>
+
+<blockquote expandable><b>Performance Note</b>
+The system processed <b>${visits.length}</b> requests today. ${errors.length === 0 ? "Everything is running smoothly without issues." : "Please review the recent error alerts to ensure stability."}</blockquote>`;
+
+    await sendTelegramMessage(reportMsg);
 
     // Cleanup logs older than 7 days
     const oneWeekAgo = new Date();
