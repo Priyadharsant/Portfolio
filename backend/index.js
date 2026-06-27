@@ -219,6 +219,7 @@ app.post("/api/telegram/webhook", async (req, res) => {
     if (update.message && update.message.text) {
       const text = update.message.text;
       const chatId = update.message.chat.id;
+      console.log(text, chatId);
       if (text === 'report' || text === 'status') await sendInstantReport(chatId);
       if (text === 'errors') await sendRecentErrors(chatId);
     }

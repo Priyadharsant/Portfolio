@@ -1,5 +1,5 @@
-// const fallbackBackendUrl = 'http://localhost:5000';
-const fallbackBackendUrl = import.meta.env.VITE_FALLBACK_BACKEND_URL || 'https://portfolio-w0wa.onrender.com';
+// const fallbackBackendUrl = 'http://localhost:3001';
+const fallbackBackendUrl = import.meta.env.VITE_FALLBACK_BACKEND_URL || 'https://backend.priyan.online';
 
 function resolveBackendUrl() {
   const configuredUrl = import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '');
