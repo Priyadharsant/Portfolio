@@ -4,6 +4,19 @@
 <head>
   <meta charset="UTF-8" />
 
+  <script>
+    // Polyfill URL.parse for older browsers
+    if (typeof URL.parse !== 'function') {
+      URL.parse = function(url, base) {
+        try {
+          return new URL(url, base);
+        } catch {
+          return null;
+        }
+      };
+    }
+  </script>
+
   <!-- =========================
        BASIC SEO
   ========================== -->
