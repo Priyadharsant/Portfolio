@@ -25,11 +25,13 @@ const Achievements = lazy(() => import('./components/Achievements'));
 const Resume = lazy(() => import('./components/Resume'));
 const Contact = lazy(() => import('./components/Contact'));
 const Footer = lazy(() => import('./components/Footer'));
+const AdminApp = lazy(() => import('./components/admin/AdminApp'));
 
 function App() {
   const isBackgroundDemo = window.location.pathname === '/background-demo';
   const isResumeView = window.location.pathname === '/resume';
   const isDownloadResume = window.location.pathname === '/download_resume';
+  const isAdminView = window.location.pathname.startsWith('/admin');
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [showPage, setShowPage] = useState(false);
   const [error, setError] = useState('');
@@ -49,6 +51,11 @@ function App() {
 
   // Notify backend of site visit
   useEffect(() => {
+    // Don't log visits from the admin dashboard or if the user is logged in as an admin
+    if (isAdminView || localStorage.getItem('portfolio_admin_token')) {
+      return;
+    }
+
     // Fire and forget visit notification
     fetch(apiUrl('/api/notify/visit'), { method: 'POST' }).catch(() => {});
 
@@ -85,7 +92,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isBackgroundDemo || isResumeView || isDownloadResume) {
+    if (isBackgroundDemo || isResumeView || isDownloadResume || isAdminView) {
       return;
     }
 
@@ -158,6 +165,15 @@ function App() {
         <CustomCursor />
         <DownloadResume />
       </>
+    );
+  }
+
+  if (isAdminView) {
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <CustomCursor />
+        <AdminApp />
+      </Suspense>
     );
   }
 
