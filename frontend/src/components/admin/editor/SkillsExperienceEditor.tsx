@@ -1,4 +1,4 @@
-import React from 'react';
+
 import type { PortfolioData } from '../../../types/portfolio';
 import { Plus, Trash2 } from 'lucide-react';
 

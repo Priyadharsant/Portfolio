@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, X, ShieldCheck, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Bell, ShieldCheck, Loader2 } from 'lucide-react';
 import { getVapidPublicKey, subscribePush } from '../../utils/api';
 
 function urlBase64ToUint8Array(base64String: string) {

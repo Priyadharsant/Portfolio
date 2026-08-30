@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+
 import { History, Clock, ArrowRight, AlertCircle, RefreshCw } from 'lucide-react';
 import { apiUrl } from '../../utils/api';
 import type { PortfolioData } from '../../types/portfolio';
@@ -15,10 +15,9 @@ interface Revision {
 interface HistoryViewerProps {
   token: string;
   onRestore: (data: PortfolioData) => void;
-  onClose: () => void;
 }
 
-export default function HistoryViewer({ token, onRestore, onClose }: HistoryViewerProps) {
+export default function HistoryViewer({ token, onRestore }: HistoryViewerProps) {
   const [revisions, setRevisions] = useState<Revision[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

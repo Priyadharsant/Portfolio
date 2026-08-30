@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { LogOut, Save, RefreshCw, AlertCircle, CheckCircle2, X, Undo2, History, BarChart3 } from 'lucide-react';
 import { apiUrl } from '../../utils/api';
@@ -367,7 +367,6 @@ export default function AdminLivePreview({ token, onLogout }: AdminLivePreviewPr
                       setHighlightedSections(changes);
                       setActiveModal('none');
                     }}
-                    onClose={() => setActiveModal('none')}
                   />
                 )}
                 {activeModal === 'revert-confirm' && (
