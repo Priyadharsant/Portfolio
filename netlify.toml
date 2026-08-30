@@ -4,10 +4,6 @@
   publish = "dist"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-[[redirects]]
   from = "https://priyadharsan.netlify.app/*"
   to = "https://priyan.online/:splat"
   status = 301
@@ -18,3 +14,8 @@
   to = "https://priyan.online/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
