@@ -26,3 +26,34 @@ const backendUrl = resolveBackendUrl();
 export function apiUrl(path: string) {
   return `${backendUrl}${path.startsWith('/') ? path : `/${path}`}`;
 }
+
+export const getAnalytics = async (token: string) => {
+    const res = await fetch(apiUrl('/api/admin/portfolio/analytics'), {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!res.ok) throw new Error('Failed to fetch analytics');
+    return res.json();
+};
+
+export const getVapidPublicKey = async (token: string) => {
+    const res = await fetch(apiUrl('/api/admin/portfolio/vapidPublicKey'), {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error('Failed to fetch VAPID key');
+    return res.json();
+};
+
+export const subscribePush = async (token: string, subscription: any, deviceName: string) => {
+    const res = await fetch(apiUrl('/api/admin/portfolio/subscribe'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ subscription, deviceName })
+    });
+    if (!res.ok) throw new Error('Failed to subscribe');
+    return res.json();
+};

@@ -4,12 +4,16 @@ import type { PortfolioData } from '../types/portfolio';
 import { cardHover, staggerContainer, fadeUp } from '../utils/motion';
 import SectionHeader from './SectionHeader';
 
+import DiffHighlight from './admin/DiffHighlight';
+
 type ProjectsProps = {
     projects: PortfolioData['projects'];
     intro: PortfolioData['projectsIntro'];
+    originalProjects?: PortfolioData['projects'];
+    originalIntro?: PortfolioData['projectsIntro'];
 };
 
-const Projects = ({ projects, intro }: ProjectsProps) => {
+const Projects = ({ projects, intro, originalProjects, originalIntro }: ProjectsProps) => {
     const getProjectIcon = (title: string) => {
         const normalizedTitle = title.toLowerCase();
 
@@ -34,7 +38,12 @@ const Projects = ({ projects, intro }: ProjectsProps) => {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(20,184,166,0.06),transparent_50%)] pointer-events-none" />
 
             <div className="section-shell relative z-10">
-                <SectionHeader kicker="Selected work" title="Projects" copy={intro} />
+                <SectionHeader 
+                    kicker="Selected work" 
+                    title="Projects" 
+                    copy={intro} 
+                    originalCopy={originalIntro} 
+                />
 
                 {/* Projects Grid */}
                 <motion.div
@@ -44,12 +53,13 @@ const Projects = ({ projects, intro }: ProjectsProps) => {
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.1 }}
                 >
-                    {projects.map((project) => {
+                    {projects.map((project, index) => {
+                        const originalProject = originalProjects?.[index];
                         const ProjectIcon = getProjectIcon(project.title);
                         return (
                             <motion.div
                                 variants={fadeUp}
-                                key={project.title}
+                                key={`${project.title}-${index}`}
                                 className="group glass-panel interactive-card overflow-hidden rounded-2xl border border-slate-200 bg-white/40 dark:border-slate-800/80 dark:bg-[#0c111e]/40 shadow-xl backdrop-blur-md flex flex-col h-full"
                                 whileHover={cardHover}
                             >
@@ -80,15 +90,25 @@ const Projects = ({ projects, intro }: ProjectsProps) => {
 
                                 {/* Card Body content */}
                                 <div className="relative p-6 flex flex-col flex-grow">
-                                    <h3 className="text-2xl font-black text-slate-950 dark:text-white leading-snug">{project.title}</h3>
+                                    <h3 className="text-2xl font-black text-slate-950 dark:text-white leading-snug">
+                                        <DiffHighlight current={project.title} original={originalProject?.title}>
+                                            {project.title}
+                                        </DiffHighlight>
+                                    </h3>
 
-                                    <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400 flex-grow">{project.description}</p>
+                                    <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400 flex-grow">
+                                        <DiffHighlight current={project.description} original={originalProject?.description}>
+                                            {project.description}
+                                        </DiffHighlight>
+                                    </p>
 
                                     {/* Technologies */}
                                     <div className="mt-5 flex flex-wrap gap-2">
-                                        {project.stack.map((tech) => (
-                                            <span key={tech} className="rounded-md border border-slate-200/80 bg-slate-50/70 px-2.5 py-1 text-xs font-semibold text-slate-600 dark:border-white/10 dark:bg-white/[0.05] dark:text-slate-300">
-                                                {tech}
+                                        {project.stack.map((tech, techIndex) => (
+                                            <span key={`${tech}-${techIndex}`} className="rounded-md border border-slate-200/80 bg-slate-50/70 px-2.5 py-1 text-xs font-semibold text-slate-600 dark:border-white/10 dark:bg-white/[0.05] dark:text-slate-300">
+                                                <DiffHighlight current={tech} original={originalProject?.stack?.[techIndex]}>
+                                                    {tech}
+                                                </DiffHighlight>
                                             </span>
                                         ))}
                                     </div>
@@ -97,10 +117,14 @@ const Projects = ({ projects, intro }: ProjectsProps) => {
                                     <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
                                         <p className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 mb-3">Key Features</p>
                                         <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
-                                            {project.features.map((feature) => (
-                                                <li key={feature} className="flex gap-2.5 items-center">
+                                            {project.features.map((feature, featIndex) => (
+                                                <li key={`${feature}-${featIndex}`} className="flex gap-2.5 items-center">
                                                     <span className="h-1.5 w-1.5 flex-none rounded-full bg-teal-500 dark:bg-teal-400" />
-                                                    <span>{feature}</span>
+                                                    <span>
+                                                        <DiffHighlight current={feature} original={originalProject?.features?.[featIndex]}>
+                                                            {feature}
+                                                        </DiffHighlight>
+                                                    </span>
                                                 </li>
                                             ))}
                                         </ul>

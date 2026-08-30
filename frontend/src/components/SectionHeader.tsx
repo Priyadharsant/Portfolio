@@ -1,16 +1,20 @@
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
+import DiffHighlight from './admin/DiffHighlight';
+
 type SectionHeaderProps = {
     kicker: string;
     title: string;
     copy?: string;
+    originalTitle?: string;
+    originalCopy?: string;
     align?: 'left' | 'center';
 };
 
-const SectionHeader = ({ kicker, title, copy, align = 'left' }: SectionHeaderProps) => {
+const SectionHeader = ({ kicker, title, copy, originalTitle, originalCopy, align = 'left' }: SectionHeaderProps) => {
     const isCentered = align === 'center';
-    const titleWords = title.split(' ');
+    const titleWords = typeof title === 'string' ? title.split(' ') : [title];
 
     return (
         <motion.div
@@ -40,19 +44,21 @@ const SectionHeader = ({ kicker, title, copy, align = 'left' }: SectionHeaderPro
             </motion.div>
             <div className={isCentered ? 'mx-auto flex max-w-2xl flex-col items-center' : 'flex max-w-2xl flex-col'}>
                 <h2 className="section-title overflow-hidden pb-1">
-                    {titleWords.map((word, index) => (
-                        <motion.span
-                            key={`${word}-${index}`}
-                            className="mr-2 inline-block"
-                            variants={{
-                                hidden: { opacity: 0, y: 34, rotateX: -35 },
-                                visible: { opacity: 1, y: 0, rotateX: 0 },
-                            }}
-                            transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
-                        >
-                            {word}
-                        </motion.span>
-                    ))}
+                    <DiffHighlight current={title} original={originalTitle}>
+                        {titleWords.map((word, index) => (
+                            <motion.span
+                                key={`${word}-${index}`}
+                                className="mr-2 inline-block"
+                                variants={{
+                                    hidden: { opacity: 0, y: 34, rotateX: -35 },
+                                    visible: { opacity: 1, y: 0, rotateX: 0 },
+                                }}
+                                transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+                            >
+                                {word}
+                            </motion.span>
+                        ))}
+                    </DiffHighlight>
                 </h2>
                 <motion.div
                     className="mt-4 h-0.5 w-24 origin-left bg-gradient-to-r from-teal-300 via-cyan-300 to-transparent"
@@ -72,7 +78,9 @@ const SectionHeader = ({ kicker, title, copy, align = 'left' }: SectionHeaderPro
                     }}
                     transition={{ duration: 0.55, ease: 'easeOut', delay: 0.16 }}
                 >
-                    {copy}
+                    <DiffHighlight current={copy} original={originalCopy}>
+                        {copy}
+                    </DiffHighlight>
                 </motion.p>
             )}
         </motion.div>

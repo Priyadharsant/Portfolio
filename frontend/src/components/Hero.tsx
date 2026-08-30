@@ -5,11 +5,14 @@ import type { PortfolioData } from '../types/portfolio';
 import { fadeUp, staggerContainer } from '../utils/motion';
 import { useTooltip } from './TooltipContext';
 
+import DiffHighlight from './admin/DiffHighlight';
+
 type HeroProps = {
     profile: PortfolioData['profile'];
     hero: PortfolioData['hero'];
+    originalProfile?: PortfolioData['profile'];
+    originalHero?: PortfolioData['hero'];
     nameRef?: Ref<HTMLHeadingElement>;
-
 };
 
 const particles = Array.from({ length: 35 }).map(() => ({
@@ -51,7 +54,7 @@ const terminalLogs = [
     { text: '[api] GET /api/portfolio - 200 OK (12ms)', color: 'text-teal-600 dark:text-teal-400 text-[10px]' }
 ];
 
-const Hero = ({ profile, hero, nameRef }: HeroProps) => {
+const Hero = ({ profile, hero, originalProfile, originalHero, nameRef }: HeroProps) => {
     const { showTooltip, hideTooltip } = useTooltip();
     const socials = [
         { label: 'GitHub', title: 'View my GitHub profile', href: profile.github, icon: Github },
@@ -129,7 +132,9 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                 >
                     <motion.div variants={fadeUp} className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-50/90 px-4 py-2 text-sm font-medium text-teal-700 backdrop-blur-sm shadow-[0_0_20px_rgba(20,184,166,0.12)] dark:bg-teal-500/10 dark:text-teal-300 dark:shadow-[0_0_20px_rgba(45,212,191,0.1)]">
                         <Sparkles className="h-4 w-4" />
-                        {hero.kicker}
+                        <DiffHighlight current={hero.kicker} original={originalHero?.kicker}>
+                            {hero.kicker}
+                        </DiffHighlight>
                     </motion.div>
 
                     <motion.h1
@@ -137,15 +142,21 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                         variants={fadeUp}
                         className="text-5xl font-black leading-tight tracking-tight text-slate-950 dark:text-slate-100 sm:text-7xl"
                     >
-                        {profile.name}
+                        <DiffHighlight current={profile.name} original={originalProfile?.name}>
+                            {profile.name}
+                        </DiffHighlight>
                     </motion.h1>
 
                     <motion.h2 variants={fadeUp} className="mt-4 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-teal-700 via-cyan-600 to-blue-600 dark:from-teal-300 dark:via-cyan-400 dark:to-blue-500 sm:text-4xl">
-                        {profile.title}
+                        <DiffHighlight current={profile.title} original={originalProfile?.title}>
+                            {profile.title}
+                        </DiffHighlight>
                     </motion.h2>
 
                     <motion.p variants={fadeUp} className="mt-6 text-lg leading-relaxed text-slate-700 dark:text-slate-400 sm:text-xl max-w-xl">
-                        {profile.tagline}
+                        <DiffHighlight current={profile.tagline} original={originalProfile?.tagline}>
+                            {profile.tagline}
+                        </DiffHighlight>
                     </motion.p>
 
                     <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -293,7 +304,7 @@ const Hero = ({ profile, hero, nameRef }: HeroProps) => {
                                     <motion.span 
                                         className="h-3.5 w-1.5 bg-teal-400 dark:bg-teal-300"
                                         animate={{ opacity: [1, 0, 1] }}
-                                        transition={{ duration: 1.2, repeat: Infinity, ease: 'steps(2)' }}
+                                        transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
                                     />
                                 </div>
                             </div>
