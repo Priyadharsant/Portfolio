@@ -300,7 +300,7 @@ export const AIChatWidget = () => {
           <Bot className="h-4 w-4 text-teal-600 transition-transform group-hover:rotate-12 dark:text-teal-400" />
           
           <span className="text-xs font-bold tracking-tight text-slate-900 dark:text-white">
-            Ask AI
+            Chat with Me
           </span>
 
           {unreadCount > 0 && (
@@ -331,11 +331,8 @@ export const AIChatWidget = () => {
                   <Sparkles className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                     Chat with Priyadharsan
-                    <span className="rounded bg-teal-500/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
-                      Online
-                    </span>
                   </h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
                     Direct portfolio & project inquiries
