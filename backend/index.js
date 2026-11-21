@@ -519,6 +519,191 @@ cron.schedule('0 21 13 * * *', async () => {
   }
 });
 
+// AI Assistant Chat Route with Multi-Model Fallback
+const ipChatCounts = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_CHAT_REQUESTS = 15;
+
+function isChatRateLimited(ip) {
+  const now = Date.now();
+  const entry = ipChatCounts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    ipChatCounts.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  if (entry.count >= MAX_CHAT_REQUESTS) return true;
+  entry.count += 1;
+  return false;
+}
+
+function getOfflineFallback(query) {
+  const q = String(query || '').toLowerCase();
+  const raw = portfolioRawData;
+
+  if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('frontend') || q.includes('backend')) {
+    const list = raw.skills?.map(s => `**${s.title}**: ${s.items.join(', ')}`).join('\n\n') || '';
+    return `Here are Priyadharsan's core technical skills:\n\n${list}\n\n*He specializes in React, TypeScript, Node.js, and cloud engineering.*`;
+  }
+  if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('built')) {
+    const list = raw.projects?.map(p => `• **${p.title}** (${p.status || 'Active'}): ${p.description}\n  *Stack: ${p.stack?.join(', ') || 'Full-Stack'}*`).join('\n\n') || '';
+    return `Here are Priyadharsan's featured projects:\n\n${list}\n\nYou can click on any project on this page for live demos and GitHub code!`;
+  }
+  if (q.includes('experience') || q.includes('job') || q.includes('intern') || q.includes('role')) {
+    const exp = raw.experience;
+    return `**${exp.title}** at **${exp.organization}** (${exp.badge}):\n\n${exp.points.map(p => `• ${p}`).join('\n')}`;
+  }
+  if (q.includes('contact') || q.includes('email') || q.includes('reach') || q.includes('hire') || q.includes('linkedin')) {
+    const p = raw.profile;
+    return `You can reach out to Priyadharsan directly through:\n\n• **Email**: [${p.email}](mailto:${p.email})\n• **LinkedIn**: [Profile](${p.linkedin})\n• **GitHub**: [Profile](${p.github})\n\nOr submit a note in the Contact section!`;
+  }
+  if (q.includes('resume') || q.includes('cv')) {
+    return `You can view or download Priyadharsan's official resume from the Resume section, or directly at [View Resume](/resume).`;
+  }
+  return `Priyadharsan is a ${raw.profile?.title} specializing in modern full-stack web applications. Feel free to ask about his **skills**, **projects**, **experience**, or **contact information**!`;
+}
+
+app.post('/api/ai/chat', async (req, res) => {
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  if (isChatRateLimited(clientIp)) {
+    return res.status(429).json({ error: 'Too many queries. Please wait a minute.' });
+  }
+
+  const { message, history } = req.body || {};
+  if (!message || typeof message !== 'string') {
+    return res.status(400).json({ error: 'Message is required.' });
+  }
+
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  const groqApiKey = process.env.GROQ_API_KEY;
+  let reply = '';
+  let source = 'gemini';
+
+  const systemInstruction = `You are the official AI Assistant for Priyadharsan's personal portfolio.
+Answer questions accurately and concisely based strictly on his verified background:
+Name: ${portfolioRawData.profile?.name}
+Title: ${portfolioRawData.profile?.title}
+Email: ${portfolioRawData.profile?.email}
+LinkedIn: ${portfolioRawData.profile?.linkedin}
+GitHub: ${portfolioRawData.profile?.github}
+Skills: ${JSON.stringify(portfolioRawData.skills)}
+Experience: ${JSON.stringify(portfolioRawData.experience)}
+Projects: ${JSON.stringify(portfolioRawData.projects)}
+Achievements: ${JSON.stringify(portfolioRawData.achievements)}
+About: ${JSON.stringify(portfolioRawData.about)}
+
+Guidelines:
+1. Always be professional, concise, friendly, and structured.
+2. Ground all answers solely in Priyadharsan's verified background.
+3. For project live links, never use "Demo link" or "Demo live" — always refer to them as "Preview" or "[Preview](url)".
+4. Format all links as clickable Markdown: [Preview](url), [LinkedIn](url), [GitHub](url), [Email](mailto:email).
+5. At the very end of your response, ALWAYS suggest 2 to 3 concise follow-up questions tailored to your answer. Format them exactly like this:
+Quick Questions:
+• [first question]
+• [second question]
+• [third question]`;
+
+  // 1. Primary: Gemini 2.5 Flash / 3.5 Flash
+  if (geminiApiKey) {
+    const models = ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-3.5-flash-lite'];
+    for (const model of models) {
+      try {
+        const contents = [];
+        if (Array.isArray(history)) {
+          for (const h of history.slice(-4)) {
+            if (h.role && h.text) {
+              contents.push({
+                role: h.role === 'user' ? 'user' : 'model',
+                parts: [{ text: String(h.text) }]
+              });
+            }
+          }
+        }
+        contents.push({ role: 'user', parts: [{ text: message }] });
+
+        const geminiRes = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              system_instruction: { parts: [{ text: systemInstruction }] },
+              contents,
+              generationConfig: { temperature: 0.6, maxOutputTokens: 1500 }
+            })
+          }
+        );
+
+        if (geminiRes.ok) {
+          const data = await geminiRes.json();
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            reply = text.trim();
+            source = `gemini (${model})`;
+            break;
+          }
+        }
+      } catch (err) {
+        console.warn(`[AI Chat] Gemini ${model} failed:`, err);
+      }
+    }
+  }
+
+  // 2. Fallback 1: Groq Cloud
+  if (!reply && groqApiKey) {
+    const groqModels = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'];
+    for (const groqModel of groqModels) {
+      try {
+        const groqMessages = [{ role: 'system', content: systemInstruction }];
+        if (Array.isArray(history)) {
+          for (const h of history.slice(-4)) {
+            if (h.role && h.text) {
+              groqMessages.push({
+                role: h.role === 'user' ? 'user' : 'assistant',
+                content: String(h.text)
+              });
+            }
+          }
+        }
+        groqMessages.push({ role: 'user', content: message });
+
+        const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${groqApiKey}`,
+          },
+          body: JSON.stringify({
+            model: groqModel,
+            messages: groqMessages,
+            temperature: 0.6,
+            max_tokens: 600,
+          }),
+        });
+
+        if (groqRes.ok) {
+          const groqData = await groqRes.json();
+          const text = groqData.choices?.[0]?.message?.content;
+          if (text) {
+            reply = text.trim();
+            source = `groq (${groqModel})`;
+            break;
+          }
+        }
+      } catch (err) {
+        console.warn(`[AI Chat] Groq ${groqModel} failed:`, err);
+      }
+    }
+  }
+
+  // 3. Fallback 2: Offline Knowledge Base
+  if (!reply) {
+    reply = getOfflineFallback(message);
+    source = 'offline-knowledge-base';
+  }
+
+  return res.json({ reply, source });
+});
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body ?? {};
   console.log("Mail triggered")

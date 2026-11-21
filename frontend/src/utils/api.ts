@@ -57,3 +57,38 @@ export const subscribePush = async (token: string, subscription: any, deviceName
     if (!res.ok) throw new Error('Failed to subscribe');
     return res.json();
 };
+
+export type ChatHistoryItem = {
+    role: 'user' | 'model';
+    text: string;
+};
+
+export const sendAIChatMessage = async (message: string, history: ChatHistoryItem[] = []) => {
+    // Attempt 1: Netlify serverless function (direct on domain)
+    try {
+      const netlifyRes = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, history })
+      });
+      if (netlifyRes.ok) {
+        return await netlifyRes.json();
+      }
+    } catch {
+      // Netlify function not available in local dev or fallback
+    }
+
+    // Attempt 2: Backend server (/api/ai/chat)
+    const backendRes = await fetch(apiUrl('/api/ai/chat'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history })
+    });
+
+    if (!backendRes.ok) {
+      const err = await backendRes.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to reach AI Assistant.');
+    }
+
+    return await backendRes.json();
+};

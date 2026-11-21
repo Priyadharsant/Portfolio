@@ -16,6 +16,7 @@ import { apiUrl } from './utils/api';
 import { TooltipProvider } from './components/TooltipContext';
 import Tooltip from './components/Tooltip';
 import CustomCursor from './components/CustomCursor';
+import AIChatWidget from './components/AIChatWidget';
 
 const About = lazy(() => import('./components/About'));
 const Skills = lazy(() => import('./components/Skills'));
@@ -214,6 +215,7 @@ function App() {
         <Header />
         <ScrollProgress />
         <ScrollToTop />
+        <AIChatWidget />
         <FloatingThemeToggle theme={theme} onThemeToggle={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))} />
         <SectionGlowOverlay />
         <LayoutGroup>

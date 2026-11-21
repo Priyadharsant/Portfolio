@@ -30,6 +30,15 @@
   perspective: 1000px;
 }
 
+/* Hide scrollbar while preserving smooth scroll capability */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 html {
   scroll-behavior: smooth;
   scrollbar-color: rgba(13, 148, 136, 0.55) #eef7fb;
