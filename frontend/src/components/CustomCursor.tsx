@@ -100,16 +100,16 @@ const CustomCursor = () => {
               <stop offset="100%" stopColor="#0ea5e9" /> {/* sky-500 */}
             </linearGradient>
             <linearGradient id="auraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.1" />
+              <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.05" />
             </linearGradient>
             
             {/* Native SVG Blur Filters */}
             <filter id="svgBlur" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
             </filter>
             <filter id="heavyBlur" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" />
             </filter>
           </defs>
           
@@ -129,7 +129,7 @@ const CustomCursor = () => {
               fill="url(#cursorGradient)"
               filter="url(#heavyBlur)"
               transform="rotate(45 12 12)"
-              className="opacity-30 dark:opacity-50"
+              className="opacity-15 dark:opacity-25"
               style={{ originX: '12px', originY: '12px' }}
             />
 

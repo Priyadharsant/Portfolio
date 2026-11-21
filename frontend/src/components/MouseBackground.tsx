@@ -12,12 +12,12 @@ const MouseBackground = ({ theme }: MouseBackgroundProps) => {
     const isDark = theme === 'dark';
 
     const lightBackground = useMotionTemplate`
-        radial-gradient(420px circle at ${pointerX}px ${pointerY}px, rgba(20, 184, 166, 0.2), transparent 45%),
-        radial-gradient(260px circle at ${pointerX}px ${pointerY}px, rgba(14, 165, 233, 0.14), transparent 60%)
+        radial-gradient(320px circle at ${pointerX}px ${pointerY}px, rgba(20, 184, 166, 0.08), transparent 50%),
+        radial-gradient(180px circle at ${pointerX}px ${pointerY}px, rgba(14, 165, 233, 0.05), transparent 65%)
     `;
     const darkBackground = useMotionTemplate`
-        radial-gradient(340px circle at ${pointerX}px ${pointerY}px, rgba(45, 212, 191, 0.09), transparent 48%),
-        radial-gradient(220px circle at ${pointerX}px ${pointerY}px, rgba(56, 189, 248, 0.055), transparent 64%)
+        radial-gradient(280px circle at ${pointerX}px ${pointerY}px, rgba(45, 212, 191, 0.045), transparent 50%),
+        radial-gradient(160px circle at ${pointerX}px ${pointerY}px, rgba(56, 189, 248, 0.025), transparent 65%)
     `;
 
     useEffect(() => {
@@ -49,7 +49,7 @@ const MouseBackground = ({ theme }: MouseBackgroundProps) => {
             aria-hidden="true"
             className="pointer-events-none fixed inset-0 z-[1] hidden opacity-0 mix-blend-multiply dark:mix-blend-screen md:block"
             style={{ background: isDark ? darkBackground : lightBackground }}
-            animate={{ opacity: isVisible ? isDark ? 0.72 : 1 : 0 }}
+            animate={{ opacity: isVisible ? (isDark ? 0.45 : 0.65) : 0 }}
             transition={{ duration: 0.12, ease: 'linear' }}
         />
     );

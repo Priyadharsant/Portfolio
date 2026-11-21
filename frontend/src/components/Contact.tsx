@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Send } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
-import { cardHover, fadeUp } from '../utils/motion';
+import { cardHover, scrollRevealLeft, scrollRevealRight } from '../utils/motion';
 import SectionHeader from './SectionHeader';
 import { apiUrl } from '../utils/api';
 
@@ -71,11 +71,11 @@ const Contact = ({ profile, contact }: ContactProps) => {
                 <SectionHeader kicker="Reach out" title="Contact" />
                 <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
                     <motion.div
-                        className="glass-panel interactive-card rounded-lg p-6"
-                        variants={fadeUp}
+                        className="glass-panel interactive-card rounded-xl p-6"
+                        variants={scrollRevealLeft}
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, amount: 0.3 }}
+                        viewport={{ once: true, margin: '-60px' }}
                         whileHover={cardHover}
                     >
                         <h3 className="text-2xl font-bold text-slate-950 dark:text-white">Get in touch</h3>
@@ -88,82 +88,85 @@ const Contact = ({ profile, contact }: ContactProps) => {
                                     key={label}
                                     href={href}
                                     target={href.startsWith('mailto:') ? undefined : '_blank'}
-                                    rel="noreferrer"
-                                    className="group relative flex items-center gap-3 rounded-md border border-slate-200/80 bg-white/80 px-4 py-3 text-slate-700 transition hover:border-teal-500 hover:bg-teal-50 hover:text-teal-700 dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-300 dark:hover:border-teal-300 dark:hover:bg-teal-300/10 dark:hover:text-teal-200"
-                                    whileHover={{ borderColor: 'rgba(45, 212, 191, 0.65)' }}
-                                    whileTap={{ scale: 0.98 }}
+                                    rel={href.startsWith('mailto:') ? undefined : 'noreferrer'}
+                                    className="flex items-center gap-3 rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-700 hover:border-teal-500/30 hover:bg-teal-50/50 hover:text-teal-700 transition-colors dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                                    whileHover={{ x: 4 }}
                                 >
-                                    <Icon className="h-5 w-5 text-teal-600 dark:text-teal-300 transform transition-transform duration-300 group-hover:scale-100" />
-                                    {label}
+                                    <Icon className="h-5 w-5 text-teal-600 dark:text-teal-300" />
+                                    <span>{label}</span>
                                 </motion.a>
                             ))}
                         </div>
                     </motion.div>
+
                     <motion.div
-                        className="glass-panel interactive-card rounded-lg p-6"
-                        variants={fadeUp}
+                        className="glass-panel interactive-card rounded-xl p-6 sm:p-8"
+                        variants={scrollRevealRight}
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, amount: 0.3 }}
-                        transition={{ delay: 0.1 }}
-                        whileHover={cardHover}
+                        viewport={{ once: true, margin: '-60px' }}
                     >
-                        <h3 className="text-2xl font-bold text-slate-950 dark:text-white">Send a message</h3>
-                        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
+                                <label htmlFor="name" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                    Name
+                                </label>
                                 <input
+                                    id="name"
                                     name="name"
                                     type="text"
-                                    placeholder="Your name"
                                     required
-                                    className="w-full rounded-md border border-slate-200/80 bg-white/90 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white dark:border-white/10 dark:bg-slate-950/70 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-teal-300 dark:focus:bg-slate-950"
+                                    className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-white/10 dark:bg-slate-950/60 dark:text-white"
+                                    placeholder="Your name"
                                 />
                             </div>
+
                             <div>
+                                <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                    Email
+                                </label>
                                 <input
+                                    id="email"
                                     name="email"
                                     type="email"
-                                    placeholder="Your email"
                                     required
-                                    className="w-full rounded-md border border-slate-200/80 bg-white/90 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white dark:border-white/10 dark:bg-slate-950/70 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-teal-300 dark:focus:bg-slate-950"
+                                    className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-white/10 dark:bg-slate-950/60 dark:text-white"
+                                    placeholder="your@email.com"
                                 />
                             </div>
+
                             <div>
+                                <label htmlFor="message" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                    Message
+                                </label>
                                 <textarea
+                                    id="message"
                                     name="message"
-                                    rows={4}
-                                    placeholder="Your message"
                                     required
-                                    className="w-full resize-none rounded-md border border-slate-200/80 bg-white/90 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-teal-500 focus:bg-white dark:border-white/10 dark:bg-slate-950/70 dark:text-white dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-teal-300 dark:focus:bg-slate-950"
-                                ></textarea>
+                                    rows={4}
+                                    className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-white/10 dark:bg-slate-950/60 dark:text-white"
+                                    placeholder="How can I help you?"
+                                />
                             </div>
+
                             {statusMessage && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className={`rounded-md border px-4 py-3 text-sm ${status === 'success'
-                                        ? 'border-emerald-500/30 bg-emerald-50 text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-200'
-                                        : 'border-red-500/30 bg-red-50 text-red-700 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-200'
-                                        }`}
+                                <p
+                                    className={`text-sm ${
+                                        status === 'success' ? 'text-teal-600 dark:text-teal-400' : 'text-rose-500'
+                                    }`}
                                 >
                                     {statusMessage}
-                                </motion.p>
+                                </p>
                             )}
-                            <motion.button
+
+                            <button
                                 type="submit"
                                 disabled={status === 'loading'}
-                                className="primary-action w-full px-5 py-3 disabled:cursor-not-allowed disabled:opacity-70"
-                                whileHover={{ backgroundColor: '#5eead4' }}
-                                whileTap={{ scale: 0.98 }}
+                                className="primary-action w-full justify-center disabled:opacity-50"
                             >
-                                <motion.span
-                                    animate={status === 'loading' ? { x: [0, 4, 0] } : { x: 0 }}
-                                    transition={{ duration: 0.8, repeat: status === 'loading' ? Infinity : 0 }}
-                                >
-                                    <Send className="h-5 w-5" />
-                                </motion.span>
-                                {status === 'loading' ? 'Sending...' : 'Send Message'}
-                            </motion.button>
+                                <Send className="h-4 w-4" />
+                                {status === 'loading' ? 'Sending...' : 'Send message'}
+                            </button>
                         </form>
                     </motion.div>
                 </div>

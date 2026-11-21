@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
 import type { PortfolioData } from '../types/portfolio';
-import { cardHover, fadeUp, staggerContainer } from '../utils/motion';
+import { cardHover, scrollRevealCard, scrollRevealText, staggerContainer } from '../utils/motion';
 import SectionHeader from './SectionHeader';
-
 import DiffHighlight from './admin/DiffHighlight';
 
 type AboutProps = {
@@ -24,24 +23,24 @@ const About = ({ about, originalAbout }: AboutProps) => {
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, amount: 0.35 }}
+                    viewport={{ once: true, margin: '-60px' }}
                 >
                     {about.paragraphs.map((paragraph, index) => (
-                        <motion.p variants={fadeUp} key={paragraph}>
+                        <motion.p variants={scrollRevealText} key={paragraph}>
                             <DiffHighlight current={paragraph} original={originalAbout?.paragraphs?.[index]}>
                                 {paragraph}
                             </DiffHighlight>
                         </motion.p>
                     ))}
 
-                    <motion.div variants={fadeUp} className="pt-4">
+                    <motion.div variants={scrollRevealCard} className="pt-4">
                         <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">Currently working on</h3>
                         <div className="grid gap-3 sm:grid-cols-3">
                             {about.currentlyWorkingOn.map((item, index) => (
                                 <motion.div
                                     key={item}
                                     className="interactive-card rounded-md border border-slate-200/80 bg-white/75 p-4 text-sm font-semibold text-teal-800 shadow-lg shadow-slate-200/70 dark:border-white/10 dark:bg-white/[0.055] dark:text-teal-100 dark:shadow-black/10"
-                                    variants={fadeUp}
+                                    variants={scrollRevealCard}
                                     whileHover={cardHover}
                                 >
                                     <DiffHighlight current={item} original={originalAbout?.currentlyWorkingOn?.[index]}>

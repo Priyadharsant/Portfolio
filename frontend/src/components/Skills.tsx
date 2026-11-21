@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Code2, Database, MonitorSmartphone, Wrench, Sparkles, Server, Terminal, Cloud } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
-import { fadeUp, staggerContainer } from '../utils/motion';
+import { scrollRevealBadge, scrollRevealCard, scrollRevealText, staggerContainer, SMOOTH_EASE } from '../utils/motion';
 
 type SkillsProps = {
     skills: PortfolioData['skills'];
@@ -79,9 +79,10 @@ const Skills = ({ skills, intro }: SkillsProps) => {
             <div className="section-shell relative z-10">
                 <div className="mb-16 text-center max-w-3xl mx-auto">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-60px' }}
+                        variants={scrollRevealBadge}
                         className="inline-flex items-center justify-center rounded-full bg-teal-50/90 px-4 py-1.5 mb-4 border border-teal-500/20 dark:bg-teal-500/10"
                     >
                         <Sparkles className="mr-2 h-4 w-4 text-teal-700 dark:text-teal-400" />
@@ -89,18 +90,22 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                     </motion.div>
                     <motion.h2
                         className="text-4xl font-black text-slate-950 dark:text-white sm:text-5xl tracking-tight mb-6"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-60px' }}
+                        variants={{
+                            hidden: { opacity: 0, y: 22 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: SMOOTH_EASE } },
+                        }}
                     >
                         Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-cyan-600 dark:from-teal-400 dark:to-cyan-500">Skills</span>
                     </motion.h2>
                     <motion.p
                         className="text-lg text-slate-700 dark:text-slate-400 leading-relaxed"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-60px' }}
+                        variants={scrollRevealText}
                     >
                         {intro}
                     </motion.p>
@@ -111,7 +116,7 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, amount: 0.1 }}
+                    viewport={{ once: true, margin: '-60px' }}
                 >
                     {skills.map((category) => {
                         const Icon = getCategoryIcon(category.title);
@@ -120,7 +125,7 @@ const Skills = ({ skills, intro }: SkillsProps) => {
                             <motion.div
                                 key={category.title}
                                 className={`group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 p-8 shadow-md shadow-slate-200/40 backdrop-blur-md transition-all duration-300 dark:border-slate-800/80 dark:bg-[#0c111e]/40 dark:shadow-none ${styles.border}`}
-                                variants={fadeUp}
+                                variants={scrollRevealCard}
                             >
                                 {/* Decorative dynamic category glow */}
                                 <div className={`absolute -right-20 -top-20 h-40 w-40 rounded-full blur-[28px] transition-all duration-500 pointer-events-none ${styles.glow}`} />

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Award, Code, Github, Trophy } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
-import { cardHover, fadeUp, staggerContainer } from '../utils/motion';
+import { cardHover, scrollRevealCard, staggerContainer } from '../utils/motion';
 import SectionHeader from './SectionHeader';
 
 type AchievementsProps = {
@@ -20,17 +20,17 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
+                    viewport={{ once: true, margin: '-60px' }}
                 >
                     {achievements.map((achievement, index) => (
                         <motion.div
                             key={achievement.title}
-                            className="group glass-panel interactive-card flex gap-4 rounded-lg p-6"
-                            variants={fadeUp}
+                            className="group glass-panel interactive-card flex gap-4 rounded-xl p-6"
+                            variants={scrollRevealCard}
                             whileHover={cardHover}
                         >
                             <div
-                                className="relative flex h-11 w-11 flex-none items-center justify-center rounded-md border border-teal-500/25 bg-teal-100/70 text-teal-700 transform transition-all duration-300 group-hover:scale-100 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
+                                className="relative flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-teal-500/25 bg-teal-100/70 text-teal-700 transform transition-all duration-300 group-hover:scale-105 dark:border-teal-300/20 dark:bg-teal-400/10 dark:text-teal-300"
                             >
                                 {(() => {
                                     const Icon = icons[index] ?? Trophy;

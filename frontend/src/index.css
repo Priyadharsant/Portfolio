@@ -21,6 +21,15 @@
   box-sizing: border-box;
 }
 
+/* GPU acceleration for smooth scroll motion and prevent repainting/blinking */
+.gpu-layer,
+.glass-panel,
+.interactive-card {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
 html {
   scroll-behavior: smooth;
   scrollbar-color: rgba(13, 148, 136, 0.55) #eef7fb;

@@ -1,9 +1,8 @@
 import { motion } from 'framer-motion';
 import { CheckSquare, ExternalLink, Github, Globe2, GraduationCap, ShoppingBag } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
-import { cardHover, staggerContainer, fadeUp } from '../utils/motion';
+import { cardHover, staggerContainer, scrollRevealCard } from '../utils/motion';
 import SectionHeader from './SectionHeader';
-
 import DiffHighlight from './admin/DiffHighlight';
 
 type ProjectsProps = {
@@ -51,14 +50,14 @@ const Projects = ({ projects, intro, originalProjects, originalIntro }: Projects
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, amount: 0.1 }}
+                    viewport={{ once: true, margin: '-60px' }}
                 >
                     {projects.map((project, index) => {
                         const originalProject = originalProjects?.[index];
                         const ProjectIcon = getProjectIcon(project.title);
                         return (
                             <motion.div
-                                variants={fadeUp}
+                                variants={scrollRevealCard}
                                 key={`${project.title}-${index}`}
                                 className="group glass-panel interactive-card overflow-hidden rounded-2xl border border-slate-200 bg-white/40 dark:border-slate-800/80 dark:bg-[#0c111e]/40 shadow-xl backdrop-blur-md flex flex-col h-full"
                                 whileHover={cardHover}
@@ -75,7 +74,7 @@ const Projects = ({ projects, intro, originalProjects, originalIntro }: Projects
                                     {/* Node visualization */}
                                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                         <div
-                                            className="flex h-20 w-20 items-center justify-center rounded-2xl border border-teal-500/20 bg-white/80 dark:bg-slate-950/80 shadow-lg text-teal-600 dark:text-teal-400 transform transition-transform duration-300 group-hover:scale-100"
+                                            className="flex h-20 w-20 items-center justify-center rounded-2xl border border-teal-500/20 bg-white/80 dark:bg-slate-950/80 shadow-lg text-teal-600 dark:text-teal-400 transform transition-transform duration-300 group-hover:scale-105"
                                         >
                                             <ProjectIcon className="h-9 w-9" />
                                         </div>
@@ -83,80 +82,69 @@ const Projects = ({ projects, intro, originalProjects, originalIntro }: Projects
 
                                     {/* Status tag pill */}
                                     <div className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-600 backdrop-blur dark:border-white/10 dark:bg-white/[0.08] dark:text-slate-300">
-                                        <span className={`h-1.5 w-1.5 rounded-full ${project.status === 'on process' ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
-                                        {project.status === 'on process' ? 'In progress' : 'Live Build'}
+                                        <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
+                                        <span>{project.status || 'Production'}</span>
                                     </div>
                                 </div>
 
-                                {/* Card Body content */}
-                                <div className="relative p-6 flex flex-col flex-grow">
-                                    <h3 className="text-2xl font-black text-slate-950 dark:text-white leading-snug">
-                                        <DiffHighlight current={project.title} original={originalProject?.title}>
-                                            {project.title}
-                                        </DiffHighlight>
-                                    </h3>
-
-                                    <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400 flex-grow">
-                                        <DiffHighlight current={project.description} original={originalProject?.description}>
-                                            {project.description}
-                                        </DiffHighlight>
-                                    </p>
-
-                                    {/* Technologies */}
-                                    <div className="mt-5 flex flex-wrap gap-2">
-                                        {project.stack.map((tech, techIndex) => (
-                                            <span key={`${tech}-${techIndex}`} className="rounded-md border border-slate-200/80 bg-slate-50/70 px-2.5 py-1 text-xs font-semibold text-slate-600 dark:border-white/10 dark:bg-white/[0.05] dark:text-slate-300">
-                                                <DiffHighlight current={tech} original={originalProject?.stack?.[techIndex]}>
-                                                    {tech}
-                                                </DiffHighlight>
+                                <div className="p-8 flex flex-col flex-grow justify-between">
+                                    <div>
+                                        {/* Meta category row */}
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <span className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                                                Featured Architecture
                                             </span>
-                                        ))}
-                                    </div>
+                                        </div>
 
-                                    {/* Key Features list */}
-                                    <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 mb-3">Key Features</p>
-                                        <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
-                                            {project.features.map((feature, featIndex) => (
-                                                <li key={`${feature}-${featIndex}`} className="flex gap-2.5 items-center">
-                                                    <span className="h-1.5 w-1.5 flex-none rounded-full bg-teal-500 dark:bg-teal-400" />
-                                                    <span>
-                                                        <DiffHighlight current={feature} original={originalProject?.features?.[featIndex]}>
-                                                            {feature}
-                                                        </DiffHighlight>
-                                                    </span>
-                                                </li>
+                                        <h3 className="text-2xl font-bold tracking-tight text-slate-900 group-hover:text-teal-600 dark:text-white dark:group-hover:text-teal-400 transition-colors">
+                                            <DiffHighlight current={project.title} original={originalProject?.title}>
+                                                {project.title}
+                                            </DiffHighlight>
+                                        </h3>
+
+                                        <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                                            <DiffHighlight current={project.description} original={originalProject?.description}>
+                                                {project.description}
+                                            </DiffHighlight>
+                                        </p>
+
+                                        {/* Technology Tags with micro-pill aesthetics */}
+                                        <div className="mt-6 flex flex-wrap gap-2">
+                                            {project.stack?.map((tag) => (
+                                                <span
+                                                    key={tag}
+                                                    className="inline-flex items-center rounded-lg border border-slate-200/80 bg-slate-50/80 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-white/[0.04] dark:text-slate-300"
+                                                >
+                                                    {tag}
+                                                </span>
                                             ))}
-                                        </ul>
+                                        </div>
                                     </div>
 
-                                    {/* Action buttons */}
-                                    <div className="mt-6 flex flex-wrap gap-3 pt-2">
-                                        <motion.a
-                                            aria-label={`GitHub repository for ${project.title}`}
-                                            href={project.github}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/50 px-4 py-2.5 text-xs font-bold text-slate-700 backdrop-blur hover:bg-slate-50 dark:bg-slate-900/40 dark:text-slate-300 dark:hover:bg-slate-800"
-                                            whileHover={{ y: -2 }}
-                                            whileTap={{ scale: 0.98 }}
-                                        >
-                                            <Github className="h-4 w-4" />
-                                            Repository
-                                        </motion.a>
-                                        {project.status !== 'on process' && (
-                                            <motion.a
-                                                aria-label={`Live demo for ${project.title}`}
+                                    {/* Action Links */}
+                                    <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-6 dark:border-slate-800/80">
+                                        {project.github && (
+                                            <a
+                                                href={project.github}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="group/btn inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/60 px-4 py-2 text-xs font-bold text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-800/60 dark:text-slate-200 dark:hover:bg-slate-800 transition-all duration-200"
+                                            >
+                                                <Github className="h-4 w-4 transition-transform group-hover/btn:-translate-y-0.5" />
+                                                Source Code
+                                            </a>
+                                        )}
+
+                                        {project.demo && (
+                                            <a
                                                 href={project.demo}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-teal-500/10 hover:shadow-lg dark:from-teal-500 dark:to-cyan-500 dark:text-slate-950"
-                                                whileHover={{ y: -2 }}
-                                                whileTap={{ scale: 0.98 }}
+                                                className="group/btn inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-teal-500/20 hover:from-teal-600 hover:to-cyan-700 transition-all duration-200"
                                             >
-                                                <ExternalLink className="h-4 w-4" />
-                                                Launch Site
-                                            </motion.a>
+                                                Live Experience
+                                                <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                                            </a>
                                         )}
                                     </div>
                                 </div>

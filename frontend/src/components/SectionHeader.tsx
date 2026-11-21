@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
-
 import DiffHighlight from './admin/DiffHighlight';
+import { SMOOTH_EASE, scrollRevealBadge } from '../utils/motion';
 
 type SectionHeaderProps = {
     kicker: string;
@@ -21,10 +21,11 @@ const SectionHeader = ({ kicker, title, copy, originalTitle, originalCopy, align
             className={isCentered ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.35 }}
+            viewport={{ once: true, margin: '-60px' }}
             variants={{
-                hidden: {},
+                hidden: { opacity: 0 },
                 visible: {
+                    opacity: 1,
                     transition: {
                         staggerChildren: 0.08,
                     },
@@ -33,11 +34,7 @@ const SectionHeader = ({ kicker, title, copy, originalTitle, originalCopy, align
         >
             <motion.div
                 className="inline-flex items-center justify-center rounded-full bg-teal-50/90 px-4 py-1.5 mb-4 border border-teal-500/20 dark:bg-teal-500/10"
-                variants={{
-                    hidden: { opacity: 0, y: 12, filter: 'blur(8px)' },
-                    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-                }}
-                transition={{ duration: 0.55, ease: 'easeOut' }}
+                variants={scrollRevealBadge}
             >
                 <Sparkles className="mr-2 h-4 w-4 text-teal-700 dark:text-teal-400" />
                 <span className="text-sm font-semibold text-teal-700 uppercase tracking-widest dark:text-teal-300">{kicker}</span>
@@ -50,10 +47,10 @@ const SectionHeader = ({ kicker, title, copy, originalTitle, originalCopy, align
                                 key={`${word}-${index}`}
                                 className="mr-2 inline-block"
                                 variants={{
-                                    hidden: { opacity: 0, y: 34, rotateX: -35 },
+                                    hidden: { opacity: 0, y: 24, rotateX: -20 },
                                     visible: { opacity: 1, y: 0, rotateX: 0 },
                                 }}
-                                transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+                                transition={{ duration: 0.65, ease: SMOOTH_EASE }}
                             >
                                 {word}
                             </motion.span>
@@ -66,17 +63,17 @@ const SectionHeader = ({ kicker, title, copy, originalTitle, originalCopy, align
                         hidden: { scaleX: 0, opacity: 0 },
                         visible: { scaleX: 1, opacity: 1 },
                     }}
-                    transition={{ duration: 0.75, ease: 'easeOut', delay: 0.12 }}
+                    transition={{ duration: 0.75, ease: SMOOTH_EASE, delay: 0.15 }}
                 />
             </div>
             {copy && (
                 <motion.p
                     className={isCentered ? 'mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-700 dark:text-slate-300' : 'section-copy'}
                     variants={{
-                        hidden: { opacity: 0, y: 18 },
+                        hidden: { opacity: 0, y: 16 },
                         visible: { opacity: 1, y: 0 },
                     }}
-                    transition={{ duration: 0.55, ease: 'easeOut', delay: 0.16 }}
+                    transition={{ duration: 0.6, ease: SMOOTH_EASE, delay: 0.2 }}
                 >
                     <DiffHighlight current={copy} original={originalCopy}>
                         {copy}

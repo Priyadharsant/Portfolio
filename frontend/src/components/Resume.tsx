@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Download, Eye } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
+import { scrollRevealCard } from '../utils/motion';
 import SectionHeader from './SectionHeader';
 
 type ResumeProps = {
@@ -15,9 +16,10 @@ const Resume = ({ resume }: ResumeProps) => {
                 <SectionHeader kicker="Overview" title="Resume" copy={resume.description} align="center" />
                 <motion.div
                     className="mx-auto mt-8 flex max-w-xl flex-col justify-center gap-3 sm:flex-row"
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    variants={scrollRevealCard}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-60px' }}
                 >
                     <motion.a
                         href="/resume"
