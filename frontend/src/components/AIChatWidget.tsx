@@ -197,11 +197,41 @@ export const AIChatWidget = () => {
     const lines = mainBody.split('\n');
     return (
       <div className="space-y-1.5">
-        {lines.map((line, lIdx) => (
-          <span key={lIdx} className="block leading-relaxed">
-            {formatSegment(line)}
-          </span>
-        ))}
+        {lines.map((line, lIdx) => {
+          const trimmed = line.trim();
+
+          // Markdown headings (### or ## or #)
+          if (trimmed.startsWith('#')) {
+            const headingText = trimmed.replace(/^#+\s*/, '');
+            return (
+              <h4 key={lIdx} className="font-bold text-sm text-slate-900 dark:text-white pt-1.5 pb-0.5 border-b border-slate-200/50 dark:border-white/5">
+                {formatSegment(headingText)}
+              </h4>
+            );
+          }
+
+          // Horizontal rule
+          if (trimmed === '---' || trimmed === '***') {
+            return <hr key={lIdx} className="my-1.5 border-slate-200/60 dark:border-white/10" />;
+          }
+
+          // Bullet list items (* or - or •)
+          if (/^[-*•]\s+/.test(trimmed)) {
+            const bulletContent = trimmed.replace(/^[-*•]\s+/, '');
+            return (
+              <div key={lIdx} className="flex items-start gap-1.5 pl-1 leading-relaxed">
+                <span className="text-teal-600 dark:text-teal-400 font-bold mt-0.5">•</span>
+                <span className="flex-1">{formatSegment(bulletContent)}</span>
+              </div>
+            );
+          }
+
+          return (
+            <span key={lIdx} className="block leading-relaxed">
+              {formatSegment(line)}
+            </span>
+          );
+        })}
 
         {/* Dynamic Clickable Follow-up Chips directly under the AI response */}
         {quickQuestions.length > 0 && (
@@ -358,8 +388,8 @@ export const AIChatWidget = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick Starter Suggestions */}
-            {messages.length <= 2 && (
+            {/* Quick Starter Suggestions - Visible ONLY on initial welcome before user sends first message */}
+            {messages.length === 1 && (
               <div className="border-t border-slate-200/70 bg-slate-50/50 p-2 dark:border-white/5 dark:bg-white/[0.01]">
                 <p className="px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1.5">
                   Suggested topics
