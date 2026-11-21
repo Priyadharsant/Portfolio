@@ -332,13 +332,13 @@ export const AIChatWidget = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                    Priyadharsan AI
+                    Chat with Priyadharsan
                     <span className="rounded bg-teal-500/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
-                      Active
+                      Online
                     </span>
                   </h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Instant portfolio insights
+                    Direct portfolio & project inquiries
                   </p>
                 </div>
               </div>
