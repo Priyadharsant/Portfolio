@@ -128,7 +128,7 @@ export const AIChatWidget = () => {
     ]);
   };
 
-  const renderFormattedText = (content: string) => {
+  const renderFormattedText = (content: string, isLastMessage: boolean = false) => {
     // Check if response contains follow-up quick questions
     let mainBody = content;
     let quickQuestions: string[] = [];
@@ -252,8 +252,8 @@ export const AIChatWidget = () => {
           );
         })}
 
-        {/* Dynamic Clickable Follow-up Chips directly under the AI response */}
-        {quickQuestions.length > 0 && (
+        {/* Dynamic Clickable Follow-up Chips - Rendered ONLY on the latest/last assistant message */}
+        {isLastMessage && quickQuestions.length > 0 && (
           <div className="mt-3.5 pt-2.5 border-t border-slate-200/70 dark:border-white/10 space-y-1.5">
             <p className="text-[10px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400">
               Quick Follow-ups:
@@ -363,38 +363,46 @@ export const AIChatWidget = () => {
 
             {/* Messages Scroll Area - Scrollable with Hidden Scrollbar */}
             <div className="no-scrollbar flex-1 overflow-y-auto p-4 space-y-3.5 text-sm">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  {msg.role === 'assistant' && (
-                    <div className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-teal-500/30 bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">
-                      <Bot className="h-3.5 w-3.5" />
-                    </div>
-                  )}
+              {messages.map((msg, index) => {
+                const isLastAssistantMessage =
+                  msg.role === 'assistant' &&
+                  !isLoading &&
+                  (index === messages.length - 1 ||
+                    messages.slice(index + 1).every((m) => m.role === 'user'));
 
+                return (
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 shadow-sm text-sm ${
-                      msg.role === 'user'
-                        ? 'bg-gradient-to-r from-teal-600 to-cyan-700 text-white dark:from-teal-500 dark:to-cyan-600'
-                        : 'border border-slate-200/90 bg-slate-50/90 text-slate-800 dark:border-white/10 dark:bg-[#0f1422] dark:text-slate-200'
-                    }`}
+                    key={msg.id}
+                    className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div>{renderFormattedText(msg.text)}</div>
-                    
-                    <div className="mt-1 flex items-center justify-end text-[10px] opacity-50">
-                      <span>{msg.timestamp}</span>
-                    </div>
-                  </div>
+                    {msg.role === 'assistant' && (
+                      <div className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-teal-500/30 bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">
+                        <Bot className="h-3.5 w-3.5" />
+                      </div>
+                    )}
 
-                  {msg.role === 'user' && (
-                    <div className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                      <User className="h-3.5 w-3.5" />
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-2.5 shadow-sm text-sm ${
+                        msg.role === 'user'
+                          ? 'bg-gradient-to-r from-teal-600 to-cyan-700 text-white dark:from-teal-500 dark:to-cyan-600'
+                          : 'border border-slate-200/90 bg-slate-50/90 text-slate-800 dark:border-white/10 dark:bg-[#0f1422] dark:text-slate-200'
+                      }`}
+                    >
+                      <div>{renderFormattedText(msg.text, isLastAssistantMessage)}</div>
+                      
+                      <div className="mt-1 flex items-center justify-end text-[10px] opacity-50">
+                        <span>{msg.timestamp}</span>
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+
+                    {msg.role === 'user' && (
+                      <div className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        <User className="h-3.5 w-3.5" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
 
               {isLoading && (
                 <div className="flex gap-2.5 items-center text-xs text-slate-500 dark:text-slate-400">
