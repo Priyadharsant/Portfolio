@@ -1,6 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, Sparkles, User, RefreshCw, ExternalLink } from 'lucide-react';
+import {
+  Bot,
+  X,
+  Send,
+  Sparkles,
+  User,
+  RefreshCw,
+  ExternalLink,
+  ArrowUpRight,
+  MessageCircle,
+  Code2,
+  Compass,
+  CheckCircle2
+} from 'lucide-react';
 import { sendAIChatMessage, type ChatHistoryItem } from '../utils/api';
 
 type Message = {
@@ -14,8 +27,17 @@ type Message = {
 const SUGGESTED_QUESTIONS = [
   'What are your core technical skills?',
   'Tell me about your featured projects',
-  'What is your work experience?',
+  'What is your experience as Backend TL?',
   'How can I get in touch with you?',
+];
+
+const FOLLOWUP_ICONS = [ArrowUpRight, MessageCircle, Code2, Compass, CheckCircle2];
+
+const OFFLINE_FALLBACK_MESSAGES = [
+  "Hi! I'm Priyadharsan, a Full-Stack Software Engineer & Backend Team Lead skilled in React, TypeScript, Node.js, Express, MongoDB, and AWS. Check out my featured projects below or reach out via the Contact section!",
+  "I specialize in scalable backend architectures, APIs, and modern responsive frontends with React and Node.js. Feel free to explore my repositories or get in touch!",
+  "I'm a B.Tech Artificial Intelligence & Data Science student and WebOps Lead at Velammal Engineering College. Explore my projects below or drop me a message directly in the Contact form!",
+  "Welcome! I build scalable web platforms and reliable cloud systems. You can preview my live projects or view my verified resume directly on this page!"
 ];
 
 export const AIChatWidget = () => {
@@ -25,7 +47,7 @@ export const AIChatWidget = () => {
     {
       id: 'welcome',
       role: 'assistant',
-      text: "👋 Hi! I'm Priyadharsan's AI Assistant. Ask me anything about his technical skills, featured projects, work experience, or how to collaborate!",
+      text: "👋 Hi there! I'm Priyadharsan. Feel free to ask me anything about my projects, technical skills, background, or how we can collaborate!",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -72,7 +94,7 @@ export const AIChatWidget = () => {
       const botMsg: Message = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        text: res.reply || "I'm having a slight delay connecting to the AI model, but feel free to ask about Priyadharsan's skills or projects!",
+        text: res.reply || "I'm having a slight delay connecting to the AI model, but feel free to ask about my skills, projects, or background!",
         source: res.source,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
@@ -80,10 +102,12 @@ export const AIChatWidget = () => {
       setMessages((prev) => [...prev, botMsg]);
       if (!isOpen) setUnreadCount((c) => c + 1);
     } catch {
+      const randomFallback =
+        OFFLINE_FALLBACK_MESSAGES[Math.floor(Math.random() * OFFLINE_FALLBACK_MESSAGES.length)];
       const fallbackMsg: Message = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        text: "Priyadharsan is a Full-Stack Software Engineer skilled in React, TypeScript, Node.js, and cloud systems. You can explore his projects right below or reach out via the Contact section!",
+        text: randomFallback,
         source: 'local-offline',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
@@ -98,7 +122,7 @@ export const AIChatWidget = () => {
       {
         id: 'welcome',
         role: 'assistant',
-        text: "Chat cleared. What else would you like to know about Priyadharsan?",
+        text: "Chat cleared. What else would you like to know about my work, projects, or skills?",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       },
     ]);
@@ -121,11 +145,6 @@ export const AIChatWidget = () => {
 
     // Helper to format inline elements: Markdown links, bare URLs, emails, and bold text
     const formatSegment = (text: string) => {
-      // Regex detects:
-      // 1. Markdown link: [text](url)
-      // 2. Bare URL: https?://...
-      // 3. Email: someone@domain.com
-      // 4. Bold: **text**
       const tokenRegex = /(\[.*?\]\(.*?\)|\bhttps?:\/\/[^\s<>)"]+|\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b|\*\*.*?\*\*)/g;
       const tokens = text.split(tokenRegex);
 
@@ -240,16 +259,20 @@ export const AIChatWidget = () => {
               Quick Follow-ups:
             </p>
             <div className="flex flex-col gap-1.5">
-              {quickQuestions.map((q, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSend(q)}
-                  disabled={isLoading}
-                  className="w-full text-left rounded-lg border border-teal-500/20 bg-teal-50/60 px-3 py-1.5 text-xs font-medium text-teal-800 transition-all hover:bg-teal-100 hover:border-teal-500/40 active:scale-[0.98] dark:border-teal-400/20 dark:bg-teal-950/30 dark:text-teal-200 dark:hover:bg-teal-900/40"
-                >
-                  ⚡ {q}
-                </button>
-              ))}
+              {quickQuestions.map((q, idx) => {
+                const IconComponent = FOLLOWUP_ICONS[idx % FOLLOWUP_ICONS.length];
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(q)}
+                    disabled={isLoading}
+                    className="group w-full flex items-center gap-2 text-left rounded-lg border border-teal-500/25 bg-teal-50/70 px-3 py-1.5 text-xs font-medium text-teal-900 transition-all hover:bg-teal-100/90 hover:border-teal-500/50 active:scale-[0.98] dark:border-teal-400/30 dark:bg-teal-950/40 dark:text-teal-200 dark:hover:bg-teal-900/60 dark:hover:border-teal-400/60"
+                  >
+                    <IconComponent className="h-3.5 w-3.5 flex-none text-teal-600 transition-transform group-hover:scale-110 dark:text-teal-400" />
+                    <span className="flex-1">{q}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -259,11 +282,11 @@ export const AIChatWidget = () => {
 
   return (
     <>
-      {/* Floating Trigger Pill - Placed cleanly to the left of the theme/scroll buttons (right-20 sm:right-24) to avoid any overlap */}
+      {/* Floating Trigger Pill - Distinct contrast in both light & dark modes with crisp glowing accents */}
       <div className="fixed bottom-5 right-20 z-50 flex items-center">
         <motion.button
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group relative flex h-12 items-center gap-2.5 rounded-full border border-zinc-200/50 bg-white/70 px-4 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-teal-500/50 hover:bg-white/90 hover:shadow-[0_12px_40px_rgba(20,184,166,0.2)] active:translate-y-0 dark:border-white/5 dark:bg-zinc-950/80 dark:hover:border-teal-400/40 dark:hover:bg-zinc-900"
+          className="group relative flex h-12 items-center gap-2.5 rounded-full border border-teal-500/40 bg-white/95 px-4 text-slate-900 shadow-[0_8px_30px_rgba(0,0,0,0.15)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-white hover:shadow-[0_12px_40px_rgba(20,184,166,0.3)] active:translate-y-0 dark:border-teal-400/60 dark:bg-[#0c1222] dark:text-white dark:shadow-[0_0_25px_rgba(20,184,166,0.25)] dark:hover:border-teal-300 dark:hover:bg-[#11192e] dark:hover:shadow-[0_0_35px_rgba(20,184,166,0.4)]"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Open AI Assistant"
@@ -271,12 +294,12 @@ export const AIChatWidget = () => {
           {/* Breathing Accent Ring */}
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-500" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-500 shadow-[0_0_8px_#14b8a6]" />
           </span>
 
           <Bot className="h-4 w-4 text-teal-600 transition-transform group-hover:rotate-12 dark:text-teal-400" />
           
-          <span className="text-xs font-bold tracking-tight text-slate-800 dark:text-white">
+          <span className="text-xs font-bold tracking-tight text-slate-900 dark:text-white">
             Ask AI
           </span>
 
@@ -423,7 +446,7 @@ export const AIChatWidget = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about Priyadharsan..."
+                  placeholder="Ask me anything..."
                   disabled={isLoading}
                   className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition-all focus:border-teal-500 focus:bg-white focus:outline-none dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder-slate-500 dark:focus:border-teal-400 dark:focus:bg-[#0d121f]"
                 />

@@ -539,14 +539,19 @@ function isChatRateLimited(ip) {
 function getOfflineFallback(query) {
   const q = String(query || '').toLowerCase();
   const raw = portfolioRawData;
+  const offlineVariations = [
+    `I am ${raw.profile?.name}, a ${raw.profile?.title}. Feel free to ask me anything about my projects, technical skills, or work experience!`,
+    `Hi! I specialize in full-stack development, cloud architecture, and modern backend systems. You can explore my featured projects right on this page or reach out via the Contact section.`,
+    `Welcome! As a Full-Stack Engineer and WebOps Team Lead, I build production-grade web systems with React, Node.js, and AWS. Let me know what you'd like to explore!`
+  ];
 
   if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('frontend') || q.includes('backend')) {
     const list = raw.skills?.map(s => `**${s.title}**: ${s.items.join(', ')}`).join('\n\n') || '';
-    return `Here are Priyadharsan's core technical skills:\n\n${list}\n\n*He specializes in React, TypeScript, Node.js, and cloud engineering.*`;
+    return `Here is a breakdown of my core technical skills:\n\n${list}\n\n*I specialize in React, TypeScript, Node.js, and cloud engineering.*`;
   }
   if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('built')) {
     const list = raw.projects?.map(p => `• **${p.title}** (${p.status || 'Active'}): ${p.description}\n  *Stack: ${p.stack?.join(', ') || 'Full-Stack'}*`).join('\n\n') || '';
-    return `Here are Priyadharsan's featured projects:\n\n${list}\n\nYou can click on any project on this page for live demos and GitHub code!`;
+    return `Here are my featured projects:\n\n${list}\n\nYou can click on any project on this page for live preview and GitHub code!`;
   }
   if (q.includes('experience') || q.includes('job') || q.includes('intern') || q.includes('role')) {
     const exp = raw.experience;
@@ -554,12 +559,12 @@ function getOfflineFallback(query) {
   }
   if (q.includes('contact') || q.includes('email') || q.includes('reach') || q.includes('hire') || q.includes('linkedin')) {
     const p = raw.profile;
-    return `You can reach out to Priyadharsan directly through:\n\n• **Email**: [${p.email}](mailto:${p.email})\n• **LinkedIn**: [Profile](${p.linkedin})\n• **GitHub**: [Profile](${p.github})\n\nOr submit a note in the Contact section!`;
+    return `You can reach out to me directly through:\n\n• **Email**: [${p.email}](mailto:${p.email})\n• **LinkedIn**: [Profile](${p.linkedin})\n• **GitHub**: [Profile](${p.github})\n\nOr submit a note in the Contact section!`;
   }
   if (q.includes('resume') || q.includes('cv')) {
-    return `You can view or download Priyadharsan's official resume from the Resume section, or directly at [View Resume](/resume).`;
+    return `You can view or download my official resume from the Resume section, or directly at [View Resume](/resume).`;
   }
-  return `Priyadharsan is a ${raw.profile?.title} specializing in modern full-stack web applications. Feel free to ask about his **skills**, **projects**, **experience**, or **contact information**!`;
+  return offlineVariations[Math.floor(Math.random() * offlineVariations.length)];
 }
 
 app.post('/api/ai/chat', async (req, res) => {
@@ -578,8 +583,10 @@ app.post('/api/ai/chat', async (req, res) => {
   let reply = '';
   let source = 'gemini';
 
-  const systemInstruction = `You are the official AI Assistant for Priyadharsan's personal portfolio.
-Answer questions accurately and concisely based strictly on his verified background:
+  const systemInstruction = `You are Priyadharsan T himself speaking directly to the visitor in first-person ("I", "me", "my").
+Chat naturally, warmly, professionally, and enthusiastically as Priyadharsan. Never refer to Priyadharsan in third person (do not say "He is...", "Priyadharsan's skills..."). Always say "I am...", "My skills include...", "In my projects, I built...", "You can contact me at...".
+
+Answer questions accurately and concisely based strictly on my verified background:
 Name: ${portfolioRawData.profile?.name}
 Title: ${portfolioRawData.profile?.title}
 Email: ${portfolioRawData.profile?.email}
@@ -592,11 +599,12 @@ Achievements: ${JSON.stringify(portfolioRawData.achievements)}
 About: ${JSON.stringify(portfolioRawData.about)}
 
 Guidelines:
-1. Always be professional, concise, friendly, and structured.
-2. Ground all answers solely in Priyadharsan's verified background.
-3. For project live links, never use "Demo link" or "Demo live" — always refer to them as "Preview" or "[Preview](url)".
-4. Format all links as clickable Markdown: [Preview](url), [LinkedIn](url), [GitHub](url), [Email](mailto:email).
-5. At the very end of your response, ALWAYS suggest 2 to 3 concise follow-up questions tailored to your answer. Format them exactly like this:
+1. Speak exclusively in first-person ("I", "my", "we").
+2. Always be professional, concise, friendly, and structured.
+3. Ground all answers solely in my verified background.
+4. For project live links, never use "Demo link" or "Demo live" — always refer to them as "Preview" or "[Preview](url)".
+5. Format all links as clickable Markdown: [Preview](url), [LinkedIn](url), [GitHub](url), [Email](mailto:email).
+6. At the very end of your response, ALWAYS suggest 2 to 3 concise follow-up questions tailored to your answer from the visitor's perspective to ask me next. Format them exactly like this:
 Quick Questions:
 • [first question]
 • [second question]
