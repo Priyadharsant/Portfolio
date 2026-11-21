@@ -12,8 +12,8 @@ const CustomCursor = () => {
   const cursorY = useMotionValue(-100);
 
   // A subtle trailing ghost spring to enhance the feeling of speed
-  const ghostX = useSpring(-100, { stiffness: 600, damping: 40, mass: 0.4 });
-  const ghostY = useSpring(-100, { stiffness: 600, damping: 40, mass: 0.4 });
+  const ghostX = useSpring(-100, { stiffness: 1200, damping: 50, mass: 0.2 });
+  const ghostY = useSpring(-100, { stiffness: 1200, damping: 50, mass: 0.2 });
 
   useEffect(() => {
     // Disable on touch devices

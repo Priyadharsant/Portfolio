@@ -7,7 +7,6 @@ import DownloadResume from './components/DownloadResume';
 import LoadingScreen from './components/LoadingScreen';
 import Header from './components/Header';
 import MouseBackground from './components/MouseBackground';
-import FloatingThemeToggle from './components/FloatingThemeToggle';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
 import SectionGlowOverlay from './components/SectionGlowOverlay';
@@ -36,7 +35,6 @@ function App() {
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [showPage, setShowPage] = useState(false);
   const [error, setError] = useState('');
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     document.documentElement.classList.remove('dark');
