@@ -282,22 +282,22 @@ export const AIChatWidget = () => {
   return (
     <>
       {/* Floating Trigger Pill - Distinct contrast in both light & dark modes with crisp glowing accents */}
-      <div className="fixed bottom-5 right-20 z-50 flex items-center">
+      <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-6 z-50 flex items-center">
         <motion.button
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group relative flex h-12 items-center gap-2 rounded-full border border-teal-500/40 bg-white/95 px-4 text-slate-900 shadow-[0_8px_30px_rgba(0,0,0,0.15)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-white hover:shadow-[0_12px_40px_rgba(20,184,166,0.3)] active:translate-y-0 dark:border-teal-400/60 dark:bg-[#0c1222] dark:text-white dark:shadow-[0_0_25px_rgba(20,184,166,0.25)] dark:hover:border-teal-300 dark:hover:bg-[#11192e] dark:hover:shadow-[0_0_35px_rgba(20,184,166,0.4)]"
+          className="group relative flex h-10 sm:h-11 items-center gap-2 rounded-full border border-teal-500/40 bg-white/95 px-3.5 sm:px-4 text-slate-900 shadow-[0_6px_25px_rgba(0,0,0,0.12)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-white hover:shadow-[0_12px_40px_rgba(20,184,166,0.25)] active:translate-y-0 dark:border-teal-400/60 dark:bg-[#0c1222] dark:text-white dark:shadow-[0_0_20px_rgba(20,184,166,0.25)] dark:hover:border-teal-300 dark:hover:bg-[#11192e]"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Chat with Priyadharsan"
         >
-          <MessageSquare className="h-4 w-4 text-teal-600 transition-transform group-hover:scale-110 dark:text-teal-400" />
+          <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-teal-600 transition-transform group-hover:scale-110 dark:text-teal-400" />
           
-          <span className="text-xs font-bold tracking-tight text-slate-900 dark:text-white">
+          <span className="text-[11px] sm:text-xs font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
             Chat with Me
           </span>
 
           {unreadCount > 0 && (
-            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-teal-500 text-[9px] font-bold text-white shadow-sm">
+            <span className="flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center rounded-full bg-teal-500 text-[8px] sm:text-[9px] font-bold text-white shadow-sm">
               {unreadCount}
             </span>
           )}

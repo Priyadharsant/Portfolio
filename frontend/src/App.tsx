@@ -36,19 +36,13 @@ function App() {
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [showPage, setShowPage] = useState(false);
   const [error, setError] = useState('');
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') {
-      return 'light';
-    }
-
-    return window.localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
-  });
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    document.documentElement.style.colorScheme = theme;
-    window.localStorage.setItem('theme', theme);
-  }, [theme]);
+    document.documentElement.classList.remove('dark');
+    document.documentElement.style.colorScheme = 'light';
+    window.localStorage.setItem('theme', 'light');
+  }, []);
 
   // Notify backend of site visit
   useEffect(() => {
@@ -211,12 +205,11 @@ function App() {
         transition={{ duration: 0.5 }}
       >
         <Tooltip />
-        <MouseBackground theme={theme} />
+        <MouseBackground theme="light" />
         <Header />
         <ScrollProgress />
         <ScrollToTop />
         <AIChatWidget />
-        <FloatingThemeToggle theme={theme} onThemeToggle={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))} />
         <SectionGlowOverlay />
         <LayoutGroup>
           <Hero profile={portfolio.profile} hero={portfolio.hero} />
