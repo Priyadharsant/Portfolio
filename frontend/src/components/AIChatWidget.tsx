@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Bot,
+  MessageSquare,
   X,
   Send,
-  Sparkles,
   User,
   RefreshCw,
   ExternalLink,
@@ -286,18 +285,12 @@ export const AIChatWidget = () => {
       <div className="fixed bottom-5 right-20 z-50 flex items-center">
         <motion.button
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group relative flex h-12 items-center gap-2.5 rounded-full border border-teal-500/40 bg-white/95 px-4 text-slate-900 shadow-[0_8px_30px_rgba(0,0,0,0.15)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-white hover:shadow-[0_12px_40px_rgba(20,184,166,0.3)] active:translate-y-0 dark:border-teal-400/60 dark:bg-[#0c1222] dark:text-white dark:shadow-[0_0_25px_rgba(20,184,166,0.25)] dark:hover:border-teal-300 dark:hover:bg-[#11192e] dark:hover:shadow-[0_0_35px_rgba(20,184,166,0.4)]"
+          className="group relative flex h-12 items-center gap-2 rounded-full border border-teal-500/40 bg-white/95 px-4 text-slate-900 shadow-[0_8px_30px_rgba(0,0,0,0.15)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-white hover:shadow-[0_12px_40px_rgba(20,184,166,0.3)] active:translate-y-0 dark:border-teal-400/60 dark:bg-[#0c1222] dark:text-white dark:shadow-[0_0_25px_rgba(20,184,166,0.25)] dark:hover:border-teal-300 dark:hover:bg-[#11192e] dark:hover:shadow-[0_0_35px_rgba(20,184,166,0.4)]"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.95 }}
-          aria-label="Open AI Assistant"
+          aria-label="Chat with Priyadharsan"
         >
-          {/* Breathing Accent Ring */}
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-500 shadow-[0_0_8px_#14b8a6]" />
-          </span>
-
-          <Bot className="h-4 w-4 text-teal-600 transition-transform group-hover:rotate-12 dark:text-teal-400" />
+          <MessageSquare className="h-4 w-4 text-teal-600 transition-transform group-hover:scale-110 dark:text-teal-400" />
           
           <span className="text-xs font-bold tracking-tight text-slate-900 dark:text-white">
             Chat with Me
@@ -328,7 +321,7 @@ export const AIChatWidget = () => {
             <div className="flex items-center justify-between border-b border-slate-200/80 bg-slate-50/80 px-4 py-3.5 backdrop-blur dark:border-white/10 dark:bg-white/[0.03]">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-teal-500/25 bg-teal-500/10 text-teal-600 dark:text-teal-400">
-                  <Sparkles className="h-4 w-4" />
+                  <MessageCircle className="h-4 w-4" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -374,7 +367,7 @@ export const AIChatWidget = () => {
                   >
                     {msg.role === 'assistant' && (
                       <div className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-teal-500/30 bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">
-                        <Bot className="h-3.5 w-3.5" />
+                        <MessageSquare className="h-3.5 w-3.5" />
                       </div>
                     )}
 
@@ -404,7 +397,7 @@ export const AIChatWidget = () => {
               {isLoading && (
                 <div className="flex gap-2.5 items-center text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex h-7 w-7 items-center justify-center rounded-full border border-teal-500/30 bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">
-                    <Bot className="h-3.5 w-3.5" />
+                    <MessageSquare className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 dark:border-white/10 dark:bg-[#0f1422]">
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-teal-500" style={{ animationDelay: '0ms' }} />
