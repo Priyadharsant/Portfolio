@@ -39,6 +39,46 @@
   scrollbar-width: none;
 }
 
+/* Minimal terminal scrollbar */
+.terminal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 184, 166, 0.4) transparent;
+}
+
+.terminal-scrollbar::-webkit-scrollbar {
+  width: 3px !important;
+  height: 3px !important;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-thumb {
+  border: none !important;
+  border-radius: 9999px !important;
+  background: rgba(20, 184, 166, 0.4) !important;
+  box-shadow: none !important;
+}
+
+.dark .terminal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(45, 212, 191, 0.4) !important;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 184, 166, 0.7) !important;
+}
+
+.dark .terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 212, 191, 0.7) !important;
+}
+
 html {
   scroll-behavior: smooth;
   scrollbar-color: rgba(13, 148, 136, 0.55) #eef7fb;

@@ -1,11 +1,12 @@
 import type { Ref } from 'react';
 import { motion } from 'framer-motion';
-import { ChefHat, Code2, Eye, Github, Linkedin, Mail, ArrowRight, Sparkles, Cloud, Layout, Server, Database, Terminal, FileCode, Cpu } from 'lucide-react';
+import { ChefHat, Code2, Eye, Github, Linkedin, Mail, ArrowRight, Sparkles, Cloud, Layout, Server, Database, FileCode, Cpu } from 'lucide-react';
 import type { PortfolioData } from '../types/portfolio';
 import { fadeUp, staggerContainer } from '../utils/motion';
 import { useTooltip } from './TooltipContext';
 
 import DiffHighlight from './admin/DiffHighlight';
+import InteractiveTerminal from './InteractiveTerminal';
 
 type HeroProps = {
     profile: PortfolioData['profile'];
@@ -44,14 +45,6 @@ const codeLines = [
     { line: 8, content: <span></span>, hasIndent: false },
     { line: 9, content: <span className="text-[#8b5cf6] dark:text-[#a78bfa]">await</span>, hasIndent: false, extra: <span> server.<span className="text-[#d97706] dark:text-[#fbbf24]">start</span>();</span> },
     { line: 10, content: <span className="text-[#64748b]">console</span>, hasIndent: false, extra: <span>.<span className="text-[#d97706] dark:text-[#fbbf24]">log</span>(<span className="text-[#10b981] dark:text-[#34d399]">"🚀 Ready!"</span>);</span> },
-];
-
-const terminalLogs = [
-    { text: 'npm run dev', color: 'text-slate-700 dark:text-slate-300 font-semibold' },
-    { text: '✔ server running on port 3021', color: 'text-emerald-600 dark:text-emerald-400 font-medium' },
-    { text: '✔ connected to MongoDB', color: 'text-emerald-600 dark:text-emerald-400 font-medium' },
-    { text: '✔ SMTP service active (Resend)', color: 'text-emerald-600 dark:text-emerald-400 font-medium' },
-    { text: '[api] GET /api/portfolio - 200 OK (12ms)', color: 'text-teal-600 dark:text-teal-400 text-[10px]' }
 ];
 
 const Hero = ({ profile, hero, originalProfile, originalHero, nameRef }: HeroProps) => {
@@ -269,46 +262,8 @@ const Hero = ({ profile, hero, originalProfile, originalHero, nameRef }: HeroPro
                             </div>
                         </motion.div>
 
-                        {/* 2. Terminal Overlay Window */}
-                        <motion.div 
-                            className="absolute -bottom-10 -right-8 w-[320px] rounded-xl border border-slate-200 bg-white/85 shadow-2xl backdrop-blur-xl dark:border-slate-800/80 dark:bg-[#070a10]/90 dark:shadow-[0_15px_40px_rgba(0,0,0,0.5)] z-20"
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.6, delay: 0.6 }}
-                            whileHover={{ y: -3 }}
-                        >
-                            {/* Terminal Header */}
-                            <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200/50 dark:border-slate-800/40 bg-slate-50/50 dark:bg-slate-900/20 rounded-t-xl">
-                                <div className="flex items-center gap-1.5">
-                                    <Terminal className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
-                                    <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400">terminal</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                    <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Active</span>
-                                </div>
-                            </div>
-
-                            {/* Terminal Logs */}
-                            <div className="p-4 font-mono text-[10px] leading-relaxed text-slate-600 dark:text-slate-400 space-y-1.5 select-none">
-                                {terminalLogs.map((log, index) => (
-                                    <div key={index} className="flex gap-2 items-start">
-                                        {index === 0 ? (
-                                            <span className="text-teal-500 dark:text-teal-400">$</span>
-                                        ) : null}
-                                        <span className={log.color}>{log.text}</span>
-                                    </div>
-                                ))}
-                                <div className="flex items-center gap-1">
-                                    <span className="text-teal-500 dark:text-teal-400">$</span>
-                                    <motion.span 
-                                        className="h-3.5 w-1.5 bg-teal-400 dark:bg-teal-300"
-                                        animate={{ opacity: [1, 0, 1] }}
-                                        transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
+                        {/* 2. Interactive Terminal Overlay Window */}
+                        <InteractiveTerminal profile={profile} hero={hero} />
 
                         {/* 3. Floating Technology Badges (Orbiting Stack Badges) */}
                         {stackBadges.map((badge) => {
